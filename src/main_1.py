@@ -10,8 +10,13 @@ tokens=(
 'NUMBER',
 'DOT',
 'NOT',
-'COMMA'
+'COMMA',
+'NULL',
 )
+
+def t_NULL(t):
+    r'\s+'
+    return t
 def t_DOT(t):
     r'\.'
     return t
@@ -22,7 +27,7 @@ def t_NOT(t):
     r'!'
     return t
 def t_PROTOCOL(t):
-    r'(ssh|telnet|tftp|ftp|scp)'
+    r'(ssh|telnet|tftp|ftp|scp|ping|tcping|arping)'
     return t
 def t_RANGE(t):
     r'~'
@@ -34,6 +39,10 @@ def t_MOD(t):
 def t_NUMBER(t):
     r'\d+'
     return t
+
+# def t_PORT_NUMBER(t):
+#     r':[1-65535]'
+#     return t
 def t_INNER(t):
     r'(ip|port|user|pwd|type)'
     return t
@@ -52,20 +61,22 @@ def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
-t_ignore  = ' \t'
+
 
 lexer=lex()
 
 def p_init_exp(p):
     '''
-    init_exp : PROTOCOL connect_exp
-             | PROTOCOL connect_exp param_exp
+    init_exp : PROTOCOL NULL connect_exp
+             | PROTOCOL NULL connect_exp NULL param_exp
     '''    
 def p_connect_exp(p):
     '''
     connect_exp : address_exp
-                | address_exp number_exp
+                | address_exp NULL sp_number_block_exp
+       
     '''
+
 def p_address_exp(p):
     '''
         address_exp : ipv4_exp
@@ -80,50 +91,40 @@ def p_domain_exp(p):
     '''
 def p_ipv4_exp(p):
     '''
-        ipv4_exp : number_exp DOT number_exp DOT number_exp DOT number_exp
+        ipv4_exp : sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp
+    '''
+
+def p_sp_number_block_exp(p):
+    '''
+        sp_number_block_exp : number_block_exp 
+                            | NOT number_block_exp
+                            | number_block_exp NOT number_block_exp
+    '''
+
+def p_number_block_exp(p):
+    '''
+        number_block_exp : number_exp
+                         | number_exp COMMA number_exp
+                         | number_exp COMMA number_block_exp
     '''
 def p_number_exp(p):
     '''
-        number_exp : normal_number_exp 
-                   | normal_number_exp NOT normal_number_exp
-    
+        number_exp : NUMBER 
+                   | NUMBER MOD NUMBER
+                   | NUMBER RANGE NUMBER
+                   | NUMBER RANGE NUMBER MOD NUMBER
+                  
     '''
-def p_normal_number_exp(p):
-    '''
-        normal_number_exp : range_number_exp 
-                   | comma_number_exp
-                   | range_number_exp COMMA comma_number_exp
-                   | comma_number_exp COMMA range_number_exp
-    '''
-
-def p_range_number_exp(p):
-    '''
-        range_number_exp : NUMBER
-                 | NUMBER RANGE NUMBER
-                 | NUMBER MOD NUMBER 
-                 | NUMBER RANGE NUMBER MOD NUMBER
-       
-    '''
-def p_comma_number_exp(p):
-    '''
-    comma_number_exp : NUMBER 
-                   | COMMA  NUMBER 
-                   | NUMBER COMMA NUMBER 
-                   | COMMA NUMBER comma_number_exp 
-                   | NUMBER COMMA NUMBER comma_number_exp 
-    '''
-
-
 
 
 def p_param_exp(p):
     '''
         param_exp : INNER EQ SN
                   | INNER EQ ipv4_exp
-                  | INNER EQ number_exp
+                  | INNER EQ number_block_exp
                   | INNER EQ SN param_exp
                   | INNER EQ ipv4_exp param_exp
-                  | INNER EQ number_exp param_exp
+                  | INNER EQ number_block_exp param_exp
     '''
 
 
@@ -140,10 +141,6 @@ if __name__ =='__main__':
         if not s: continue
         result = parser.parse(s)
         print(result)
-    # while True:
-    #     s=input('[TEST]')
-    #     test(s)
-
 
 
 

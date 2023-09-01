@@ -3,73 +3,68 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 Grammar
 
 Rule 0     S' -> init_exp
-Rule 1     init_exp -> PROTOCOL connect_exp
-Rule 2     init_exp -> PROTOCOL connect_exp param_exp
+Rule 1     init_exp -> PROTOCOL NULL connect_exp
+Rule 2     init_exp -> PROTOCOL NULL connect_exp NULL param_exp
 Rule 3     connect_exp -> address_exp
-Rule 4     connect_exp -> address_exp number_exp
+Rule 4     connect_exp -> address_exp NULL sp_number_block_exp
 Rule 5     address_exp -> ipv4_exp
 Rule 6     address_exp -> domain_exp
 Rule 7     domain_exp -> DOT SN
 Rule 8     domain_exp -> SN DOT SN
 Rule 9     domain_exp -> DOT SN domain_exp
 Rule 10    domain_exp -> SN DOT SN domain_exp
-Rule 11    ipv4_exp -> number_exp DOT number_exp DOT number_exp DOT number_exp
-Rule 12    number_exp -> normal_number_exp
-Rule 13    number_exp -> normal_number_exp NOT normal_number_exp
-Rule 14    normal_number_exp -> range_number_exp
-Rule 15    normal_number_exp -> comma_number_exp
-Rule 16    normal_number_exp -> range_number_exp COMMA comma_number_exp
-Rule 17    normal_number_exp -> comma_number_exp COMMA range_number_exp
-Rule 18    range_number_exp -> NUMBER
-Rule 19    range_number_exp -> NUMBER RANGE NUMBER
-Rule 20    range_number_exp -> NUMBER MOD NUMBER
-Rule 21    range_number_exp -> NUMBER RANGE NUMBER MOD NUMBER
-Rule 22    comma_number_exp -> NUMBER
-Rule 23    comma_number_exp -> COMMA NUMBER
-Rule 24    comma_number_exp -> NUMBER COMMA NUMBER
-Rule 25    comma_number_exp -> COMMA NUMBER comma_number_exp
-Rule 26    comma_number_exp -> NUMBER COMMA NUMBER comma_number_exp
-Rule 27    param_exp -> INNER EQ SN
-Rule 28    param_exp -> INNER EQ ipv4_exp
-Rule 29    param_exp -> INNER EQ number_exp
-Rule 30    param_exp -> INNER EQ SN param_exp
-Rule 31    param_exp -> INNER EQ ipv4_exp param_exp
-Rule 32    param_exp -> INNER EQ number_exp param_exp
+Rule 11    ipv4_exp -> sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp
+Rule 12    sp_number_block_exp -> number_block_exp
+Rule 13    sp_number_block_exp -> NOT number_block_exp
+Rule 14    sp_number_block_exp -> number_block_exp NOT number_block_exp
+Rule 15    number_block_exp -> number_exp
+Rule 16    number_block_exp -> number_exp COMMA number_exp
+Rule 17    number_block_exp -> number_exp COMMA number_block_exp
+Rule 18    number_exp -> NUMBER
+Rule 19    number_exp -> NUMBER MOD NUMBER
+Rule 20    number_exp -> NUMBER RANGE NUMBER
+Rule 21    number_exp -> NUMBER RANGE NUMBER MOD NUMBER
+Rule 22    param_exp -> INNER EQ SN
+Rule 23    param_exp -> INNER EQ ipv4_exp
+Rule 24    param_exp -> INNER EQ number_block_exp
+Rule 25    param_exp -> INNER EQ SN param_exp
+Rule 26    param_exp -> INNER EQ ipv4_exp param_exp
+Rule 27    param_exp -> INNER EQ number_block_exp param_exp
 
 Terminals, with rules where they appear
 
-COMMA                : 16 17 23 24 25 26
+COMMA                : 16 17
 DOT                  : 7 8 9 10 11 11 11
-EQ                   : 27 28 29 30 31 32
-INNER                : 27 28 29 30 31 32
-MOD                  : 20 21
-NOT                  : 13
-NUMBER               : 18 19 19 20 20 21 21 21 22 23 24 24 25 26 26
+EQ                   : 22 23 24 25 26 27
+INNER                : 22 23 24 25 26 27
+MOD                  : 19 21
+NOT                  : 13 14
+NULL                 : 1 2 2 4
+NUMBER               : 18 19 19 20 20 21 21 21
 PROTOCOL             : 1 2
-RANGE                : 19 21
-SN                   : 7 8 8 9 10 10 27 30
+RANGE                : 20 21
+SN                   : 7 8 8 9 10 10 22 25
 error                : 
 
 Nonterminals, with rules where they appear
 
 address_exp          : 3 4
-comma_number_exp     : 15 16 17 25 26
 connect_exp          : 1 2
 domain_exp           : 6 9 10
 init_exp             : 0
-ipv4_exp             : 5 28 31
-normal_number_exp    : 12 13 13
-number_exp           : 4 11 11 11 11 29 32
-param_exp            : 2 30 31 32
-range_number_exp     : 14 16 17
+ipv4_exp             : 5 23 26
+number_block_exp     : 12 13 14 14 17 24 27
+number_exp           : 15 16 16 17
+param_exp            : 2 25 26 27
+sp_number_block_exp  : 4 11 11 11 11
 
 Parsing method: LALR
 
 state 0
 
     (0) S' -> . init_exp
-    (1) init_exp -> . PROTOCOL connect_exp
-    (2) init_exp -> . PROTOCOL connect_exp param_exp
+    (1) init_exp -> . PROTOCOL NULL connect_exp
+    (2) init_exp -> . PROTOCOL NULL connect_exp NULL param_exp
 
     PROTOCOL        shift and go to state 2
 
@@ -83,279 +78,225 @@ state 1
 
 state 2
 
-    (1) init_exp -> PROTOCOL . connect_exp
-    (2) init_exp -> PROTOCOL . connect_exp param_exp
+    (1) init_exp -> PROTOCOL . NULL connect_exp
+    (2) init_exp -> PROTOCOL . NULL connect_exp NULL param_exp
+
+    NULL            shift and go to state 3
+
+
+state 3
+
+    (1) init_exp -> PROTOCOL NULL . connect_exp
+    (2) init_exp -> PROTOCOL NULL . connect_exp NULL param_exp
     (3) connect_exp -> . address_exp
-    (4) connect_exp -> . address_exp number_exp
+    (4) connect_exp -> . address_exp NULL sp_number_block_exp
     (5) address_exp -> . ipv4_exp
     (6) address_exp -> . domain_exp
-    (11) ipv4_exp -> . number_exp DOT number_exp DOT number_exp DOT number_exp
+    (11) ipv4_exp -> . sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp
     (7) domain_exp -> . DOT SN
     (8) domain_exp -> . SN DOT SN
     (9) domain_exp -> . DOT SN domain_exp
     (10) domain_exp -> . SN DOT SN domain_exp
-    (12) number_exp -> . normal_number_exp
-    (13) number_exp -> . normal_number_exp NOT normal_number_exp
-    (14) normal_number_exp -> . range_number_exp
-    (15) normal_number_exp -> . comma_number_exp
-    (16) normal_number_exp -> . range_number_exp COMMA comma_number_exp
-    (17) normal_number_exp -> . comma_number_exp COMMA range_number_exp
-    (18) range_number_exp -> . NUMBER
-    (19) range_number_exp -> . NUMBER RANGE NUMBER
-    (20) range_number_exp -> . NUMBER MOD NUMBER
-    (21) range_number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
-    (22) comma_number_exp -> . NUMBER
-    (23) comma_number_exp -> . COMMA NUMBER
-    (24) comma_number_exp -> . NUMBER COMMA NUMBER
-    (25) comma_number_exp -> . COMMA NUMBER comma_number_exp
-    (26) comma_number_exp -> . NUMBER COMMA NUMBER comma_number_exp
+    (12) sp_number_block_exp -> . number_block_exp
+    (13) sp_number_block_exp -> . NOT number_block_exp
+    (14) sp_number_block_exp -> . number_block_exp NOT number_block_exp
+    (15) number_block_exp -> . number_exp
+    (16) number_block_exp -> . number_exp COMMA number_exp
+    (17) number_block_exp -> . number_exp COMMA number_block_exp
+    (18) number_exp -> . NUMBER
+    (19) number_exp -> . NUMBER MOD NUMBER
+    (20) number_exp -> . NUMBER RANGE NUMBER
+    (21) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    DOT             shift and go to state 8
-    SN              shift and go to state 9
+    DOT             shift and go to state 9
+    SN              shift and go to state 10
+    NOT             shift and go to state 12
     NUMBER          shift and go to state 14
-    COMMA           shift and go to state 13
 
-    connect_exp                    shift and go to state 3
-    address_exp                    shift and go to state 4
-    number_exp                     shift and go to state 5
-    ipv4_exp                       shift and go to state 6
-    domain_exp                     shift and go to state 7
-    normal_number_exp              shift and go to state 10
-    range_number_exp               shift and go to state 11
-    comma_number_exp               shift and go to state 12
-
-state 3
-
-    (1) init_exp -> PROTOCOL connect_exp .
-    (2) init_exp -> PROTOCOL connect_exp . param_exp
-    (27) param_exp -> . INNER EQ SN
-    (28) param_exp -> . INNER EQ ipv4_exp
-    (29) param_exp -> . INNER EQ number_exp
-    (30) param_exp -> . INNER EQ SN param_exp
-    (31) param_exp -> . INNER EQ ipv4_exp param_exp
-    (32) param_exp -> . INNER EQ number_exp param_exp
-
-    $end            reduce using rule 1 (init_exp -> PROTOCOL connect_exp .)
-    INNER           shift and go to state 16
-
-    param_exp                      shift and go to state 15
+    connect_exp                    shift and go to state 4
+    address_exp                    shift and go to state 5
+    sp_number_block_exp            shift and go to state 6
+    ipv4_exp                       shift and go to state 7
+    domain_exp                     shift and go to state 8
+    number_block_exp               shift and go to state 11
+    number_exp                     shift and go to state 13
 
 state 4
 
-    (3) connect_exp -> address_exp .
-    (4) connect_exp -> address_exp . number_exp
-    (12) number_exp -> . normal_number_exp
-    (13) number_exp -> . normal_number_exp NOT normal_number_exp
-    (14) normal_number_exp -> . range_number_exp
-    (15) normal_number_exp -> . comma_number_exp
-    (16) normal_number_exp -> . range_number_exp COMMA comma_number_exp
-    (17) normal_number_exp -> . comma_number_exp COMMA range_number_exp
-    (18) range_number_exp -> . NUMBER
-    (19) range_number_exp -> . NUMBER RANGE NUMBER
-    (20) range_number_exp -> . NUMBER MOD NUMBER
-    (21) range_number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
-    (22) comma_number_exp -> . NUMBER
-    (23) comma_number_exp -> . COMMA NUMBER
-    (24) comma_number_exp -> . NUMBER COMMA NUMBER
-    (25) comma_number_exp -> . COMMA NUMBER comma_number_exp
-    (26) comma_number_exp -> . NUMBER COMMA NUMBER comma_number_exp
+    (1) init_exp -> PROTOCOL NULL connect_exp .
+    (2) init_exp -> PROTOCOL NULL connect_exp . NULL param_exp
 
-    INNER           reduce using rule 3 (connect_exp -> address_exp .)
-    $end            reduce using rule 3 (connect_exp -> address_exp .)
-    NUMBER          shift and go to state 14
-    COMMA           shift and go to state 13
+    $end            reduce using rule 1 (init_exp -> PROTOCOL NULL connect_exp .)
+    NULL            shift and go to state 15
 
-    number_exp                     shift and go to state 17
-    normal_number_exp              shift and go to state 10
-    range_number_exp               shift and go to state 11
-    comma_number_exp               shift and go to state 12
 
 state 5
 
-    (11) ipv4_exp -> number_exp . DOT number_exp DOT number_exp DOT number_exp
+    (3) connect_exp -> address_exp .
+    (4) connect_exp -> address_exp . NULL sp_number_block_exp
 
-    DOT             shift and go to state 18
+  ! shift/reduce conflict for NULL resolved as shift
+    $end            reduce using rule 3 (connect_exp -> address_exp .)
+    NULL            shift and go to state 16
+
+  ! NULL            [ reduce using rule 3 (connect_exp -> address_exp .) ]
 
 
 state 6
 
-    (5) address_exp -> ipv4_exp .
+    (11) ipv4_exp -> sp_number_block_exp . DOT sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp
 
-    NUMBER          reduce using rule 5 (address_exp -> ipv4_exp .)
-    COMMA           reduce using rule 5 (address_exp -> ipv4_exp .)
-    INNER           reduce using rule 5 (address_exp -> ipv4_exp .)
-    $end            reduce using rule 5 (address_exp -> ipv4_exp .)
+    DOT             shift and go to state 17
 
 
 state 7
 
-    (6) address_exp -> domain_exp .
+    (5) address_exp -> ipv4_exp .
 
-    NUMBER          reduce using rule 6 (address_exp -> domain_exp .)
-    COMMA           reduce using rule 6 (address_exp -> domain_exp .)
-    INNER           reduce using rule 6 (address_exp -> domain_exp .)
-    $end            reduce using rule 6 (address_exp -> domain_exp .)
+    NULL            reduce using rule 5 (address_exp -> ipv4_exp .)
+    $end            reduce using rule 5 (address_exp -> ipv4_exp .)
 
 
 state 8
 
-    (7) domain_exp -> DOT . SN
-    (9) domain_exp -> DOT . SN domain_exp
+    (6) address_exp -> domain_exp .
 
-    SN              shift and go to state 19
+    NULL            reduce using rule 6 (address_exp -> domain_exp .)
+    $end            reduce using rule 6 (address_exp -> domain_exp .)
 
 
 state 9
 
-    (8) domain_exp -> SN . DOT SN
-    (10) domain_exp -> SN . DOT SN domain_exp
+    (7) domain_exp -> DOT . SN
+    (9) domain_exp -> DOT . SN domain_exp
 
-    DOT             shift and go to state 20
+    SN              shift and go to state 18
 
 
 state 10
 
-    (12) number_exp -> normal_number_exp .
-    (13) number_exp -> normal_number_exp . NOT normal_number_exp
+    (8) domain_exp -> SN . DOT SN
+    (10) domain_exp -> SN . DOT SN domain_exp
 
-    DOT             reduce using rule 12 (number_exp -> normal_number_exp .)
-    INNER           reduce using rule 12 (number_exp -> normal_number_exp .)
-    $end            reduce using rule 12 (number_exp -> normal_number_exp .)
-    NUMBER          reduce using rule 12 (number_exp -> normal_number_exp .)
-    COMMA           reduce using rule 12 (number_exp -> normal_number_exp .)
-    NOT             shift and go to state 21
+    DOT             shift and go to state 19
 
 
 state 11
 
-    (14) normal_number_exp -> range_number_exp .
-    (16) normal_number_exp -> range_number_exp . COMMA comma_number_exp
+    (12) sp_number_block_exp -> number_block_exp .
+    (14) sp_number_block_exp -> number_block_exp . NOT number_block_exp
 
-  ! shift/reduce conflict for COMMA resolved as shift
-    NOT             reduce using rule 14 (normal_number_exp -> range_number_exp .)
-    DOT             reduce using rule 14 (normal_number_exp -> range_number_exp .)
-    INNER           reduce using rule 14 (normal_number_exp -> range_number_exp .)
-    $end            reduce using rule 14 (normal_number_exp -> range_number_exp .)
-    NUMBER          reduce using rule 14 (normal_number_exp -> range_number_exp .)
-    COMMA           shift and go to state 22
-
-  ! COMMA           [ reduce using rule 14 (normal_number_exp -> range_number_exp .) ]
+    DOT             reduce using rule 12 (sp_number_block_exp -> number_block_exp .)
+    NULL            reduce using rule 12 (sp_number_block_exp -> number_block_exp .)
+    $end            reduce using rule 12 (sp_number_block_exp -> number_block_exp .)
+    INNER           reduce using rule 12 (sp_number_block_exp -> number_block_exp .)
+    NOT             shift and go to state 20
 
 
 state 12
 
-    (15) normal_number_exp -> comma_number_exp .
-    (17) normal_number_exp -> comma_number_exp . COMMA range_number_exp
+    (13) sp_number_block_exp -> NOT . number_block_exp
+    (15) number_block_exp -> . number_exp
+    (16) number_block_exp -> . number_exp COMMA number_exp
+    (17) number_block_exp -> . number_exp COMMA number_block_exp
+    (18) number_exp -> . NUMBER
+    (19) number_exp -> . NUMBER MOD NUMBER
+    (20) number_exp -> . NUMBER RANGE NUMBER
+    (21) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-  ! shift/reduce conflict for COMMA resolved as shift
-    NOT             reduce using rule 15 (normal_number_exp -> comma_number_exp .)
-    DOT             reduce using rule 15 (normal_number_exp -> comma_number_exp .)
-    INNER           reduce using rule 15 (normal_number_exp -> comma_number_exp .)
-    $end            reduce using rule 15 (normal_number_exp -> comma_number_exp .)
-    NUMBER          reduce using rule 15 (normal_number_exp -> comma_number_exp .)
-    COMMA           shift and go to state 23
+    NUMBER          shift and go to state 14
 
-  ! COMMA           [ reduce using rule 15 (normal_number_exp -> comma_number_exp .) ]
-
+    number_block_exp               shift and go to state 21
+    number_exp                     shift and go to state 13
 
 state 13
 
-    (23) comma_number_exp -> COMMA . NUMBER
-    (25) comma_number_exp -> COMMA . NUMBER comma_number_exp
+    (15) number_block_exp -> number_exp .
+    (16) number_block_exp -> number_exp . COMMA number_exp
+    (17) number_block_exp -> number_exp . COMMA number_block_exp
 
-    NUMBER          shift and go to state 24
+    NOT             reduce using rule 15 (number_block_exp -> number_exp .)
+    DOT             reduce using rule 15 (number_block_exp -> number_exp .)
+    NULL            reduce using rule 15 (number_block_exp -> number_exp .)
+    $end            reduce using rule 15 (number_block_exp -> number_exp .)
+    INNER           reduce using rule 15 (number_block_exp -> number_exp .)
+    COMMA           shift and go to state 22
 
 
 state 14
 
-    (18) range_number_exp -> NUMBER .
-    (19) range_number_exp -> NUMBER . RANGE NUMBER
-    (20) range_number_exp -> NUMBER . MOD NUMBER
-    (21) range_number_exp -> NUMBER . RANGE NUMBER MOD NUMBER
-    (22) comma_number_exp -> NUMBER .
-    (24) comma_number_exp -> NUMBER . COMMA NUMBER
-    (26) comma_number_exp -> NUMBER . COMMA NUMBER comma_number_exp
+    (18) number_exp -> NUMBER .
+    (19) number_exp -> NUMBER . MOD NUMBER
+    (20) number_exp -> NUMBER . RANGE NUMBER
+    (21) number_exp -> NUMBER . RANGE NUMBER MOD NUMBER
 
-  ! reduce/reduce conflict for COMMA resolved using rule 18 (range_number_exp -> NUMBER .)
-  ! reduce/reduce conflict for NOT resolved using rule 18 (range_number_exp -> NUMBER .)
-  ! reduce/reduce conflict for DOT resolved using rule 18 (range_number_exp -> NUMBER .)
-  ! reduce/reduce conflict for INNER resolved using rule 18 (range_number_exp -> NUMBER .)
-  ! reduce/reduce conflict for $end resolved using rule 18 (range_number_exp -> NUMBER .)
-  ! reduce/reduce conflict for NUMBER resolved using rule 18 (range_number_exp -> NUMBER .)
-  ! shift/reduce conflict for COMMA resolved as shift
-    NOT             reduce using rule 18 (range_number_exp -> NUMBER .)
-    DOT             reduce using rule 18 (range_number_exp -> NUMBER .)
-    INNER           reduce using rule 18 (range_number_exp -> NUMBER .)
-    $end            reduce using rule 18 (range_number_exp -> NUMBER .)
-    NUMBER          reduce using rule 18 (range_number_exp -> NUMBER .)
-    RANGE           shift and go to state 25
-    MOD             shift and go to state 26
-    COMMA           shift and go to state 27
-
-  ! COMMA           [ reduce using rule 18 (range_number_exp -> NUMBER .) ]
-  ! COMMA           [ reduce using rule 22 (comma_number_exp -> NUMBER .) ]
-  ! NOT             [ reduce using rule 22 (comma_number_exp -> NUMBER .) ]
-  ! DOT             [ reduce using rule 22 (comma_number_exp -> NUMBER .) ]
-  ! INNER           [ reduce using rule 22 (comma_number_exp -> NUMBER .) ]
-  ! $end            [ reduce using rule 22 (comma_number_exp -> NUMBER .) ]
-  ! NUMBER          [ reduce using rule 22 (comma_number_exp -> NUMBER .) ]
+    COMMA           reduce using rule 18 (number_exp -> NUMBER .)
+    NOT             reduce using rule 18 (number_exp -> NUMBER .)
+    DOT             reduce using rule 18 (number_exp -> NUMBER .)
+    NULL            reduce using rule 18 (number_exp -> NUMBER .)
+    $end            reduce using rule 18 (number_exp -> NUMBER .)
+    INNER           reduce using rule 18 (number_exp -> NUMBER .)
+    MOD             shift and go to state 23
+    RANGE           shift and go to state 24
 
 
 state 15
 
-    (2) init_exp -> PROTOCOL connect_exp param_exp .
+    (2) init_exp -> PROTOCOL NULL connect_exp NULL . param_exp
+    (22) param_exp -> . INNER EQ SN
+    (23) param_exp -> . INNER EQ ipv4_exp
+    (24) param_exp -> . INNER EQ number_block_exp
+    (25) param_exp -> . INNER EQ SN param_exp
+    (26) param_exp -> . INNER EQ ipv4_exp param_exp
+    (27) param_exp -> . INNER EQ number_block_exp param_exp
 
-    $end            reduce using rule 2 (init_exp -> PROTOCOL connect_exp param_exp .)
+    INNER           shift and go to state 26
 
+    param_exp                      shift and go to state 25
 
 state 16
 
-    (27) param_exp -> INNER . EQ SN
-    (28) param_exp -> INNER . EQ ipv4_exp
-    (29) param_exp -> INNER . EQ number_exp
-    (30) param_exp -> INNER . EQ SN param_exp
-    (31) param_exp -> INNER . EQ ipv4_exp param_exp
-    (32) param_exp -> INNER . EQ number_exp param_exp
+    (4) connect_exp -> address_exp NULL . sp_number_block_exp
+    (12) sp_number_block_exp -> . number_block_exp
+    (13) sp_number_block_exp -> . NOT number_block_exp
+    (14) sp_number_block_exp -> . number_block_exp NOT number_block_exp
+    (15) number_block_exp -> . number_exp
+    (16) number_block_exp -> . number_exp COMMA number_exp
+    (17) number_block_exp -> . number_exp COMMA number_block_exp
+    (18) number_exp -> . NUMBER
+    (19) number_exp -> . NUMBER MOD NUMBER
+    (20) number_exp -> . NUMBER RANGE NUMBER
+    (21) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    EQ              shift and go to state 28
+    NOT             shift and go to state 12
+    NUMBER          shift and go to state 14
 
+    sp_number_block_exp            shift and go to state 27
+    number_block_exp               shift and go to state 11
+    number_exp                     shift and go to state 13
 
 state 17
 
-    (4) connect_exp -> address_exp number_exp .
+    (11) ipv4_exp -> sp_number_block_exp DOT . sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp
+    (12) sp_number_block_exp -> . number_block_exp
+    (13) sp_number_block_exp -> . NOT number_block_exp
+    (14) sp_number_block_exp -> . number_block_exp NOT number_block_exp
+    (15) number_block_exp -> . number_exp
+    (16) number_block_exp -> . number_exp COMMA number_exp
+    (17) number_block_exp -> . number_exp COMMA number_block_exp
+    (18) number_exp -> . NUMBER
+    (19) number_exp -> . NUMBER MOD NUMBER
+    (20) number_exp -> . NUMBER RANGE NUMBER
+    (21) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    INNER           reduce using rule 4 (connect_exp -> address_exp number_exp .)
-    $end            reduce using rule 4 (connect_exp -> address_exp number_exp .)
+    NOT             shift and go to state 12
+    NUMBER          shift and go to state 14
 
+    sp_number_block_exp            shift and go to state 28
+    number_block_exp               shift and go to state 11
+    number_exp                     shift and go to state 13
 
 state 18
-
-    (11) ipv4_exp -> number_exp DOT . number_exp DOT number_exp DOT number_exp
-    (12) number_exp -> . normal_number_exp
-    (13) number_exp -> . normal_number_exp NOT normal_number_exp
-    (14) normal_number_exp -> . range_number_exp
-    (15) normal_number_exp -> . comma_number_exp
-    (16) normal_number_exp -> . range_number_exp COMMA comma_number_exp
-    (17) normal_number_exp -> . comma_number_exp COMMA range_number_exp
-    (18) range_number_exp -> . NUMBER
-    (19) range_number_exp -> . NUMBER RANGE NUMBER
-    (20) range_number_exp -> . NUMBER MOD NUMBER
-    (21) range_number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
-    (22) comma_number_exp -> . NUMBER
-    (23) comma_number_exp -> . COMMA NUMBER
-    (24) comma_number_exp -> . NUMBER COMMA NUMBER
-    (25) comma_number_exp -> . COMMA NUMBER comma_number_exp
-    (26) comma_number_exp -> . NUMBER COMMA NUMBER comma_number_exp
-
-    NUMBER          shift and go to state 14
-    COMMA           shift and go to state 13
-
-    number_exp                     shift and go to state 29
-    normal_number_exp              shift and go to state 10
-    range_number_exp               shift and go to state 11
-    comma_number_exp               shift and go to state 12
-
-state 19
 
     (7) domain_exp -> DOT SN .
     (9) domain_exp -> DOT SN . domain_exp
@@ -364,173 +305,122 @@ state 19
     (9) domain_exp -> . DOT SN domain_exp
     (10) domain_exp -> . SN DOT SN domain_exp
 
-    NUMBER          reduce using rule 7 (domain_exp -> DOT SN .)
-    COMMA           reduce using rule 7 (domain_exp -> DOT SN .)
-    INNER           reduce using rule 7 (domain_exp -> DOT SN .)
+    NULL            reduce using rule 7 (domain_exp -> DOT SN .)
     $end            reduce using rule 7 (domain_exp -> DOT SN .)
-    DOT             shift and go to state 8
-    SN              shift and go to state 9
+    DOT             shift and go to state 9
+    SN              shift and go to state 10
 
-    domain_exp                     shift and go to state 30
+    domain_exp                     shift and go to state 29
 
-state 20
+state 19
 
     (8) domain_exp -> SN DOT . SN
     (10) domain_exp -> SN DOT . SN domain_exp
 
-    SN              shift and go to state 31
+    SN              shift and go to state 30
 
+
+state 20
+
+    (14) sp_number_block_exp -> number_block_exp NOT . number_block_exp
+    (15) number_block_exp -> . number_exp
+    (16) number_block_exp -> . number_exp COMMA number_exp
+    (17) number_block_exp -> . number_exp COMMA number_block_exp
+    (18) number_exp -> . NUMBER
+    (19) number_exp -> . NUMBER MOD NUMBER
+    (20) number_exp -> . NUMBER RANGE NUMBER
+    (21) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+
+    NUMBER          shift and go to state 14
+
+    number_block_exp               shift and go to state 31
+    number_exp                     shift and go to state 13
 
 state 21
 
-    (13) number_exp -> normal_number_exp NOT . normal_number_exp
-    (14) normal_number_exp -> . range_number_exp
-    (15) normal_number_exp -> . comma_number_exp
-    (16) normal_number_exp -> . range_number_exp COMMA comma_number_exp
-    (17) normal_number_exp -> . comma_number_exp COMMA range_number_exp
-    (18) range_number_exp -> . NUMBER
-    (19) range_number_exp -> . NUMBER RANGE NUMBER
-    (20) range_number_exp -> . NUMBER MOD NUMBER
-    (21) range_number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
-    (22) comma_number_exp -> . NUMBER
-    (23) comma_number_exp -> . COMMA NUMBER
-    (24) comma_number_exp -> . NUMBER COMMA NUMBER
-    (25) comma_number_exp -> . COMMA NUMBER comma_number_exp
-    (26) comma_number_exp -> . NUMBER COMMA NUMBER comma_number_exp
+    (13) sp_number_block_exp -> NOT number_block_exp .
 
-    NUMBER          shift and go to state 14
-    COMMA           shift and go to state 13
+    DOT             reduce using rule 13 (sp_number_block_exp -> NOT number_block_exp .)
+    NULL            reduce using rule 13 (sp_number_block_exp -> NOT number_block_exp .)
+    $end            reduce using rule 13 (sp_number_block_exp -> NOT number_block_exp .)
+    INNER           reduce using rule 13 (sp_number_block_exp -> NOT number_block_exp .)
 
-    normal_number_exp              shift and go to state 32
-    range_number_exp               shift and go to state 11
-    comma_number_exp               shift and go to state 12
 
 state 22
 
-    (16) normal_number_exp -> range_number_exp COMMA . comma_number_exp
-    (22) comma_number_exp -> . NUMBER
-    (23) comma_number_exp -> . COMMA NUMBER
-    (24) comma_number_exp -> . NUMBER COMMA NUMBER
-    (25) comma_number_exp -> . COMMA NUMBER comma_number_exp
-    (26) comma_number_exp -> . NUMBER COMMA NUMBER comma_number_exp
+    (16) number_block_exp -> number_exp COMMA . number_exp
+    (17) number_block_exp -> number_exp COMMA . number_block_exp
+    (18) number_exp -> . NUMBER
+    (19) number_exp -> . NUMBER MOD NUMBER
+    (20) number_exp -> . NUMBER RANGE NUMBER
+    (21) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (15) number_block_exp -> . number_exp
+    (16) number_block_exp -> . number_exp COMMA number_exp
+    (17) number_block_exp -> . number_exp COMMA number_block_exp
 
-    NUMBER          shift and go to state 34
-    COMMA           shift and go to state 13
+    NUMBER          shift and go to state 14
 
-    comma_number_exp               shift and go to state 33
+    number_exp                     shift and go to state 32
+    number_block_exp               shift and go to state 33
 
 state 23
 
-    (17) normal_number_exp -> comma_number_exp COMMA . range_number_exp
-    (18) range_number_exp -> . NUMBER
-    (19) range_number_exp -> . NUMBER RANGE NUMBER
-    (20) range_number_exp -> . NUMBER MOD NUMBER
-    (21) range_number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (19) number_exp -> NUMBER MOD . NUMBER
 
-    NUMBER          shift and go to state 36
+    NUMBER          shift and go to state 34
 
-    range_number_exp               shift and go to state 35
 
 state 24
 
-    (23) comma_number_exp -> COMMA NUMBER .
-    (25) comma_number_exp -> COMMA NUMBER . comma_number_exp
-    (22) comma_number_exp -> . NUMBER
-    (23) comma_number_exp -> . COMMA NUMBER
-    (24) comma_number_exp -> . NUMBER COMMA NUMBER
-    (25) comma_number_exp -> . COMMA NUMBER comma_number_exp
-    (26) comma_number_exp -> . NUMBER COMMA NUMBER comma_number_exp
+    (20) number_exp -> NUMBER RANGE . NUMBER
+    (21) number_exp -> NUMBER RANGE . NUMBER MOD NUMBER
 
-  ! shift/reduce conflict for NUMBER resolved as shift
-  ! shift/reduce conflict for COMMA resolved as shift
-    NOT             reduce using rule 23 (comma_number_exp -> COMMA NUMBER .)
-    DOT             reduce using rule 23 (comma_number_exp -> COMMA NUMBER .)
-    INNER           reduce using rule 23 (comma_number_exp -> COMMA NUMBER .)
-    $end            reduce using rule 23 (comma_number_exp -> COMMA NUMBER .)
-    NUMBER          shift and go to state 34
-    COMMA           shift and go to state 13
+    NUMBER          shift and go to state 35
 
-  ! COMMA           [ reduce using rule 23 (comma_number_exp -> COMMA NUMBER .) ]
-  ! NUMBER          [ reduce using rule 23 (comma_number_exp -> COMMA NUMBER .) ]
-
-    comma_number_exp               shift and go to state 37
 
 state 25
 
-    (19) range_number_exp -> NUMBER RANGE . NUMBER
-    (21) range_number_exp -> NUMBER RANGE . NUMBER MOD NUMBER
+    (2) init_exp -> PROTOCOL NULL connect_exp NULL param_exp .
 
-    NUMBER          shift and go to state 38
+    $end            reduce using rule 2 (init_exp -> PROTOCOL NULL connect_exp NULL param_exp .)
 
 
 state 26
 
-    (20) range_number_exp -> NUMBER MOD . NUMBER
+    (22) param_exp -> INNER . EQ SN
+    (23) param_exp -> INNER . EQ ipv4_exp
+    (24) param_exp -> INNER . EQ number_block_exp
+    (25) param_exp -> INNER . EQ SN param_exp
+    (26) param_exp -> INNER . EQ ipv4_exp param_exp
+    (27) param_exp -> INNER . EQ number_block_exp param_exp
 
-    NUMBER          shift and go to state 39
+    EQ              shift and go to state 36
 
 
 state 27
 
-    (24) comma_number_exp -> NUMBER COMMA . NUMBER
-    (26) comma_number_exp -> NUMBER COMMA . NUMBER comma_number_exp
+    (4) connect_exp -> address_exp NULL sp_number_block_exp .
 
-    NUMBER          shift and go to state 40
+    NULL            reduce using rule 4 (connect_exp -> address_exp NULL sp_number_block_exp .)
+    $end            reduce using rule 4 (connect_exp -> address_exp NULL sp_number_block_exp .)
 
 
 state 28
 
-    (27) param_exp -> INNER EQ . SN
-    (28) param_exp -> INNER EQ . ipv4_exp
-    (29) param_exp -> INNER EQ . number_exp
-    (30) param_exp -> INNER EQ . SN param_exp
-    (31) param_exp -> INNER EQ . ipv4_exp param_exp
-    (32) param_exp -> INNER EQ . number_exp param_exp
-    (11) ipv4_exp -> . number_exp DOT number_exp DOT number_exp DOT number_exp
-    (12) number_exp -> . normal_number_exp
-    (13) number_exp -> . normal_number_exp NOT normal_number_exp
-    (14) normal_number_exp -> . range_number_exp
-    (15) normal_number_exp -> . comma_number_exp
-    (16) normal_number_exp -> . range_number_exp COMMA comma_number_exp
-    (17) normal_number_exp -> . comma_number_exp COMMA range_number_exp
-    (18) range_number_exp -> . NUMBER
-    (19) range_number_exp -> . NUMBER RANGE NUMBER
-    (20) range_number_exp -> . NUMBER MOD NUMBER
-    (21) range_number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
-    (22) comma_number_exp -> . NUMBER
-    (23) comma_number_exp -> . COMMA NUMBER
-    (24) comma_number_exp -> . NUMBER COMMA NUMBER
-    (25) comma_number_exp -> . COMMA NUMBER comma_number_exp
-    (26) comma_number_exp -> . NUMBER COMMA NUMBER comma_number_exp
+    (11) ipv4_exp -> sp_number_block_exp DOT sp_number_block_exp . DOT sp_number_block_exp DOT sp_number_block_exp
 
-    SN              shift and go to state 41
-    NUMBER          shift and go to state 14
-    COMMA           shift and go to state 13
+    DOT             shift and go to state 37
 
-    ipv4_exp                       shift and go to state 42
-    number_exp                     shift and go to state 43
-    normal_number_exp              shift and go to state 10
-    range_number_exp               shift and go to state 11
-    comma_number_exp               shift and go to state 12
 
 state 29
 
-    (11) ipv4_exp -> number_exp DOT number_exp . DOT number_exp DOT number_exp
-
-    DOT             shift and go to state 44
-
-
-state 30
-
     (9) domain_exp -> DOT SN domain_exp .
 
-    NUMBER          reduce using rule 9 (domain_exp -> DOT SN domain_exp .)
-    COMMA           reduce using rule 9 (domain_exp -> DOT SN domain_exp .)
-    INNER           reduce using rule 9 (domain_exp -> DOT SN domain_exp .)
+    NULL            reduce using rule 9 (domain_exp -> DOT SN domain_exp .)
     $end            reduce using rule 9 (domain_exp -> DOT SN domain_exp .)
 
 
-state 31
+state 30
 
     (8) domain_exp -> SN DOT SN .
     (10) domain_exp -> SN DOT SN . domain_exp
@@ -539,338 +429,276 @@ state 31
     (9) domain_exp -> . DOT SN domain_exp
     (10) domain_exp -> . SN DOT SN domain_exp
 
-    NUMBER          reduce using rule 8 (domain_exp -> SN DOT SN .)
-    COMMA           reduce using rule 8 (domain_exp -> SN DOT SN .)
-    INNER           reduce using rule 8 (domain_exp -> SN DOT SN .)
+    NULL            reduce using rule 8 (domain_exp -> SN DOT SN .)
     $end            reduce using rule 8 (domain_exp -> SN DOT SN .)
-    DOT             shift and go to state 8
-    SN              shift and go to state 9
+    DOT             shift and go to state 9
+    SN              shift and go to state 10
 
-    domain_exp                     shift and go to state 45
+    domain_exp                     shift and go to state 38
+
+state 31
+
+    (14) sp_number_block_exp -> number_block_exp NOT number_block_exp .
+
+    DOT             reduce using rule 14 (sp_number_block_exp -> number_block_exp NOT number_block_exp .)
+    NULL            reduce using rule 14 (sp_number_block_exp -> number_block_exp NOT number_block_exp .)
+    $end            reduce using rule 14 (sp_number_block_exp -> number_block_exp NOT number_block_exp .)
+    INNER           reduce using rule 14 (sp_number_block_exp -> number_block_exp NOT number_block_exp .)
+
 
 state 32
 
-    (13) number_exp -> normal_number_exp NOT normal_number_exp .
+    (16) number_block_exp -> number_exp COMMA number_exp .
+    (15) number_block_exp -> number_exp .
+    (16) number_block_exp -> number_exp . COMMA number_exp
+    (17) number_block_exp -> number_exp . COMMA number_block_exp
 
-    DOT             reduce using rule 13 (number_exp -> normal_number_exp NOT normal_number_exp .)
-    INNER           reduce using rule 13 (number_exp -> normal_number_exp NOT normal_number_exp .)
-    $end            reduce using rule 13 (number_exp -> normal_number_exp NOT normal_number_exp .)
-    NUMBER          reduce using rule 13 (number_exp -> normal_number_exp NOT normal_number_exp .)
-    COMMA           reduce using rule 13 (number_exp -> normal_number_exp NOT normal_number_exp .)
+  ! reduce/reduce conflict for NOT resolved using rule 15 (number_block_exp -> number_exp .)
+  ! reduce/reduce conflict for DOT resolved using rule 15 (number_block_exp -> number_exp .)
+  ! reduce/reduce conflict for NULL resolved using rule 15 (number_block_exp -> number_exp .)
+  ! reduce/reduce conflict for $end resolved using rule 15 (number_block_exp -> number_exp .)
+  ! reduce/reduce conflict for INNER resolved using rule 15 (number_block_exp -> number_exp .)
+    NOT             reduce using rule 15 (number_block_exp -> number_exp .)
+    DOT             reduce using rule 15 (number_block_exp -> number_exp .)
+    NULL            reduce using rule 15 (number_block_exp -> number_exp .)
+    $end            reduce using rule 15 (number_block_exp -> number_exp .)
+    INNER           reduce using rule 15 (number_block_exp -> number_exp .)
+    COMMA           shift and go to state 22
+
+  ! NOT             [ reduce using rule 16 (number_block_exp -> number_exp COMMA number_exp .) ]
+  ! DOT             [ reduce using rule 16 (number_block_exp -> number_exp COMMA number_exp .) ]
+  ! NULL            [ reduce using rule 16 (number_block_exp -> number_exp COMMA number_exp .) ]
+  ! $end            [ reduce using rule 16 (number_block_exp -> number_exp COMMA number_exp .) ]
+  ! INNER           [ reduce using rule 16 (number_block_exp -> number_exp COMMA number_exp .) ]
 
 
 state 33
 
-    (16) normal_number_exp -> range_number_exp COMMA comma_number_exp .
+    (17) number_block_exp -> number_exp COMMA number_block_exp .
 
-    NOT             reduce using rule 16 (normal_number_exp -> range_number_exp COMMA comma_number_exp .)
-    DOT             reduce using rule 16 (normal_number_exp -> range_number_exp COMMA comma_number_exp .)
-    INNER           reduce using rule 16 (normal_number_exp -> range_number_exp COMMA comma_number_exp .)
-    $end            reduce using rule 16 (normal_number_exp -> range_number_exp COMMA comma_number_exp .)
-    NUMBER          reduce using rule 16 (normal_number_exp -> range_number_exp COMMA comma_number_exp .)
-    COMMA           reduce using rule 16 (normal_number_exp -> range_number_exp COMMA comma_number_exp .)
+    NOT             reduce using rule 17 (number_block_exp -> number_exp COMMA number_block_exp .)
+    DOT             reduce using rule 17 (number_block_exp -> number_exp COMMA number_block_exp .)
+    NULL            reduce using rule 17 (number_block_exp -> number_exp COMMA number_block_exp .)
+    $end            reduce using rule 17 (number_block_exp -> number_exp COMMA number_block_exp .)
+    INNER           reduce using rule 17 (number_block_exp -> number_exp COMMA number_block_exp .)
 
 
 state 34
 
-    (22) comma_number_exp -> NUMBER .
-    (24) comma_number_exp -> NUMBER . COMMA NUMBER
-    (26) comma_number_exp -> NUMBER . COMMA NUMBER comma_number_exp
+    (19) number_exp -> NUMBER MOD NUMBER .
 
-  ! shift/reduce conflict for COMMA resolved as shift
-    NOT             reduce using rule 22 (comma_number_exp -> NUMBER .)
-    DOT             reduce using rule 22 (comma_number_exp -> NUMBER .)
-    INNER           reduce using rule 22 (comma_number_exp -> NUMBER .)
-    $end            reduce using rule 22 (comma_number_exp -> NUMBER .)
-    NUMBER          reduce using rule 22 (comma_number_exp -> NUMBER .)
-    COMMA           shift and go to state 27
-
-  ! COMMA           [ reduce using rule 22 (comma_number_exp -> NUMBER .) ]
+    COMMA           reduce using rule 19 (number_exp -> NUMBER MOD NUMBER .)
+    NOT             reduce using rule 19 (number_exp -> NUMBER MOD NUMBER .)
+    DOT             reduce using rule 19 (number_exp -> NUMBER MOD NUMBER .)
+    NULL            reduce using rule 19 (number_exp -> NUMBER MOD NUMBER .)
+    $end            reduce using rule 19 (number_exp -> NUMBER MOD NUMBER .)
+    INNER           reduce using rule 19 (number_exp -> NUMBER MOD NUMBER .)
 
 
 state 35
 
-    (17) normal_number_exp -> comma_number_exp COMMA range_number_exp .
+    (20) number_exp -> NUMBER RANGE NUMBER .
+    (21) number_exp -> NUMBER RANGE NUMBER . MOD NUMBER
 
-    NOT             reduce using rule 17 (normal_number_exp -> comma_number_exp COMMA range_number_exp .)
-    DOT             reduce using rule 17 (normal_number_exp -> comma_number_exp COMMA range_number_exp .)
-    INNER           reduce using rule 17 (normal_number_exp -> comma_number_exp COMMA range_number_exp .)
-    $end            reduce using rule 17 (normal_number_exp -> comma_number_exp COMMA range_number_exp .)
-    NUMBER          reduce using rule 17 (normal_number_exp -> comma_number_exp COMMA range_number_exp .)
-    COMMA           reduce using rule 17 (normal_number_exp -> comma_number_exp COMMA range_number_exp .)
+    COMMA           reduce using rule 20 (number_exp -> NUMBER RANGE NUMBER .)
+    NOT             reduce using rule 20 (number_exp -> NUMBER RANGE NUMBER .)
+    DOT             reduce using rule 20 (number_exp -> NUMBER RANGE NUMBER .)
+    NULL            reduce using rule 20 (number_exp -> NUMBER RANGE NUMBER .)
+    $end            reduce using rule 20 (number_exp -> NUMBER RANGE NUMBER .)
+    INNER           reduce using rule 20 (number_exp -> NUMBER RANGE NUMBER .)
+    MOD             shift and go to state 39
 
 
 state 36
 
-    (18) range_number_exp -> NUMBER .
-    (19) range_number_exp -> NUMBER . RANGE NUMBER
-    (20) range_number_exp -> NUMBER . MOD NUMBER
-    (21) range_number_exp -> NUMBER . RANGE NUMBER MOD NUMBER
+    (22) param_exp -> INNER EQ . SN
+    (23) param_exp -> INNER EQ . ipv4_exp
+    (24) param_exp -> INNER EQ . number_block_exp
+    (25) param_exp -> INNER EQ . SN param_exp
+    (26) param_exp -> INNER EQ . ipv4_exp param_exp
+    (27) param_exp -> INNER EQ . number_block_exp param_exp
+    (11) ipv4_exp -> . sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp
+    (15) number_block_exp -> . number_exp
+    (16) number_block_exp -> . number_exp COMMA number_exp
+    (17) number_block_exp -> . number_exp COMMA number_block_exp
+    (12) sp_number_block_exp -> . number_block_exp
+    (13) sp_number_block_exp -> . NOT number_block_exp
+    (14) sp_number_block_exp -> . number_block_exp NOT number_block_exp
+    (18) number_exp -> . NUMBER
+    (19) number_exp -> . NUMBER MOD NUMBER
+    (20) number_exp -> . NUMBER RANGE NUMBER
+    (21) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    NOT             reduce using rule 18 (range_number_exp -> NUMBER .)
-    DOT             reduce using rule 18 (range_number_exp -> NUMBER .)
-    INNER           reduce using rule 18 (range_number_exp -> NUMBER .)
-    $end            reduce using rule 18 (range_number_exp -> NUMBER .)
-    NUMBER          reduce using rule 18 (range_number_exp -> NUMBER .)
-    COMMA           reduce using rule 18 (range_number_exp -> NUMBER .)
-    RANGE           shift and go to state 25
-    MOD             shift and go to state 26
+    SN              shift and go to state 40
+    NOT             shift and go to state 12
+    NUMBER          shift and go to state 14
 
+    ipv4_exp                       shift and go to state 41
+    number_block_exp               shift and go to state 42
+    sp_number_block_exp            shift and go to state 6
+    number_exp                     shift and go to state 13
 
 state 37
 
-    (25) comma_number_exp -> COMMA NUMBER comma_number_exp .
+    (11) ipv4_exp -> sp_number_block_exp DOT sp_number_block_exp DOT . sp_number_block_exp DOT sp_number_block_exp
+    (12) sp_number_block_exp -> . number_block_exp
+    (13) sp_number_block_exp -> . NOT number_block_exp
+    (14) sp_number_block_exp -> . number_block_exp NOT number_block_exp
+    (15) number_block_exp -> . number_exp
+    (16) number_block_exp -> . number_exp COMMA number_exp
+    (17) number_block_exp -> . number_exp COMMA number_block_exp
+    (18) number_exp -> . NUMBER
+    (19) number_exp -> . NUMBER MOD NUMBER
+    (20) number_exp -> . NUMBER RANGE NUMBER
+    (21) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    COMMA           reduce using rule 25 (comma_number_exp -> COMMA NUMBER comma_number_exp .)
-    NOT             reduce using rule 25 (comma_number_exp -> COMMA NUMBER comma_number_exp .)
-    DOT             reduce using rule 25 (comma_number_exp -> COMMA NUMBER comma_number_exp .)
-    INNER           reduce using rule 25 (comma_number_exp -> COMMA NUMBER comma_number_exp .)
-    $end            reduce using rule 25 (comma_number_exp -> COMMA NUMBER comma_number_exp .)
-    NUMBER          reduce using rule 25 (comma_number_exp -> COMMA NUMBER comma_number_exp .)
+    NOT             shift and go to state 12
+    NUMBER          shift and go to state 14
 
+    sp_number_block_exp            shift and go to state 43
+    number_block_exp               shift and go to state 11
+    number_exp                     shift and go to state 13
 
 state 38
 
-    (19) range_number_exp -> NUMBER RANGE NUMBER .
-    (21) range_number_exp -> NUMBER RANGE NUMBER . MOD NUMBER
+    (10) domain_exp -> SN DOT SN domain_exp .
 
-    COMMA           reduce using rule 19 (range_number_exp -> NUMBER RANGE NUMBER .)
-    NOT             reduce using rule 19 (range_number_exp -> NUMBER RANGE NUMBER .)
-    DOT             reduce using rule 19 (range_number_exp -> NUMBER RANGE NUMBER .)
-    INNER           reduce using rule 19 (range_number_exp -> NUMBER RANGE NUMBER .)
-    $end            reduce using rule 19 (range_number_exp -> NUMBER RANGE NUMBER .)
-    NUMBER          reduce using rule 19 (range_number_exp -> NUMBER RANGE NUMBER .)
-    MOD             shift and go to state 46
+    NULL            reduce using rule 10 (domain_exp -> SN DOT SN domain_exp .)
+    $end            reduce using rule 10 (domain_exp -> SN DOT SN domain_exp .)
 
 
 state 39
 
-    (20) range_number_exp -> NUMBER MOD NUMBER .
+    (21) number_exp -> NUMBER RANGE NUMBER MOD . NUMBER
 
-    COMMA           reduce using rule 20 (range_number_exp -> NUMBER MOD NUMBER .)
-    NOT             reduce using rule 20 (range_number_exp -> NUMBER MOD NUMBER .)
-    DOT             reduce using rule 20 (range_number_exp -> NUMBER MOD NUMBER .)
-    INNER           reduce using rule 20 (range_number_exp -> NUMBER MOD NUMBER .)
-    $end            reduce using rule 20 (range_number_exp -> NUMBER MOD NUMBER .)
-    NUMBER          reduce using rule 20 (range_number_exp -> NUMBER MOD NUMBER .)
+    NUMBER          shift and go to state 44
 
 
 state 40
 
-    (24) comma_number_exp -> NUMBER COMMA NUMBER .
-    (26) comma_number_exp -> NUMBER COMMA NUMBER . comma_number_exp
-    (22) comma_number_exp -> . NUMBER
-    (23) comma_number_exp -> . COMMA NUMBER
-    (24) comma_number_exp -> . NUMBER COMMA NUMBER
-    (25) comma_number_exp -> . COMMA NUMBER comma_number_exp
-    (26) comma_number_exp -> . NUMBER COMMA NUMBER comma_number_exp
+    (22) param_exp -> INNER EQ SN .
+    (25) param_exp -> INNER EQ SN . param_exp
+    (22) param_exp -> . INNER EQ SN
+    (23) param_exp -> . INNER EQ ipv4_exp
+    (24) param_exp -> . INNER EQ number_block_exp
+    (25) param_exp -> . INNER EQ SN param_exp
+    (26) param_exp -> . INNER EQ ipv4_exp param_exp
+    (27) param_exp -> . INNER EQ number_block_exp param_exp
 
-  ! shift/reduce conflict for NUMBER resolved as shift
-  ! shift/reduce conflict for COMMA resolved as shift
-    NOT             reduce using rule 24 (comma_number_exp -> NUMBER COMMA NUMBER .)
-    DOT             reduce using rule 24 (comma_number_exp -> NUMBER COMMA NUMBER .)
-    INNER           reduce using rule 24 (comma_number_exp -> NUMBER COMMA NUMBER .)
-    $end            reduce using rule 24 (comma_number_exp -> NUMBER COMMA NUMBER .)
-    NUMBER          shift and go to state 34
-    COMMA           shift and go to state 13
+    $end            reduce using rule 22 (param_exp -> INNER EQ SN .)
+    INNER           shift and go to state 26
 
-  ! COMMA           [ reduce using rule 24 (comma_number_exp -> NUMBER COMMA NUMBER .) ]
-  ! NUMBER          [ reduce using rule 24 (comma_number_exp -> NUMBER COMMA NUMBER .) ]
-
-    comma_number_exp               shift and go to state 47
+    param_exp                      shift and go to state 45
 
 state 41
 
-    (27) param_exp -> INNER EQ SN .
-    (30) param_exp -> INNER EQ SN . param_exp
-    (27) param_exp -> . INNER EQ SN
-    (28) param_exp -> . INNER EQ ipv4_exp
-    (29) param_exp -> . INNER EQ number_exp
-    (30) param_exp -> . INNER EQ SN param_exp
-    (31) param_exp -> . INNER EQ ipv4_exp param_exp
-    (32) param_exp -> . INNER EQ number_exp param_exp
+    (23) param_exp -> INNER EQ ipv4_exp .
+    (26) param_exp -> INNER EQ ipv4_exp . param_exp
+    (22) param_exp -> . INNER EQ SN
+    (23) param_exp -> . INNER EQ ipv4_exp
+    (24) param_exp -> . INNER EQ number_block_exp
+    (25) param_exp -> . INNER EQ SN param_exp
+    (26) param_exp -> . INNER EQ ipv4_exp param_exp
+    (27) param_exp -> . INNER EQ number_block_exp param_exp
 
-    $end            reduce using rule 27 (param_exp -> INNER EQ SN .)
-    INNER           shift and go to state 16
+    $end            reduce using rule 23 (param_exp -> INNER EQ ipv4_exp .)
+    INNER           shift and go to state 26
 
-    param_exp                      shift and go to state 48
+    param_exp                      shift and go to state 46
 
 state 42
 
-    (28) param_exp -> INNER EQ ipv4_exp .
-    (31) param_exp -> INNER EQ ipv4_exp . param_exp
-    (27) param_exp -> . INNER EQ SN
-    (28) param_exp -> . INNER EQ ipv4_exp
-    (29) param_exp -> . INNER EQ number_exp
-    (30) param_exp -> . INNER EQ SN param_exp
-    (31) param_exp -> . INNER EQ ipv4_exp param_exp
-    (32) param_exp -> . INNER EQ number_exp param_exp
+    (24) param_exp -> INNER EQ number_block_exp .
+    (27) param_exp -> INNER EQ number_block_exp . param_exp
+    (12) sp_number_block_exp -> number_block_exp .
+    (14) sp_number_block_exp -> number_block_exp . NOT number_block_exp
+    (22) param_exp -> . INNER EQ SN
+    (23) param_exp -> . INNER EQ ipv4_exp
+    (24) param_exp -> . INNER EQ number_block_exp
+    (25) param_exp -> . INNER EQ SN param_exp
+    (26) param_exp -> . INNER EQ ipv4_exp param_exp
+    (27) param_exp -> . INNER EQ number_block_exp param_exp
 
-    $end            reduce using rule 28 (param_exp -> INNER EQ ipv4_exp .)
-    INNER           shift and go to state 16
+    $end            reduce using rule 24 (param_exp -> INNER EQ number_block_exp .)
+    DOT             reduce using rule 12 (sp_number_block_exp -> number_block_exp .)
+    NOT             shift and go to state 20
+    INNER           shift and go to state 26
 
-    param_exp                      shift and go to state 49
+    param_exp                      shift and go to state 47
 
 state 43
 
-    (29) param_exp -> INNER EQ number_exp .
-    (32) param_exp -> INNER EQ number_exp . param_exp
-    (11) ipv4_exp -> number_exp . DOT number_exp DOT number_exp DOT number_exp
-    (27) param_exp -> . INNER EQ SN
-    (28) param_exp -> . INNER EQ ipv4_exp
-    (29) param_exp -> . INNER EQ number_exp
-    (30) param_exp -> . INNER EQ SN param_exp
-    (31) param_exp -> . INNER EQ ipv4_exp param_exp
-    (32) param_exp -> . INNER EQ number_exp param_exp
+    (11) ipv4_exp -> sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp . DOT sp_number_block_exp
 
-    $end            reduce using rule 29 (param_exp -> INNER EQ number_exp .)
-    DOT             shift and go to state 18
-    INNER           shift and go to state 16
+    DOT             shift and go to state 48
 
-    param_exp                      shift and go to state 50
 
 state 44
 
-    (11) ipv4_exp -> number_exp DOT number_exp DOT . number_exp DOT number_exp
-    (12) number_exp -> . normal_number_exp
-    (13) number_exp -> . normal_number_exp NOT normal_number_exp
-    (14) normal_number_exp -> . range_number_exp
-    (15) normal_number_exp -> . comma_number_exp
-    (16) normal_number_exp -> . range_number_exp COMMA comma_number_exp
-    (17) normal_number_exp -> . comma_number_exp COMMA range_number_exp
-    (18) range_number_exp -> . NUMBER
-    (19) range_number_exp -> . NUMBER RANGE NUMBER
-    (20) range_number_exp -> . NUMBER MOD NUMBER
-    (21) range_number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
-    (22) comma_number_exp -> . NUMBER
-    (23) comma_number_exp -> . COMMA NUMBER
-    (24) comma_number_exp -> . NUMBER COMMA NUMBER
-    (25) comma_number_exp -> . COMMA NUMBER comma_number_exp
-    (26) comma_number_exp -> . NUMBER COMMA NUMBER comma_number_exp
+    (21) number_exp -> NUMBER RANGE NUMBER MOD NUMBER .
 
-    NUMBER          shift and go to state 14
-    COMMA           shift and go to state 13
+    COMMA           reduce using rule 21 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
+    NOT             reduce using rule 21 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
+    DOT             reduce using rule 21 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
+    NULL            reduce using rule 21 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
+    $end            reduce using rule 21 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
+    INNER           reduce using rule 21 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
 
-    number_exp                     shift and go to state 51
-    normal_number_exp              shift and go to state 10
-    range_number_exp               shift and go to state 11
-    comma_number_exp               shift and go to state 12
 
 state 45
 
-    (10) domain_exp -> SN DOT SN domain_exp .
+    (25) param_exp -> INNER EQ SN param_exp .
 
-    NUMBER          reduce using rule 10 (domain_exp -> SN DOT SN domain_exp .)
-    COMMA           reduce using rule 10 (domain_exp -> SN DOT SN domain_exp .)
-    INNER           reduce using rule 10 (domain_exp -> SN DOT SN domain_exp .)
-    $end            reduce using rule 10 (domain_exp -> SN DOT SN domain_exp .)
+    $end            reduce using rule 25 (param_exp -> INNER EQ SN param_exp .)
 
 
 state 46
 
-    (21) range_number_exp -> NUMBER RANGE NUMBER MOD . NUMBER
+    (26) param_exp -> INNER EQ ipv4_exp param_exp .
 
-    NUMBER          shift and go to state 52
+    $end            reduce using rule 26 (param_exp -> INNER EQ ipv4_exp param_exp .)
 
 
 state 47
 
-    (26) comma_number_exp -> NUMBER COMMA NUMBER comma_number_exp .
+    (27) param_exp -> INNER EQ number_block_exp param_exp .
 
-    COMMA           reduce using rule 26 (comma_number_exp -> NUMBER COMMA NUMBER comma_number_exp .)
-    NOT             reduce using rule 26 (comma_number_exp -> NUMBER COMMA NUMBER comma_number_exp .)
-    DOT             reduce using rule 26 (comma_number_exp -> NUMBER COMMA NUMBER comma_number_exp .)
-    INNER           reduce using rule 26 (comma_number_exp -> NUMBER COMMA NUMBER comma_number_exp .)
-    $end            reduce using rule 26 (comma_number_exp -> NUMBER COMMA NUMBER comma_number_exp .)
-    NUMBER          reduce using rule 26 (comma_number_exp -> NUMBER COMMA NUMBER comma_number_exp .)
+    $end            reduce using rule 27 (param_exp -> INNER EQ number_block_exp param_exp .)
 
 
 state 48
 
-    (30) param_exp -> INNER EQ SN param_exp .
+    (11) ipv4_exp -> sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp DOT . sp_number_block_exp
+    (12) sp_number_block_exp -> . number_block_exp
+    (13) sp_number_block_exp -> . NOT number_block_exp
+    (14) sp_number_block_exp -> . number_block_exp NOT number_block_exp
+    (15) number_block_exp -> . number_exp
+    (16) number_block_exp -> . number_exp COMMA number_exp
+    (17) number_block_exp -> . number_exp COMMA number_block_exp
+    (18) number_exp -> . NUMBER
+    (19) number_exp -> . NUMBER MOD NUMBER
+    (20) number_exp -> . NUMBER RANGE NUMBER
+    (21) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    $end            reduce using rule 30 (param_exp -> INNER EQ SN param_exp .)
+    NOT             shift and go to state 12
+    NUMBER          shift and go to state 14
 
+    sp_number_block_exp            shift and go to state 49
+    number_block_exp               shift and go to state 11
+    number_exp                     shift and go to state 13
 
 state 49
 
-    (31) param_exp -> INNER EQ ipv4_exp param_exp .
+    (11) ipv4_exp -> sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp .
 
-    $end            reduce using rule 31 (param_exp -> INNER EQ ipv4_exp param_exp .)
-
-
-state 50
-
-    (32) param_exp -> INNER EQ number_exp param_exp .
-
-    $end            reduce using rule 32 (param_exp -> INNER EQ number_exp param_exp .)
-
-
-state 51
-
-    (11) ipv4_exp -> number_exp DOT number_exp DOT number_exp . DOT number_exp
-
-    DOT             shift and go to state 53
-
-
-state 52
-
-    (21) range_number_exp -> NUMBER RANGE NUMBER MOD NUMBER .
-
-    COMMA           reduce using rule 21 (range_number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
-    NOT             reduce using rule 21 (range_number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
-    DOT             reduce using rule 21 (range_number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
-    INNER           reduce using rule 21 (range_number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
-    $end            reduce using rule 21 (range_number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
-    NUMBER          reduce using rule 21 (range_number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
-
-
-state 53
-
-    (11) ipv4_exp -> number_exp DOT number_exp DOT number_exp DOT . number_exp
-    (12) number_exp -> . normal_number_exp
-    (13) number_exp -> . normal_number_exp NOT normal_number_exp
-    (14) normal_number_exp -> . range_number_exp
-    (15) normal_number_exp -> . comma_number_exp
-    (16) normal_number_exp -> . range_number_exp COMMA comma_number_exp
-    (17) normal_number_exp -> . comma_number_exp COMMA range_number_exp
-    (18) range_number_exp -> . NUMBER
-    (19) range_number_exp -> . NUMBER RANGE NUMBER
-    (20) range_number_exp -> . NUMBER MOD NUMBER
-    (21) range_number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
-    (22) comma_number_exp -> . NUMBER
-    (23) comma_number_exp -> . COMMA NUMBER
-    (24) comma_number_exp -> . NUMBER COMMA NUMBER
-    (25) comma_number_exp -> . COMMA NUMBER comma_number_exp
-    (26) comma_number_exp -> . NUMBER COMMA NUMBER comma_number_exp
-
-    NUMBER          shift and go to state 14
-    COMMA           shift and go to state 13
-
-    number_exp                     shift and go to state 54
-    normal_number_exp              shift and go to state 10
-    range_number_exp               shift and go to state 11
-    comma_number_exp               shift and go to state 12
-
-state 54
-
-    (11) ipv4_exp -> number_exp DOT number_exp DOT number_exp DOT number_exp .
-
-    NUMBER          reduce using rule 11 (ipv4_exp -> number_exp DOT number_exp DOT number_exp DOT number_exp .)
-    COMMA           reduce using rule 11 (ipv4_exp -> number_exp DOT number_exp DOT number_exp DOT number_exp .)
-    INNER           reduce using rule 11 (ipv4_exp -> number_exp DOT number_exp DOT number_exp DOT number_exp .)
-    $end            reduce using rule 11 (ipv4_exp -> number_exp DOT number_exp DOT number_exp DOT number_exp .)
+    NULL            reduce using rule 11 (ipv4_exp -> sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp .)
+    $end            reduce using rule 11 (ipv4_exp -> sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp .)
+    INNER           reduce using rule 11 (ipv4_exp -> sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp DOT sp_number_block_exp .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for COMMA in state 11 resolved as shift
-WARNING: shift/reduce conflict for COMMA in state 12 resolved as shift
-WARNING: shift/reduce conflict for COMMA in state 14 resolved as shift
-WARNING: shift/reduce conflict for NUMBER in state 24 resolved as shift
-WARNING: shift/reduce conflict for COMMA in state 24 resolved as shift
-WARNING: shift/reduce conflict for COMMA in state 34 resolved as shift
-WARNING: shift/reduce conflict for NUMBER in state 40 resolved as shift
-WARNING: shift/reduce conflict for COMMA in state 40 resolved as shift
-WARNING: reduce/reduce conflict in state 14 resolved using rule (range_number_exp -> NUMBER)
-WARNING: rejected rule (comma_number_exp -> NUMBER) in state 14
+WARNING: shift/reduce conflict for NULL in state 5 resolved as shift
+WARNING: reduce/reduce conflict in state 32 resolved using rule (number_block_exp -> number_exp)
+WARNING: rejected rule (number_block_exp -> number_exp COMMA number_exp) in state 32
+WARNING: Rule (number_block_exp -> number_exp COMMA number_exp) is never reduced
