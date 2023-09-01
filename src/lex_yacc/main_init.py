@@ -115,6 +115,7 @@ def p_number_exp(p):
                    | NUMBER RANGE NUMBER MOD NUMBER
                   
     '''
+    print(p[0])
 
 
 def p_param_exp(p):
