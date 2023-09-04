@@ -193,8 +193,8 @@ def p_number_block_exp(p):
     if len(p)==4:
         p[0]=list(set(p[1]+p[3]))
     if len(p)>4:
-        i=0
- 
+        i=0 
+  
         while i<len(p):
             if i%2!=0:
                 p[0]=list(set(p[1]+p[3]))
