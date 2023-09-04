@@ -14,6 +14,8 @@ tokens=(
 'NOT',
 'COMMA',
 'NULL',
+
+
 )
 
 def t_NULL(t):
@@ -62,39 +64,68 @@ def t_error(t):
 
 def p_init_exp(p):
     '''
-    init_exp : PROTOCOL NULL connect_exp
-            | PROTOCOL NULL connect_exp NULL param_exp
-    '''    
+    init_exp : PROTOCOL NULL connect_exp NULL param_exp
+    ''' 
+    p[0]=[]
+    i=0
+    while i<len(p[3]):
+        if p[1]=='ftp':   
+            if p[3][i][1]=='default':
+                p[0]+=('ftp',p[3][i][0],'21')
+            else:
+                p[0]+=('telnet',p[3][i][0],p[3][i][1])
+        if p[1]=='ssh':   
+            if p[3][i][1]=='default':
+                p[0]+=('ssh',p[3][i][0],'22')
+            else:
+                p[0]+=('ssh',p[3][i][0],p[3][i][1])
+        if p[1]=='telnet':   
+            if p[3][i][1]=='default':
+                p[0]+=('telnet',p[3][i][0],'23')
+            else:
+                p[0]+=('telnet',p[3][i][0],p[3][i][1])
+        i+=1
+        print(p[0])
 def p_connect_exp(p):
     '''
-    connect_exp : address_exp
+    connect_exp : address_exp 
                 | address_exp NULL port_number_block_exp
     
     '''
+    if len(p)==2:
+        p[0]=[(ip,'default') for ip in p[1]]
+    else:
+        p[0]=list(product(p[1],p[3]))
+ 
 
 def p_address_exp(p):
     '''
         address_exp : ipv4_exp 
                     | domain_exp
+                    | address_exp NULL ipv4_exp
+                    | address_exp NULL domain_exp
     '''
+   
+    p[0]=[]
+    if len(p)==2:
+        p[0]=p[1]
+    else:
+        p[0]=p[1]+p[3]
+  
 
 def p_domain_exp(p):
     '''
         domain_exp : domain_block_exp 
-                   | domain_block_exp COMMA domain_exp
+                   | domain_exp COMMA domain_block_exp 
     '''
     p[0]=[]
-    
+
     i=0
-    while i<len(p):
-        print(len(p))
-        if i%2!=0:
-            if p[1]:
-                p[0]+=[gethostbyname(p[1])]
-            if p[3]:
-                p[0]+=[gethostbyname(p[3])]
-        i+=1
-    print(p[0])
+    if  len(p)<=2:
+        p[0]=[gethostbyname(p[1])]
+    else:
+        p[0]=p[1]+ [gethostbyname(p[3])]
+  
 
 
 def p_domain_block_exp(p):
@@ -103,12 +134,9 @@ def p_domain_block_exp(p):
                          | domain_block_exp DOT SN
     '''
 
-    i=0
-    while i<len(p):
-        if i%2!=0:
-            p[0]=f'{p[1]}.{p[3]}'
-        i+=1
-    print(p[0])
+
+    p[0]=f'{p[1]}.{p[3]}'
+    
 
 def p_ipv4_exp(p):
     '''
@@ -116,7 +144,7 @@ def p_ipv4_exp(p):
     '''
     product_ip=list(product(p[1],p[3],p[5],p[7]))
     p[0]=[".".join(i) for i in product_ip ]
-    print(p[0])
+   
 def p_port_number_block_exp(p):
     '''
         port_number_block_exp : number_block_exp 
@@ -190,7 +218,7 @@ def p_number_exp(p):
         p[0]+=[i for i in range(int(p[1]),int(p[3])+1)]
     if len(p)==6:
         p[0]+=[i for i in range(int(p[1]),int(p[3])+1) if i % int(p[5])==0]
-    # print(p[0])
+
 
 
 def p_param_exp(p):
