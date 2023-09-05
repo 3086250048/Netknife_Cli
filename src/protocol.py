@@ -1,7 +1,9 @@
 from tools import tcp_port_scan
 from itertools import product
 from multiping import multi_ping
-
+import paramiko
+from concurrent.futures import ThreadPoolExecutor
+import time
 class Protocol_Exec:
     def __init__(self,protocol=None,address=None,port=None,param={}) -> None:
         self.protocol=protocol
@@ -27,6 +29,7 @@ class Protocol_Exec:
                 print(result['open'] or 'there are no open ports')
             if 'close' in self.param['flag']:
                 print(result['close'] or 'there are no close ports')
+  
     def ping(self):
         result={
             'open':'',
@@ -37,7 +40,7 @@ class Protocol_Exec:
             return
         else:
             if len(self.address)>65535:
-                print('cannot send ICMP echo request to more than 65535 addresses at the same time.')
+                print('cannot send icmp echo request to more than 65535 addresses at the same time.')
                 return
         if 'timeout' not in self.param.keys():
             timeout=1.0
@@ -70,12 +73,27 @@ class Protocol_Exec:
        
     def ftp(self):
         pass
+   
     def tftp(self):
         pass
     def telnet(self):
         pass
     def ssh(self):
-        pass
+        ssh_client = paramiko.SSHClient()   
+        ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())   
+        connects=list(product(self.address,self.port,self.param['user'],self.param['pwd']))
+        def send_command(connect,cmd):
+            ssh_client.connect(*connect)
+            command=ssh_client.invoke_shell()
+            command.send(cmd)
+            time.sleep(1)
+            output=command.recv(65535).decode()
+            return output
+        with ThreadPoolExecutor(max_workers=len(connects)) as executor:
+            futures = [executor.submit(send_command,connect,1) for connect in connects]
+            for future in futures:
+                print(future.result())
+
     def scp(self):
         pass
     def arping(self):
@@ -97,8 +115,7 @@ class Protocol_Exec:
         try:
             PROTOCOL_MAP[self.protocol]()
         except Exception as e:
-            # print(e)
-            pass
+            print(e)
  
 if __name__ =='__main__':
     p=Protocol_Exec()
