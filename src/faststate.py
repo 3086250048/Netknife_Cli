@@ -55,7 +55,7 @@ def t_PROTOCOL(t):
     return t
 
 def t_INNER(t):
-    r'(ip|port|user|pwd|type|timeout|flag)'
+    r'(ip|port|user|pwd|type|timeout|flag|retry)'
     return t
 
 def t_WORD(t):
@@ -248,7 +248,10 @@ def p_param_exp(p):
     print(p[0])
 
 def p_error(p):
-        print(f'Syntax error at {p.value!r}')
+    '''
+        error :
+    '''   
+    print(f'Syntax error at {p.value!r}')
 
 if __name__ =='__main__':
    

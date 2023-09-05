@@ -1,5 +1,6 @@
 from tools import tcp_port_scan
 from itertools import product
+from multiping import multi_ping
 
 class Protocol_Exec:
     def __init__(self,protocol=None,address=None,port=None,param={}) -> None:
@@ -27,7 +28,46 @@ class Protocol_Exec:
             if 'close' in self.param['flag']:
                 print(result['close'] or 'there are no close ports')
     def ping(self):
-        pass
+        result={
+            'open':'',
+            'close':''
+        }
+        if not self.address :
+            print('the address parameter cannot be missing')
+            return
+        else:
+            if len(self.address)>65535:
+                print('cannot send ICMP echo request to more than 65535 addresses at the same time.')
+                return
+        if 'timeout' not in self.param.keys():
+            timeout=1.0
+        else:
+            timeout=float(self.param['timeout'])
+
+        if 'retry' not in self.param.keys():
+            retry=5
+        else:
+            retry=int(self.param['retry'])
+
+        mp=multi_ping(self.address,timeout,retry)
+     
+        result['open']=''
+        result['close']=''
+        for i in list(mp[0].keys()):
+            result['open']+=f'ip:{i}:open\n'
+        for i in mp[1]:
+            result['close']+=f'ip:{i}:close\n'
+      
+        if 'flag' not in self.param.keys(): 
+            print(result['open'].rstrip() or 'there are no open ip')
+            print(result['close'] or 'there are no close ip')
+        else:
+            if 'open' in self.param['flag']:
+                print(result['open'] or 'there are no open ip')
+            if 'close' in self.param['flag']:
+                print(result['close'] or 'there are no close ip')
+        
+       
     def ftp(self):
         pass
     def tftp(self):
@@ -53,7 +93,12 @@ class Protocol_Exec:
             'tftp':self.tftp,
             'serial':self.serial
         }
-        PROTOCOL_MAP[self.protocol]()
+        # PROTOCOL_MAP[self.protocol]()
+        try:
+            PROTOCOL_MAP[self.protocol]()
+        except Exception as e:
+            # print(e)
+            pass
  
 if __name__ =='__main__':
     p=Protocol_Exec()

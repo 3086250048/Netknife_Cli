@@ -17,12 +17,15 @@ while True:
                    auto_suggest=AutoSuggestFromHistory(),completer=Netknife_Cli)
     input=input_raw.rstrip()    
     if not input:continue
+  
     if input=='exit':
         print(exit)
         break
-    parser.parse(input)
-    # try:
-    #     parser.parse(input)
-    # except Exception as e:
-    #     print('error...')
+    
+    # parser.parse(input)
+    
+    try:
+        parser.parse(input)
+    except Exception as e:
+        print('error...')
 
