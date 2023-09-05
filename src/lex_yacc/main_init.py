@@ -12,7 +12,7 @@ PARAM_TABLE={
 tokens=(
 'INNER',
 'EQ',
-'SN',
+'WORD',
 'PROTOCOL',
 'RANGE',
 'MOD',
@@ -50,8 +50,8 @@ def t_PROTOCOL(t):
 def t_INNER(t):
     r'(ip|port|user|pwd|type)'
     return t
-def t_SN(t):
-    r'(\d+[a-zA-Z\u4e00-\u9fa5_]+|[a-zA-Z\u4e00-\u9fa5_]+|[a-zA-Z\u4e00-\u9fa5_]+\d+|[a-zA-Z\u4e00-\u9fa5_]+\d+[a-zA-Z\u4e00-\u9fa5_]+)'
+def t_WORD(t):
+    r'[a-zA-Z\u4e00-\u9fa5_]+'
     return t
 def t_NUMBER(t):
     r'\d+'
@@ -165,12 +165,22 @@ def p_ipv4_number_block_exp(p):
         p[0]=[str(i) for i in gen_number_1 if i not in gen_number_2]
     print(p[0])
 
-
+def p_sn_exp(p):
+    '''
+        sn_exp : WORD
+               | NUMBER WORD
+               | sn_exp WORD
+               | sn_exp NUMBER
+    '''
+    if len(p)==2:
+        p[0]=f'{p[1]}'
+    else:
+        p[0]=f'{p[1]}{p[2]}'
 def p_domain_block_exp(p):
     '''
-        domain_block_exp : SN DOT SN
-                         | ipv4_number_block_exp DOT SN
-                         | domain_block_exp DOT SN
+        domain_block_exp : sn_exp DOT sn_exp
+                         | ipv4_number_block_exp DOT sn_exp
+                         | domain_block_exp DOT sn_exp
                          | domain_block_exp DOT NUMBER
 
     '''
@@ -218,10 +228,10 @@ def p_number_exp(p):
 
 def p_param_exp(p):
     '''
-        param_exp : INNER EQ SN
+        param_exp : INNER EQ sn_exp
                   | INNER EQ address_exp
                   | INNER EQ port_number_block_exp
-                  | INNER EQ SN NULL param_exp
+                  | INNER EQ sn_exp NULL param_exp
                   | INNER EQ address_exp  NULL param_exp
                   | INNER EQ port_number_block_exp  NULL param_exp
                 
