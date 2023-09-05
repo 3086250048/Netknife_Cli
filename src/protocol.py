@@ -2,7 +2,7 @@ from tools import tcp_port_scan
 from itertools import product
 
 class Protocol_Exec:
-    def __init__(self,protocol=None,address=None,port=None,param=None) -> None:
+    def __init__(self,protocol=None,address=None,port=None,param={}) -> None:
         self.protocol=protocol
         self.address=address
         self.port=port
@@ -12,11 +12,20 @@ class Protocol_Exec:
             print('the port parameter cannot be missing')
             return
         port=[int(i) for i in self.port]
-        param={}
-        param['flag']=self.param['flag'] or 'open'
-        param['timeout']=self.param['timeout'] or 1
-        tcp_port_scan(list(product(self.address,port)),int(param['timeout']),param['flag']) 
-
+        param={
+            'timeout':1,
+        }
+        if 'timeout' in self.param.keys():
+            param['timeout']=int(self.param['timeout'])
+        result=tcp_port_scan(list(product(self.address,port)),param['timeout'])
+        if 'flag' not in self.param.keys(): 
+            print(result['open'] or 'there are no open ports')
+            print(result['close'] or 'there are no close ports')
+        else:
+            if 'open' in self.param['flag']:
+                print(result['open'] or 'there are no open ports')
+            if 'close' in self.param['flag']:
+                print(result['close'] or 'there are no close ports')
     def ping(self):
         pass
     def ftp(self):

@@ -55,7 +55,7 @@ def t_PROTOCOL(t):
     return t
 
 def t_INNER(t):
-    r'(ip|port|user|pwd|type|timeout)'
+    r'(ip|port|user|pwd|type|timeout|flag)'
     return t
 
 def t_WORD(t):
@@ -79,12 +79,12 @@ def p_protocol_exp(p):
     ''' 
 
     if len(p)==4:
-        Protocol_Exec(protocol=p[1],address=p[3],port=None,param=None).exec()
+        Protocol_Exec(protocol=p[1],address=p[3]).exec()
     if len(p)==6:
         if isinstance(p[5],list) :
-            Protocol_Exec(protocol=p[1],address=p[3],port=p[5],param=None).exec()
+            Protocol_Exec(protocol=p[1],address=p[3],port=p[5]).exec()
         else:
-            Protocol_Exec(protocol=p[1],address=p[3],port=None,param=p[5]).exec()
+            Protocol_Exec(protocol=p[1],address=p[3],param=p[5]).exec()
     if len(p)==8:
         Protocol_Exec(protocol=p[1],address=p[3],port=p[5],param=p[7]).exec()
 
@@ -241,8 +241,11 @@ def p_param_exp(p):
             p[0][p[1]]=p[3]
     else:
         p[0]=p[5]
-        p[0][p[1]]=p[3]
-
+        if len(p[3])==1:
+            p[0][p[1]]=p[3][0]
+        else:
+            p[0][p[1]]=p[3]
+    print(p[0])
 
 def p_error(p):
         print(f'Syntax error at {p.value!r}')

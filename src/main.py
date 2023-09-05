@@ -13,11 +13,16 @@ Netknife_Cli = WordCompleter(['telnet', 'ssh', 'ping', 'tcping',
 lexer=lex(module=faststate)
 parser=yacc(module=faststate,debug=True)
 while True:
-    input = prompt('>>>', history=FileHistory('history.txt'), 
+    input_raw= prompt('>>>', history=FileHistory('history.txt'), 
                    auto_suggest=AutoSuggestFromHistory(),completer=Netknife_Cli)
+    input=input_raw.rstrip()    
     if not input:continue
     if input=='exit':
         print(exit)
         break
     parser.parse(input)
+    # try:
+    #     parser.parse(input)
+    # except Exception as e:
+    #     print('error...')
 
