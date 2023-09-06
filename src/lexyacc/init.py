@@ -2,7 +2,7 @@ from ply.lex import lex
 from ply.yacc import yacc
 from itertools import product
 from socket import gethostbyname
-from protocol import Protocol_Exec
+from handler.protocol import Protocol_Exec
 
 PARAM_TABLE={
     'raw_number_to_domain_block_exp':None
@@ -248,9 +248,6 @@ def p_param_exp(p):
     print(p[0])
 
 def p_error(p):
-    '''
-        error :
-    '''   
     print(f'Syntax error at {p.value!r}')
 
 if __name__ =='__main__':

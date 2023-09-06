@@ -1,0 +1,98 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> cmd_exp
+Rule 1     cmd_exp -> CMD
+Rule 2     cmd_exp -> CMD NULL
+Rule 3     cmd_exp -> cmd_exp CMD
+Rule 4     cmd_exp -> cmd_exp CMD NULL
+Rule 5     cmd_exp -> AT INNER
+
+Terminals, with rules where they appear
+
+AT                   : 5
+CMD                  : 1 2 3 4
+INNER                : 5
+NULL                 : 2 4
+error                : 
+
+Nonterminals, with rules where they appear
+
+cmd_exp              : 3 4 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . cmd_exp
+    (1) cmd_exp -> . CMD
+    (2) cmd_exp -> . CMD NULL
+    (3) cmd_exp -> . cmd_exp CMD
+    (4) cmd_exp -> . cmd_exp CMD NULL
+    (5) cmd_exp -> . AT INNER
+
+    CMD             shift and go to state 2
+    AT              shift and go to state 3
+
+    cmd_exp                        shift and go to state 1
+
+state 1
+
+    (0) S' -> cmd_exp .
+    (3) cmd_exp -> cmd_exp . CMD
+    (4) cmd_exp -> cmd_exp . CMD NULL
+
+    CMD             shift and go to state 4
+
+
+state 2
+
+    (1) cmd_exp -> CMD .
+    (2) cmd_exp -> CMD . NULL
+
+    CMD             reduce using rule 1 (cmd_exp -> CMD .)
+    $end            reduce using rule 1 (cmd_exp -> CMD .)
+    NULL            shift and go to state 5
+
+
+state 3
+
+    (5) cmd_exp -> AT . INNER
+
+    INNER           shift and go to state 6
+
+
+state 4
+
+    (3) cmd_exp -> cmd_exp CMD .
+    (4) cmd_exp -> cmd_exp CMD . NULL
+
+    CMD             reduce using rule 3 (cmd_exp -> cmd_exp CMD .)
+    $end            reduce using rule 3 (cmd_exp -> cmd_exp CMD .)
+    NULL            shift and go to state 7
+
+
+state 5
+
+    (2) cmd_exp -> CMD NULL .
+
+    CMD             reduce using rule 2 (cmd_exp -> CMD NULL .)
+    $end            reduce using rule 2 (cmd_exp -> CMD NULL .)
+
+
+state 6
+
+    (5) cmd_exp -> AT INNER .
+
+    CMD             reduce using rule 5 (cmd_exp -> AT INNER .)
+    $end            reduce using rule 5 (cmd_exp -> AT INNER .)
+
+
+state 7
+
+    (4) cmd_exp -> cmd_exp CMD NULL .
+
+    CMD             reduce using rule 4 (cmd_exp -> cmd_exp CMD NULL .)
+    $end            reduce using rule 4 (cmd_exp -> cmd_exp CMD NULL .)
+

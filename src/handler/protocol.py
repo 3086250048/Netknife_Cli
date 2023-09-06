@@ -79,6 +79,8 @@ class Protocol_Exec:
     def telnet(self):
         pass
     def ssh(self):
+        print('goto send...')
+        return
         ssh_client = paramiko.SSHClient()   
         ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())   
         connects=list(product(self.address,self.port,self.param['user'],self.param['pwd']))

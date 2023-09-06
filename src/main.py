@@ -1,31 +1,34 @@
 ver='1.0'
 from ply.lex import lex
 from ply.yacc import yacc
-from prompt_toolkit import prompt
-from prompt_toolkit import prompt
-from prompt_toolkit.history import FileHistory
-from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
-from prompt_toolkit.completion import WordCompleter
-import faststate
+import lexyacc.init as init,lexyacc.send as send
 
-Netknife_Cli = WordCompleter(['telnet', 'ssh', 'ping', 'tcping',
-                              'exit'], ignore_case=True)
-lexer=lex(module=faststate)
-parser=yacc(module=faststate,debug=True)
+
+lexer=lex(module=init,lextab='init')
+parser=yacc(module=init,debug=True)
+prompt_str='[init]'
 while True:
-    input_raw= prompt('>>>', history=FileHistory('history.txt'), 
-                   auto_suggest=AutoSuggestFromHistory(),completer=Netknife_Cli)
-    input=input_raw.rstrip()    
-    if not input:continue
+    input_raw=input(prompt_str)
+    if not input_raw:continue
+    _in=input_raw.rstrip()    
   
-    if input=='exit':
+  
+    if _in=='exit':
         print(exit)
         break
     
     # parser.parse(input)
     
     try:
-        parser.parse(input)
+        out=parser.parse(_in)
+        print(out)
+        if 'ssh' in _in:
+            lexer=lex(module=send)
+            parser=yacc(module=send)
+            prompt_str='[send]'
+     
+          
+                
     except Exception as e:
         print('error...')
 
