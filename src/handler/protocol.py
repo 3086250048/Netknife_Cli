@@ -4,12 +4,38 @@ from multiping import multi_ping
 import paramiko
 from concurrent.futures import ThreadPoolExecutor
 import time
-class Protocol_Exec:
-    def __init__(self,protocol=None,address=None,port=None,param={}) -> None:
-        self.protocol=protocol
-        self.address=address
-        self.port=port
+from main import Netknife
+import lexyacc.send as send
+class Param_Produce:
+    def __init__(self,param) -> None:
         self.param=param
+    def produce_ssh_param(self):
+        param,user,pwd={},'',''
+        param['address']=self.param['address']
+        if 'port' not in self.param:
+            param['port']=22
+        else:
+            param['port']=self.param['port']
+        if 'param' not in self.param:
+            while not user or not pwd :
+                if not user: user=input('username:')
+                if not pwd: pwd=input('password:')
+                param['username']=user
+                param['password']=pwd
+        else:
+                param['username']=self.param['param']['user']
+                param['password']=self.param['param']['pwd']
+
+        return list(product(param['address'],[param['port']],[param['username']],[param['password']]))
+
+class Protocol_Exec:
+
+    def __init__(self,param):    
+        product_param_map={
+            'ssh':Param_Produce(param).produce_ssh_param
+        }
+        self.ssh_connects_info=product_param_map[param['protocol']]()
+        print(self.ssh_connects_info)
     def tcping(self):
         if not self.port :
             print('the port parameter cannot be missing')
@@ -69,24 +95,31 @@ class Protocol_Exec:
                 print(result['open'] or 'there are no open ip')
             if 'close' in self.param['flag']:
                 print(result['close'] or 'there are no close ip')
-        
-       
-    def ftp(self):
+
         pass
-   
-    def tftp(self):
-        pass
-    def telnet(self):
-        pass
-    def ssh(self):
-        print('goto send...')
-        return
+    
+
+    def get_ssh_shell(self):
+        Netknife().change_state(send,'>')
+        self.ssh_shells=[]
         ssh_client = paramiko.SSHClient()   
         ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())   
-        connects=list(product(self.address,self.port,self.param['user'],self.param['pwd']))
-        def send_command(connect,cmd):
+        def connect_shell(connect):
             ssh_client.connect(*connect)
-            command=ssh_client.invoke_shell()
+            shell=ssh_client.invoke_shell()
+            return shell 
+        
+        with ThreadPoolExecutor(max_workers=len(self.ssh_connects_info)) as executor:
+            futures = [executor.submit(connect_shell,connect) for connect in self.ssh_connects_info]
+            for future in futures:
+                result=future.result()
+                self.ssh_shells.append(result)
+       
+        print('ok')        
+
+    def excute_ssh_cmd(self):
+        return
+        def send_command(connect,cmd):
             command.send(cmd)
             time.sleep(1)
             output=command.recv(65535).decode()
@@ -102,22 +135,7 @@ class Protocol_Exec:
         pass
     def serial(self):
         pass
-    def exec(self):
-        PROTOCOL_MAP={
-            'ping':self.ping,
-            'tcping':self.tcping,
-            'arping':self.arping,
-            'telnet':self.telnet,
-            'ssh':self.ssh,
-            'ftp':self.ftp,
-            'tftp':self.tftp,
-            'serial':self.serial
-        }
-        # PROTOCOL_MAP[self.protocol]()
-        try:
-            PROTOCOL_MAP[self.protocol]()
-        except Exception as e:
-            print(e)
+
  
 if __name__ =='__main__':
     p=Protocol_Exec()

@@ -77,16 +77,27 @@ def p_protocol_exp(p):
                 | PROTOCOL NULL address_exp NULL port_number_block_exp
                 | PROTOCOL NULL address_exp NULL port_number_block_exp NULL param_exp
     ''' 
-
+    p[0]={}
     if len(p)==4:
-        Protocol_Exec(protocol=p[1],address=p[3]).exec()
+       p[0]['protocol']=p[1]
+       p[0]['address']=p[3]
     if len(p)==6:
-        if isinstance(p[5],list) :
-            Protocol_Exec(protocol=p[1],address=p[3],port=p[5]).exec()
+        if isinstance(p[5],list):
+            p[0]['protocol']=p[1]
+            p[0]['address']=p[3]
+            p[0]['port']=p[5]
         else:
-            Protocol_Exec(protocol=p[1],address=p[3],param=p[5]).exec()
+            p[0]['protocol']=p[1]
+            p[0]['address']=p[3]
+            p[0]['param']=p[5]
     if len(p)==8:
-        Protocol_Exec(protocol=p[1],address=p[3],port=p[5],param=p[7]).exec()
+            p[0]['protocol']=p[1]
+            p[0]['address']=p[3]
+            p[0]['port']=p[5]
+            p[0]['param']=p[7]
+
+
+    Protocol_Exec(p[0]).get_ssh_shell()
 
 def p_address_exp(p):
     '''
@@ -131,14 +142,14 @@ def p_port_number_block_exp(p):
     leg_number=[i for i in range(1,65536)]
 
     if len(p)==2:
-        p[0]=[str(i) for i in p[1] if i >=1 and i<=65535]
+        p[0]=[i for i in p[1] if i >=1 and i<=65535]
     if len(p)==3:
         gen_number=[i for i in p[2] if i >=1 and i<=65535]
-        p[0]=[str(i) for i in leg_number if i not in gen_number]
+        p[0]=[i for i in leg_number if i not in gen_number]
     if len(p)==4:
         gen_number_1= [i for i in p[1] if i >=1 and i<=65535]
         gen_number_2= [i for i in p[3] if i >=1 and i<=65535]
-        p[0]=[str(i) for i in gen_number_1 if i not in gen_number_2]
+        p[0]=[i for i in gen_number_1 if i not in gen_number_2]
 
 def p_ipv4_number_block_exp(p):
     
@@ -227,6 +238,7 @@ def p_param_exp(p):
     '''
         param_exp : INNER EQ sn_exp
                 | INNER EQ address_exp
+                | INNER EQ NULL
                 | INNER EQ port_number_block_exp
                 | INNER EQ sn_exp NULL param_exp
                 | INNER EQ address_exp  NULL param_exp
