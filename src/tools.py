@@ -1,15 +1,14 @@
 import socket
 from concurrent.futures import ThreadPoolExecutor
+from multiping import multi_ping
 
-
-#param : tagert [('192.168.2.254',443)]
 def tcp_port_check(target,timeout):
 
      sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
      sock.settimeout(timeout) 
      result = sock.connect_ex(target)
      return (result,target)
-#param : flag p print r return
+
 def tcp_port_scan(targets,timeout=1):
     dic={}
     open_str=''
@@ -25,6 +24,22 @@ def tcp_port_scan(targets,timeout=1):
     dic['open']=open_str.rstrip()
     dic['close']=close_str
     return dic
+
+def ping_scan(address,timeout,retry):
+        result={
+        'open':'',
+        'close':''
+        }
+
+        mp=multi_ping(address,timeout,retry)
+    
+        for i in list(mp[0].keys()):
+            result['open']+=f'ip:{i}:open\n'
+        for i in mp[1]:
+            result['close']+=f'ip:{i}:close\n'
+        result['open']=result['open'].rstrip()
+        return result
+
 
 if __name__ =='__main__':
     tcp_port_scan([['192.168.2.254','443']])

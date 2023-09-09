@@ -2,7 +2,7 @@ from ply.lex import lex
 from ply.yacc import yacc
 from itertools import product
 from socket import gethostbyname
-from handler.protocol import Protocol_Exec
+from handler.protocol import Protocol_Excute
 
 PARAM_TABLE={
     'raw_number_to_domain_block_exp':None
@@ -95,9 +95,14 @@ def p_protocol_exp(p):
             p[0]['address']=p[3]
             p[0]['port']=p[5]
             p[0]['param']=p[7]
+    handler=Protocol_Excute()
+    MAP={
+        'ssh':handler.get_ssh_shell,
+        'ping':handler.ping,
+        'tcping':handler.tcping,
+    }
 
-
-    Protocol_Exec(p[0]).get_ssh_shell()
+    MAP[p[1]](p[0])
 
 def p_address_exp(p):
     '''
