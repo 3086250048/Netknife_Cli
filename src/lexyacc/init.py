@@ -9,7 +9,6 @@ PARAM_TABLE={
 }
 
 tokens=(
-'CONTINUE',
 'INNER',
 'EQ',
 'WORD',
@@ -23,9 +22,7 @@ tokens=(
 'NULL',
 )
 
-def t_CONTINUE(t):
-    r'CONTINUE'
-    return t
+
 
 def t_NULL(t):
     r'\s+'
@@ -77,8 +74,7 @@ def t_error(t):
 
 def p_protocol_exp(p):
     '''
-    protocol_exp : CONTINUE
-                | PROTOCOL NULL address_exp
+    protocol_exp : PROTOCOL NULL address_exp
                 | PROTOCOL NULL address_exp NULL param_exp
                 | PROTOCOL NULL address_exp NULL port_number_block_exp
                 | PROTOCOL NULL address_exp NULL port_number_block_exp NULL param_exp
