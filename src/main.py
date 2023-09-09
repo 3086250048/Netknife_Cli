@@ -2,32 +2,39 @@ ver='1.0'
 from ply.lex import lex
 from ply.yacc import yacc
 import lexyacc.init as init
-
+import lexyacc.send as send 
+from global_var import Global_Var
 
 class Netknife:
-    def __new__(cls, *args, **kwargs):
-        if not hasattr(cls, '_instance'):
-            orig = super(Netknife, cls)
-            cls._instance = orig.__new__(cls, *args, **kwargs)
-        return cls._instance
     def __init__(self) -> None:
+       
+        self.StateMAP={
+            'init':init,
+            'send':send,
+        }
+        self.PromptMap={
+            'init':'[init]',
+            'send':'>'
+        }
         self.lexer=lex(module=init)
         self.parser=yacc(module=init,debug=True)
-        self.prompt_str='[init]'
-    
-    def change_state(self,file_name,prompt):
-        print(id(self))
-        self.lexer=lex(module=file_name)
-        self.parser=yacc(module=file_name)
-        self.prompt_str=prompt
-        print(self.prompt_str)
+        self.var=Global_Var()
     def run(self):
-        print(id(self))
         while True:
-            input_raw=input(self.prompt_str)
+           
+            if (self.var.current_state != self.var.next_state) and self.var.next_state :
+                self.var.current_state=self.var.next_state
+                self.prompt_str=self.PromptMap[self.var.next_state]
+                self.lexer=lex(module=self.StateMAP[self.var.next_state])
+                self.parser=yacc(module=self.StateMAP[self.var.next_state])
+                
+            input_raw=input(self.PromptMap[self.var.current_state])
             if not input_raw:continue
             _in=input_raw.rstrip()   
-            self.parser.parse(_in) 
+            try:
+                self.parser.parse(_in) 
+            except Exception as e:
+                print(e)
             
          
         

@@ -3,6 +3,7 @@ from itertools import product
 import paramiko
 from concurrent.futures import ThreadPoolExecutor
 import time
+from global_var import Global_Var
 
 class Param_Error(ValueError):
     def __init__(self,error) -> None:
@@ -119,15 +120,14 @@ than 65535 addresses at the same time.')
     此类主要负责命令执行和命令行上下文管理
 '''
 class Protocol_Excute:
-    def __new__(cls, *args, **kwargs):
-        if not hasattr(cls, '_instance'):
-            orig = super(Protocol_Excute, cls)
-            cls._instance = orig.__new__(cls, *args, **kwargs)
-        return cls._instance
+    def __new__(cls,*args, **kwds):
+        if not hasattr(cls,'_instance'):
+            cls._instance=super().__new__(cls,*args,**kwds)
+        return cls._instance   
    
     def __init__(self):  
         self.ssh_shells=[]
-        
+        self.var=Global_Var()
         self.tcping_P=None
         self.ping_P=None
         self.excute_ssh_cmd_P=None
@@ -177,7 +177,8 @@ class Protocol_Excute:
             for future in futures:
                 result=future.result()
                 self.ssh_shells.append(result)
-        print('ok')        
+        
+        self.var.next_state='send'
 
     def excute_ssh_cmd(self,param):
         #获取参数
