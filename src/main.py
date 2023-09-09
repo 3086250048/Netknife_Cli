@@ -21,13 +21,14 @@ class Netknife:
         self.var=Global_Var()
     def run(self):
         while True:
-           
+            print(self.var.current_state,self.var.next_state)
             if (self.var.current_state != self.var.next_state) and self.var.next_state :
+             
                 self.var.current_state=self.var.next_state
                 self.prompt_str=self.PromptMap[self.var.next_state]
                 self.lexer=lex(module=self.StateMAP[self.var.next_state])
                 self.parser=yacc(module=self.StateMAP[self.var.next_state])
-                
+
             input_raw=input(self.PromptMap[self.var.current_state])
             if not input_raw:continue
             _in=input_raw.rstrip()   

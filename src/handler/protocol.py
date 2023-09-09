@@ -120,18 +120,24 @@ than 65535 addresses at the same time.')
     此类主要负责命令执行和命令行上下文管理
 '''
 class Protocol_Excute:
+    _exist=False
     def __new__(cls,*args, **kwds):
         if not hasattr(cls,'_instance'):
             cls._instance=super().__new__(cls,*args,**kwds)
         return cls._instance   
    
     def __init__(self):  
-        self.ssh_shells=[]
-        self.var=Global_Var()
-        self.tcping_P=None
-        self.ping_P=None
-        self.excute_ssh_cmd_P=None
-        self.get_ssh_shell_P=None
+        if self._exist==False:
+            self._exist=True
+            self.ssh_shells=[]
+            self.var=Global_Var()
+            self.tcping_P=None
+            self.ping_P=None
+            self.excute_ssh_cmd_P=None
+            self.get_ssh_shell_P=None
+
+    def state_change(self,next_state):
+        self.var.next_state=next_state
 
     def tcping(self,param):
         #获取参数
@@ -178,7 +184,7 @@ class Protocol_Excute:
                 result=future.result()
                 self.ssh_shells.append(result)
         
-        self.var.next_state='send'
+        self.state_change('send')
 
     def excute_ssh_cmd(self,param):
         #获取参数
@@ -200,7 +206,7 @@ class Protocol_Excute:
         pass
     def serial(self):
         pass
-
+    
  
 if __name__ =='__main__':
     pass

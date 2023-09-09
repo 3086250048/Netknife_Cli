@@ -98,6 +98,7 @@ def p_protocol_exp(p):
             p[0]['port']=p[5]
             p[0]['param']=p[7]
     handler=Protocol_Excute()
+    print(handler)
     MAP={
         'ssh':handler.get_ssh_shell,
         'ping':handler.ping,

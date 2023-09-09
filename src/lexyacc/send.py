@@ -1,19 +1,20 @@
 from ply.lex import lex
 from ply.yacc import yacc
-
-
+from handler.protocol import Protocol_Excute
+from global_var import Global_Var
 tokens=(
 'CMD',
 'INNER',
 'AT',
-'NULL'
+'NULL',
 )
 
 def t_AT(t):
     r'@'
     return t
+
 def t_INNER(t):
-    r'init'
+    r'(init|send)'
     return t
 def t_CMD(t):
     r'.+'
@@ -36,9 +37,14 @@ def p_cmd_exp(p):
     '''
 
     if len(p)==2:
-        p[0]=f'{p[1]}'
+            p[0]=f'{p[1]}'
     if len(p)==3:
-        p[0]=f'{p[1]}{p[2]}'
+        if p[1]=='@':
+            p[0]=p[2]
+            handler=Protocol_Excute()
+            handler.state_change('init')
+        else:
+            p[0]=f'{p[1]}{p[2]}'
     if len(p)==4:
         p[0]=f'{p[1]}{p[2]}{p[3]}'
 
