@@ -13,15 +13,15 @@ class Netknife:
             'send':send,
         }
         self.PromptMap={
-            'init':'[init]',
-            'send':'>'
+            'init':'[Netknife@init]#',
+            'send':'[Netknife@send]#'
         }
         self.lexer=lex(module=init)
         self.parser=yacc(module=init,debug=True)
         self.var=Global_Var()
     def run(self):
         while True:
-            print(self.var.current_state,self.var.next_state)
+
             if (self.var.current_state != self.var.next_state) and self.var.next_state :
              
                 self.var.current_state=self.var.next_state
@@ -32,10 +32,11 @@ class Netknife:
             input_raw=input(self.PromptMap[self.var.current_state])
             if not input_raw:continue
             _in=input_raw.rstrip()   
-            try:
-                self.parser.parse(_in) 
-            except Exception as e:
-                print(e)
+            self.parser.parse(_in)
+            # try:
+            #     self.parser.parse(_in) 
+            # except Exception as e:
+            #     print(e)
             
          
         

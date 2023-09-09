@@ -12,7 +12,9 @@ class Param_Error(ValueError):
     def __str__(self) -> str:
         return self.error
 
-'''
+
+class Param_Produce:
+    '''
     Param_Product:
         get_ssh_shell_P
         excute_ssh_cmd_P
@@ -20,9 +22,7 @@ class Param_Error(ValueError):
         tcping_P
     
     此类主要负责Protocol_Excute类函数参数的构造和参数异常时的异常抛出
-'''
-class Param_Produce:
-    
+    '''
     def __init__(self,param) -> None:
         self.param=param
     def get_ssh_shell_P(self):
@@ -39,6 +39,7 @@ class Param_Produce:
             while not user or not pwd :
                 if not user: user=input('username:')
                 if not pwd: pwd=input('password:')
+                print(pwd)
                 param['username']=user
                 param['password']=pwd
         else:
@@ -48,20 +49,23 @@ class Param_Produce:
         return list(product(param['address'],[param['port']],[param['username']],[param['password']]))
 
     def excute_ssh_cmd_P(self):
-        pass
+        return self.param
     def ping_P(self):
         '''
         return : {'address':[address:str],'timeout':float,'retry':int }
         '''
+    
         if len(self.param['address'])>65535:
             raise Param_Error(
         'cannot send icmp echo request to more \
 than 65535 addresses at the same time.')
-        
+        else:
+            address=self.param['address']
         if 'param' not in self.param:
             timeout=1.0
             retry=5
             flag='openclose'
+            sort='forward'
         else:
             if 'timeout' not in self.param['param']:
                 timeout=1.0
@@ -77,12 +81,21 @@ than 65535 addresses at the same time.')
                 flag='openclose'
             else:
                 flag=self.param['param']['flag']
+
+            if 'sort' not in self.param['param']:
+                print('进入sort赋值')
+                sort='forward' 
+            else:
+                sort=self.param['param']['sort']
+
+            
         return {
-                'address':self.param['address'],
-                'timeout':timeout,
-                'retry':retry,
-                'flag':flag
-                }
+            'address':address,
+            'timeout':timeout,
+            'retry':retry,
+            'flag':flag,
+            'sort':sort
+            }
     
     def tcping_P(self):
         '''
@@ -110,7 +123,9 @@ than 65535 addresses at the same time.')
                 'timeout':timeout,
                 'flag':flag
                 }
-'''
+
+class Protocol_Excute:
+    '''
     Protocol_Excute:
         ping:探测存活IP
         tcping:探测开放端口
@@ -118,8 +133,7 @@ than 65535 addresses at the same time.')
         excute_ssh_cmd:向ssh隧道发送命令
     
     此类主要负责命令执行和命令行上下文管理
-'''
-class Protocol_Excute:
+    '''
     _exist=False
     def __new__(cls,*args, **kwds):
         if not hasattr(cls,'_instance'):
@@ -159,9 +173,10 @@ class Protocol_Excute:
         timeout=self.ping_P['timeout']
         retry=self.ping_P['retry']
         flag=self.ping_P['flag']
+        sort=self.ping_P['sort']
         
         #执行
-        result=ping_scan(address,timeout,retry)
+        result=ping_scan(address,timeout,retry,sort)
         if 'open' in flag:
             print(result['open'] or 'there are no open ip')
         if 'close' in flag:
@@ -172,11 +187,11 @@ class Protocol_Excute:
         self.get_ssh_shell_P=Param_Produce(param).get_ssh_shell_P() 
         #执行
         ssh_client = paramiko.SSHClient()   
-        ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())   
+        ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())  
         def connect_shell(connect):
             ssh_client.connect(*connect)
             shell=ssh_client.invoke_shell()
-            return shell 
+            return shell
         
         with ThreadPoolExecutor(max_workers=len(self.get_ssh_shell_P)) as executor:
             futures = [executor.submit(connect_shell,connect) for connect in self.get_ssh_shell_P]
@@ -188,12 +203,12 @@ class Protocol_Excute:
 
     def excute_ssh_cmd(self,param):
         #获取参数
-        self.excute_ssh_cmd_P=Param_Produce(param).excute_ssh_cmd_P() 
+        self.excute_ssh_cmd_P=Param_Produce(param).excute_ssh_cmd_P()+'\n' 
         #执行
         def send_command(shell,cmd):
             shell.send(cmd)
-            time.sleep(1)
-            output=shell.recv(65535).decode()
+            time.sleep(0.1)
+            output=shell.recv(65535).decode('utf-8')
             return output
         with ThreadPoolExecutor(max_workers=len(self.ssh_shells)) as executor:
             futures = [executor.submit(send_command,shell,self.excute_ssh_cmd_P) for shell in self.ssh_shells]

@@ -1,6 +1,7 @@
 import socket
 from concurrent.futures import ThreadPoolExecutor
 from multiping import multi_ping
+import socket
 
 def tcp_port_check(target,timeout):
 
@@ -25,17 +26,31 @@ def tcp_port_scan(targets,timeout=1):
     dic['close']=close_str
     return dic
 
-def ping_scan(address,timeout,retry):
+def ping_scan(address,timeout,retry,sort):
         result={
         'open':'',
         'close':''
         }
 
         mp=multi_ping(address,timeout,retry)
-    
+        open=[]
+        close=[]
         for i in list(mp[0].keys()):
-            result['open']+=f'ip:{i}:open\n'
+            open.append(i)
+       
         for i in mp[1]:
+            close.append(i)
+
+        if 're' in sort:
+            _open=sorted(open,key=socket.inet_aton,reverse=True)
+            _close=sorted(close,key=socket.inet_aton,reverse=True)
+        else:
+            _open=sorted(open,key=socket.inet_aton)
+            _close=sorted(close,key=socket.inet_aton) 
+       
+        for i in _open:
+            result['open']+=f'ip:{i}:open\n'
+        for i in _close:
             result['close']+=f'ip:{i}:close\n'
         result['open']=result['open'].rstrip()
         return result

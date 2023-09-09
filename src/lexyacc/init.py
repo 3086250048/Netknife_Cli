@@ -57,7 +57,7 @@ def t_PROTOCOL(t):
     return t
 
 def t_INNER(t):
-    r'(ip|port|user|pwd|type|timeout|flag|retry)'
+    r'(ip|port|user|pwd|type|timeout|flag|retry|sort)'
     return t
 
 def t_WORD(t):
@@ -97,8 +97,8 @@ def p_protocol_exp(p):
             p[0]['address']=p[3]
             p[0]['port']=p[5]
             p[0]['param']=p[7]
+
     handler=Protocol_Excute()
-    print(handler)
     MAP={
         'ssh':handler.get_ssh_shell,
         'ping':handler.ping,

@@ -1,7 +1,10 @@
 from ply.lex import lex
 from ply.yacc import yacc
 from handler.protocol import Protocol_Excute
-from global_var import Global_Var
+
+
+handler=Protocol_Excute()
+
 tokens=(
 'CMD',
 'INNER',
@@ -38,15 +41,17 @@ def p_cmd_exp(p):
 
     if len(p)==2:
             p[0]=f'{p[1]}'
+            handler.excute_ssh_cmd(p[0])
     if len(p)==3:
         if p[1]=='@':
             p[0]=p[2]
-            handler=Protocol_Excute()
-            handler.state_change('init')
+            handler.state_change(p[0])
         else:
             p[0]=f'{p[1]}{p[2]}'
+            handler.excute_ssh_cmd(p[0])
     if len(p)==4:
         p[0]=f'{p[1]}{p[2]}{p[3]}'
+        handler.excute_ssh_cmd(p[0])
 
 
 def p_error(p):
