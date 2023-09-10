@@ -1,4 +1,9 @@
-from tools import tcp_port_scan,ping_scan
+from tools import (
+    tcp_port_scan,
+    ping_scan,
+    connect_ssh_shell,
+    send_ssh_command
+)
 from itertools import product
 import paramiko
 from concurrent.futures import ThreadPoolExecutor
@@ -32,21 +37,20 @@ class Param_Produce:
         param,user,pwd={},'',''
         param['address']=self.param['address']
         if 'port' not in self.param:
-            param['port']=22
+            param['port']=[22]
         else:
             param['port']=self.param['port']
         if 'param' not in self.param:
             while not user or not pwd :
                 if not user: user=input('username:')
                 if not pwd: pwd=input('password:')
-                print(pwd)
                 param['username']=user
                 param['password']=pwd
         else:
                 param['username']=self.param['param']['user']
                 param['password']=self.param['param']['pwd']
 
-        return list(product(param['address'],[param['port']],[param['username']],[param['password']]))
+        return list(product(param['address'],param['port'],[param['username']],[param['password']]))
 
     def excute_ssh_cmd_P(self):
         return self.param
@@ -83,7 +87,6 @@ than 65535 addresses at the same time.')
                 flag=self.param['param']['flag']
 
             if 'sort' not in self.param['param']:
-                print('进入sort赋值')
                 sort='forward' 
             else:
                 sort=self.param['param']['sort']
@@ -186,32 +189,25 @@ class Protocol_Excute:
         #获取参数
         self.get_ssh_shell_P=Param_Produce(param).get_ssh_shell_P() 
         #执行
-        ssh_client = paramiko.SSHClient()   
-        ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())  
-        def connect_shell(connect):
-            ssh_client.connect(*connect)
-            shell=ssh_client.invoke_shell()
-            return shell
-        
+        #清空ssh历史记录(添加记录在tools里)
+        self.var.ssh_open=None
+        self.var.ssh_close=None
         with ThreadPoolExecutor(max_workers=len(self.get_ssh_shell_P)) as executor:
-            futures = [executor.submit(connect_shell,connect) for connect in self.get_ssh_shell_P]
+            futures = [executor.submit(connect_ssh_shell,connect) for connect in self.get_ssh_shell_P]   
             for future in futures:
                 result=future.result()
                 self.ssh_shells.append(result)
-        
+        #打印历史记录
+        # print(self.var.ssh_open)
+        #状态切换
         self.state_change('send')
 
     def excute_ssh_cmd(self,param):
         #获取参数
         self.excute_ssh_cmd_P=Param_Produce(param).excute_ssh_cmd_P()+'\n' 
         #执行
-        def send_command(shell,cmd):
-            shell.send(cmd)
-            time.sleep(0.1)
-            output=shell.recv(65535).decode('utf-8')
-            return output
         with ThreadPoolExecutor(max_workers=len(self.ssh_shells)) as executor:
-            futures = [executor.submit(send_command,shell,self.excute_ssh_cmd_P) for shell in self.ssh_shells]
+            futures = [executor.submit(send_ssh_command,shell,self.excute_ssh_cmd_P) for shell in self.ssh_shells]
             for future in futures:
                 print(future.result())
 

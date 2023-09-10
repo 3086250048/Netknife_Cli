@@ -30,9 +30,15 @@ class Netknife:
                 self.parser=yacc(module=self.StateMAP[self.var.next_state])
 
             input_raw=input(self.PromptMap[self.var.current_state])
-            if not input_raw:continue
-            _in=input_raw.rstrip()   
-            self.parser.parse(_in)
+            if not input_raw and self.var.current_state!='send':
+                continue
+            else:
+                if input_raw:
+                    _in=input_raw.rstrip()   
+                    self.parser.parse(_in)
+                if self.var.current_state=='send' and not input_raw:
+                    self.parser.parse('enter')
+            
             # try:
             #     self.parser.parse(_in) 
             # except Exception as e:

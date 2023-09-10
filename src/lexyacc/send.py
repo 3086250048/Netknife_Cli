@@ -29,7 +29,6 @@ def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
-
 def p_cmd_exp(p):
     '''
         cmd_exp : CMD
@@ -40,8 +39,11 @@ def p_cmd_exp(p):
     '''
 
     if len(p)==2:
-            p[0]=f'{p[1]}'
-            handler.excute_ssh_cmd(p[0])
+            if p[1]=='enter':
+                handler.excute_ssh_cmd(' ')
+            else:
+                p[0]=f'{p[1]}'
+                handler.excute_ssh_cmd(p[0])
     if len(p)==3:
         if p[1]=='@':
             p[0]=p[2]
