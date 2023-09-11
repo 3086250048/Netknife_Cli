@@ -20,7 +20,11 @@ class Global_Var:
             self._ssh_close=[]
 
             #手动添加的上下文参数
-            self._param={}
+            self._extend_param={}
+
+            #根据@语法临时给协议使用的参数
+            self._temp_param={}
+            
     @property
     def current_state(self):
         return self._current_state 
@@ -47,8 +51,12 @@ class Global_Var:
     def ssh_close(self):
         return self._ssh_close
     @property
-    def param(self):
-        return self._param
+    def extend_param(self):
+        return self._extend_param
+    @property
+    def temp_param(self):
+        return self._temp_param
+
     @current_state.setter
     def current_state(self,value):
         self._current_state=value
@@ -93,14 +101,15 @@ class Global_Var:
             self._ssh_close=[]
         else:
             self._ssh_close.append(value)
-    @param.setter
+    @extend_param.setter
     def param(self,value):
 
         keys=list(self._param.keys())
         if value['ip'] not in keys:
-            self._param[value['ip']]={}
+            self.extend_param[value['ip']]={}
         
-        if value['key'] not in self._param[value['ip']]:
-            self._param[value['ip']][value['key']]=value['value']
+        self.extend_param[value['ip']][value['key']]=value['value']
 
-        print(self._param)
+    @temp_param.setter
+    def temp_param(self,value):
+        self._temp_param[value['ip']]=value['param']

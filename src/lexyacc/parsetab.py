@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'AT COMMA DOT EQ INNER MOD NOT NULL NUMBER PROTOCOL RANGE WORD\n    protocol_exp : at_exp \n                 | PROTOCOL NULL address_exp\n                 | PROTOCOL NULL address_exp NULL param_exp\n                 | PROTOCOL NULL address_exp NULL port_number_block_exp\n                 | PROTOCOL NULL address_exp NULL port_number_block_exp NULL param_exp\n    \n        at_exp : AT\n               | AT PROTOCOL\n               | AT NOT PROTOCOL \n               | at_exp COMMA PROTOCOL\n               | at_exp COMMA NOT PROTOCOL\n               | INNER AT address_exp EQ sn_exp\n               | INNER AT address_exp EQ NUMBER\n               | at_exp NULL INNER AT address_exp EQ sn_exp\n               | at_exp NULL INNER AT address_exp EQ NUMBER\n    \n        address_exp : ipv4_exp \n                    | domain_exp\n                    | address_exp NULL ipv4_exp\n                    | address_exp NULL domain_exp\n    \n        domain_exp : domain_block_exp \n                | domain_exp COMMA domain_block_exp \n    \n        ipv4_exp : ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp\n    \n        port_number_block_exp : number_block_exp \n                            | NOT number_block_exp\n                            | number_block_exp NOT number_block_exp\n    \n        ipv4_number_block_exp : number_block_exp \n                            | NOT number_block_exp\n                            | number_block_exp NOT number_block_exp\n    \n        sn_exp : WORD\n            | NUMBER WORD\n            | sn_exp WORD\n            | sn_exp NUMBER\n    \n        domain_block_exp : sn_exp DOT sn_exp\n                        | ipv4_number_block_exp DOT sn_exp\n                        | domain_block_exp DOT sn_exp\n                        | domain_block_exp DOT NUMBER\n\n    \n        number_block_exp : number_exp\n                        | number_block_exp COMMA number_exp\n    \n        number_exp : NUMBER \n                | NUMBER RANGE NUMBER\n                | NUMBER RANGE NUMBER MOD NUMBER\n                \n    \n        param_exp : INNER EQ sn_exp\n                | INNER EQ address_exp\n                | INNER EQ NULL\n                | INNER EQ port_number_block_exp\n                | INNER EQ sn_exp NULL param_exp\n                | INNER EQ address_exp  NULL param_exp\n                | INNER EQ port_number_block_exp  NULL param_exp\n                \n    '
+_lr_signature = 'AT COMMA DOT EQ INNER MOD NOT NULL NUMBER PROTOCOL RANGE SEMICOLON WORD\n        init_exp : at_protocol_exp \n                 | at_param_exp\n                 | at_protocol_exp NULL at_param_exp\n                 | at_param_exp NULL at_protocol_exp\n                 | PROTOCOL NULL address_exp \n                 | PROTOCOL NULL address_exp NULL param_exp\n                 | PROTOCOL NULL address_exp NULL port_number_block_exp\n                 | PROTOCOL NULL address_exp NULL port_number_block_exp NULL param_exp\n    \n    at_protocol_exp : AT  \n                    | AT PROTOCOL \n                    | AT NOT PROTOCOL\n                    | at_protocol_exp COMMA PROTOCOL\n                    | at_protocol_exp COMMA NOT PROTOCOL\n    \n    at_param_exp : INNER AT address_exp \n                 | INNER COMMA at_param_exp \n                 | AT address_exp \n                 | INNER AT address_exp EQ sn_exp \n                 | INNER AT address_exp EQ NUMBER \n                 | at_param_exp NULL INNER AT address_exp EQ sn_exp \n                 | at_param_exp NULL INNER AT address_exp EQ NUMBER\n    \n        address_exp : ipv4_exp \n                    | domain_exp\n                    | address_exp SEMICOLON ipv4_exp\n                    | address_exp SEMICOLON domain_exp\n    \n        domain_exp : domain_block_exp \n                | domain_exp COMMA domain_block_exp \n    \n        ipv4_exp : ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp\n    \n        port_number_block_exp : number_block_exp \n                            | NOT number_block_exp\n                            | number_block_exp NOT number_block_exp\n    \n        ipv4_number_block_exp : number_block_exp \n                            | NOT number_block_exp\n                            | number_block_exp NOT number_block_exp\n    \n        sn_exp : WORD\n            | NUMBER WORD\n            | sn_exp WORD\n            | sn_exp NUMBER\n    \n        domain_block_exp : sn_exp DOT sn_exp\n                        | ipv4_number_block_exp DOT sn_exp\n                        | domain_block_exp DOT sn_exp\n                        | domain_block_exp DOT NUMBER\n\n    \n        number_block_exp : number_exp\n                        | number_block_exp COMMA number_exp\n    \n        number_exp : NUMBER \n                | NUMBER RANGE NUMBER\n                | NUMBER RANGE NUMBER MOD NUMBER\n                \n    \n        param_exp : INNER EQ sn_exp\n                | INNER EQ address_exp\n                | INNER EQ NULL\n                | INNER EQ port_number_block_exp\n                | INNER EQ sn_exp NULL param_exp\n                | INNER EQ address_exp  NULL param_exp\n                | INNER EQ port_number_block_exp  NULL param_exp\n                \n    '
     
-_lr_action_items = {'PROTOCOL':([0,4,6,10,13,],[3,9,12,26,28,]),'AT':([0,5,14,],[4,11,29,]),'INNER':([0,7,30,68,85,86,87,],[5,14,50,50,50,50,50,]),'$end':([1,2,4,9,12,15,16,17,19,20,23,24,25,26,28,36,37,39,40,41,46,47,48,49,51,53,54,57,58,59,60,61,62,64,65,66,71,75,76,77,78,79,80,81,82,84,89,90,91,92,],[0,-1,-6,-7,-9,-2,-15,-16,-19,-25,-38,-36,-28,-8,-10,-26,-38,-30,-31,-29,-3,-4,-17,-18,-22,-38,-20,-33,-34,-35,-27,-37,-32,-39,-11,-12,-23,-13,-14,-5,-41,-42,-43,-44,-24,-40,-45,-46,-47,-21,]),'COMMA':([2,4,9,12,17,19,20,23,24,25,26,28,36,37,39,40,41,49,51,53,54,57,58,59,60,61,62,64,65,66,71,75,76,82,84,],[6,-6,-7,-9,31,-19,35,-38,-36,-28,-8,-10,35,-38,-30,-31,-29,31,35,-38,-20,-33,-34,-35,35,-37,-32,-39,-11,-12,35,-13,-14,35,-40,]),'NULL':([2,3,4,9,12,15,16,17,19,20,23,24,25,26,27,28,36,37,39,40,41,45,47,48,49,51,53,54,57,58,59,60,61,62,64,65,66,69,71,75,76,78,79,81,82,84,92,],[7,8,-6,-7,-9,30,-15,-16,-19,-25,-38,-36,-28,-8,44,-10,-26,-38,-30,-31,-29,44,68,-17,-18,-22,-38,-20,-33,-34,-35,-27,-37,-32,-39,-11,-12,80,-23,-13,-14,85,86,87,-24,-40,-21,]),'NOT':([4,6,8,11,20,23,24,29,30,31,32,37,44,51,53,61,64,69,73,84,86,88,],[10,13,21,21,34,-38,-36,21,52,21,21,-38,21,70,-38,-37,-39,52,21,-40,21,21,]),'WORD':([8,11,22,23,25,29,30,31,32,33,38,39,40,41,43,44,53,57,58,59,62,63,65,66,67,69,72,75,76,78,86,],[25,25,39,41,-28,25,25,25,25,25,25,-30,-31,-29,25,25,41,39,39,41,39,41,39,41,25,25,25,39,41,39,25,]),'NUMBER':([8,11,21,22,25,29,30,31,32,33,34,35,38,39,40,41,42,43,44,52,57,58,62,65,67,69,70,72,73,74,75,78,86,88,],[23,23,37,40,-28,23,53,23,23,59,37,37,63,-30,-31,-29,64,66,23,37,40,40,40,40,76,23,37,63,37,84,40,40,23,37,]),'EQ':([16,17,19,20,24,25,27,36,37,39,40,41,45,48,49,50,54,57,58,59,60,61,62,64,84,92,],[-15,-16,-19,-25,-36,-28,43,-26,-38,-30,-31,-29,67,-17,-18,69,-20,-33,-34,-35,-27,-37,-32,-39,-40,-21,]),'DOT':([18,19,20,22,23,24,25,36,37,39,40,41,51,53,54,55,56,57,58,59,60,61,62,64,71,78,82,83,84,],[32,33,-25,38,-38,-36,-28,-26,-38,-30,-31,-29,-25,-38,33,72,73,-33,-34,-35,-27,-37,-32,-39,-26,38,-27,88,-40,]),'RANGE':([23,37,53,],[42,42,42,]),'MOD':([64,],[74,]),}
+_lr_action_items = {'PROTOCOL':([0,5,8,12,28,31,53,],[4,11,27,34,51,11,34,]),'AT':([0,6,7,9,24,30,],[5,23,26,31,26,52,]),'INNER':([0,7,9,24,50,54,81,98,99,100,],[6,6,30,6,30,72,72,72,72,72,]),'$end':([1,2,3,5,11,13,14,15,17,18,20,21,22,25,27,29,31,32,34,35,36,44,45,46,48,49,51,55,56,57,60,61,62,63,64,65,67,70,71,73,78,79,84,86,87,88,89,90,91,92,93,94,96,102,103,104,105,106,107,],[0,-1,-2,-9,-10,-16,-21,-22,-25,-31,-44,-42,-34,-3,-12,-4,-9,-5,-11,-32,-44,-36,-37,-35,-14,-15,-13,-23,-24,-26,-39,-40,-41,-33,-43,-38,-45,-6,-7,-28,-17,-18,-29,-46,-19,-20,-8,-47,-48,-49,-50,-28,-30,-29,-27,-51,-52,-53,-30,]),'NULL':([2,3,4,5,11,13,14,15,17,18,20,21,22,25,27,32,34,35,36,44,45,46,48,49,51,55,56,57,60,61,62,63,64,65,67,71,73,78,79,82,84,86,87,88,90,91,93,94,96,102,103,107,],[7,9,10,-9,-10,-16,-21,-22,-25,-31,-44,-42,-34,50,-12,54,-11,-32,-44,-36,-37,-35,-14,50,-13,-23,-24,-26,-39,-40,-41,-33,-43,-38,-45,81,-28,-17,-18,92,-29,-46,-19,-20,98,99,100,-28,-30,-29,-27,-30,]),'COMMA':([2,5,6,11,15,17,18,20,21,22,27,29,31,34,35,36,44,45,46,51,56,57,60,61,62,63,64,65,67,73,84,86,94,96,102,107,],[8,-9,24,-10,38,-25,42,-44,-42,-34,-12,8,-9,-11,42,-44,-36,-37,-35,-13,38,-26,-39,-40,-41,42,-43,-38,-45,42,42,-46,42,42,42,42,]),'NOT':([5,8,10,18,20,21,23,26,31,36,37,38,39,52,54,64,67,73,76,82,86,94,97,],[12,28,33,41,-44,-42,33,33,53,-44,33,33,33,33,74,-43,-45,83,33,95,-46,101,33,]),'WORD':([5,10,19,20,22,23,26,37,38,39,40,43,44,45,46,52,60,61,62,65,66,68,75,78,79,80,82,87,88,90,],[22,22,44,46,-34,22,22,22,22,22,22,22,-36,-37,-35,22,44,44,46,44,46,22,22,44,46,22,22,44,46,44,]),'NUMBER':([5,10,12,19,22,23,26,33,37,38,39,40,41,42,43,44,45,46,47,52,54,60,61,65,68,74,75,76,77,78,80,82,83,87,90,95,97,101,],[20,20,36,45,-34,20,20,36,20,20,20,62,36,36,66,-36,-37,-35,67,20,36,45,45,45,79,36,66,36,86,45,88,20,36,45,45,36,36,36,]),'SEMICOLON':([13,14,15,17,18,21,22,32,35,36,44,45,46,48,55,56,57,60,61,62,63,64,65,67,69,86,91,103,],[37,-21,-22,-25,-31,-42,-34,37,-32,-44,-36,-37,-35,37,-23,-24,-26,-39,-40,-41,-33,-43,-38,-45,37,-46,37,-27,]),'EQ':([14,15,17,18,21,22,35,36,44,45,46,48,55,56,57,60,61,62,63,64,65,67,69,72,86,103,],[-21,-22,-25,-31,-42,-34,-32,-44,-36,-37,-35,68,-23,-24,-26,-39,-40,-41,-33,-43,-38,-45,80,82,-46,-27,]),'DOT':([16,17,18,19,20,21,22,35,36,44,45,46,57,58,59,60,61,62,63,64,65,67,85,86,90,94,102,107,],[39,40,-31,43,-44,-42,-34,-32,-44,-36,-37,-35,40,75,76,-39,-40,-41,-33,-43,-38,-45,97,-46,43,-31,-32,-33,]),'RANGE':([20,36,],[47,47,]),'MOD':([67,],[77,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'protocol_exp':([0,],[1,]),'at_exp':([0,],[2,]),'address_exp':([8,11,29,69,],[15,27,45,79,]),'ipv4_exp':([8,11,29,30,44,69,86,],[16,16,16,48,48,16,48,]),'domain_exp':([8,11,29,30,44,69,86,],[17,17,17,49,49,17,49,]),'ipv4_number_block_exp':([8,11,29,30,31,32,44,69,73,86,88,],[18,18,18,18,55,56,18,18,83,18,92,]),'domain_block_exp':([8,11,29,30,31,44,69,86,],[19,19,19,19,54,19,19,19,]),'number_block_exp':([8,11,21,29,30,31,32,34,44,52,69,70,73,86,88,],[20,20,36,20,51,20,20,60,20,71,51,82,20,20,20,]),'sn_exp':([8,11,29,30,31,32,33,38,43,44,67,69,72,86,],[22,22,22,22,22,57,58,62,65,22,75,78,57,22,]),'number_exp':([8,11,21,29,30,31,32,34,35,44,52,69,70,73,86,88,],[24,24,24,24,24,24,24,24,61,24,24,24,24,24,24,24,]),'param_exp':([30,68,85,86,87,],[46,77,89,90,91,]),'port_number_block_exp':([30,69,],[47,81,]),}
+_lr_goto_items = {'init_exp':([0,],[1,]),'at_protocol_exp':([0,9,],[2,29,]),'at_param_exp':([0,7,24,],[3,25,49,]),'address_exp':([5,10,23,26,52,82,],[13,32,48,13,69,91,]),'ipv4_exp':([5,10,23,26,37,52,82,],[14,14,14,14,55,14,14,]),'domain_exp':([5,10,23,26,37,52,82,],[15,15,15,15,56,15,15,]),'ipv4_number_block_exp':([5,10,23,26,37,38,39,52,76,82,97,],[16,16,16,16,16,58,59,16,85,16,103,]),'domain_block_exp':([5,10,23,26,37,38,52,82,],[17,17,17,17,17,57,17,17,]),'number_block_exp':([5,10,12,23,26,33,37,38,39,41,52,54,74,76,82,83,95,97,101,],[18,18,35,18,18,35,18,18,18,63,18,73,84,18,94,96,102,18,107,]),'sn_exp':([5,10,23,26,37,38,39,40,43,52,68,75,80,82,],[19,19,19,19,19,19,60,61,65,19,78,60,87,90,]),'number_exp':([5,10,12,23,26,33,37,38,39,41,42,52,54,74,76,82,83,95,97,101,],[21,21,21,21,21,21,21,21,21,21,64,21,21,21,21,21,21,21,21,21,]),'param_exp':([54,81,98,99,100,],[70,89,104,105,106,]),'port_number_block_exp':([54,82,],[71,93,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,52 +26,58 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> protocol_exp","S'",1,None,None,None),
-  ('protocol_exp -> at_exp','protocol_exp',1,'p_protocol_exp','init.py',85),
-  ('protocol_exp -> PROTOCOL NULL address_exp','protocol_exp',3,'p_protocol_exp','init.py',86),
-  ('protocol_exp -> PROTOCOL NULL address_exp NULL param_exp','protocol_exp',5,'p_protocol_exp','init.py',87),
-  ('protocol_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp','protocol_exp',5,'p_protocol_exp','init.py',88),
-  ('protocol_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp NULL param_exp','protocol_exp',7,'p_protocol_exp','init.py',89),
-  ('at_exp -> AT','at_exp',1,'p_at_exp','init.py',125),
-  ('at_exp -> AT PROTOCOL','at_exp',2,'p_at_exp','init.py',126),
-  ('at_exp -> AT NOT PROTOCOL','at_exp',3,'p_at_exp','init.py',127),
-  ('at_exp -> at_exp COMMA PROTOCOL','at_exp',3,'p_at_exp','init.py',128),
-  ('at_exp -> at_exp COMMA NOT PROTOCOL','at_exp',4,'p_at_exp','init.py',129),
-  ('at_exp -> INNER AT address_exp EQ sn_exp','at_exp',5,'p_at_exp','init.py',130),
-  ('at_exp -> INNER AT address_exp EQ NUMBER','at_exp',5,'p_at_exp','init.py',131),
-  ('at_exp -> at_exp NULL INNER AT address_exp EQ sn_exp','at_exp',7,'p_at_exp','init.py',132),
-  ('at_exp -> at_exp NULL INNER AT address_exp EQ NUMBER','at_exp',7,'p_at_exp','init.py',133),
-  ('address_exp -> ipv4_exp','address_exp',1,'p_address_exp','init.py',178),
-  ('address_exp -> domain_exp','address_exp',1,'p_address_exp','init.py',179),
-  ('address_exp -> address_exp NULL ipv4_exp','address_exp',3,'p_address_exp','init.py',180),
-  ('address_exp -> address_exp NULL domain_exp','address_exp',3,'p_address_exp','init.py',181),
-  ('domain_exp -> domain_block_exp','domain_exp',1,'p_domain_exp','init.py',192),
-  ('domain_exp -> domain_exp COMMA domain_block_exp','domain_exp',3,'p_domain_exp','init.py',193),
-  ('ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp','ipv4_exp',7,'p_ipv4_exp','init.py',205),
-  ('port_number_block_exp -> number_block_exp','port_number_block_exp',1,'p_port_number_block_exp','init.py',212),
-  ('port_number_block_exp -> NOT number_block_exp','port_number_block_exp',2,'p_port_number_block_exp','init.py',213),
-  ('port_number_block_exp -> number_block_exp NOT number_block_exp','port_number_block_exp',3,'p_port_number_block_exp','init.py',214),
-  ('ipv4_number_block_exp -> number_block_exp','ipv4_number_block_exp',1,'p_ipv4_number_block_exp','init.py',230),
-  ('ipv4_number_block_exp -> NOT number_block_exp','ipv4_number_block_exp',2,'p_ipv4_number_block_exp','init.py',231),
-  ('ipv4_number_block_exp -> number_block_exp NOT number_block_exp','ipv4_number_block_exp',3,'p_ipv4_number_block_exp','init.py',232),
-  ('sn_exp -> WORD','sn_exp',1,'p_sn_exp','init.py',251),
-  ('sn_exp -> NUMBER WORD','sn_exp',2,'p_sn_exp','init.py',252),
-  ('sn_exp -> sn_exp WORD','sn_exp',2,'p_sn_exp','init.py',253),
-  ('sn_exp -> sn_exp NUMBER','sn_exp',2,'p_sn_exp','init.py',254),
-  ('domain_block_exp -> sn_exp DOT sn_exp','domain_block_exp',3,'p_domain_block_exp','init.py',263),
-  ('domain_block_exp -> ipv4_number_block_exp DOT sn_exp','domain_block_exp',3,'p_domain_block_exp','init.py',264),
-  ('domain_block_exp -> domain_block_exp DOT sn_exp','domain_block_exp',3,'p_domain_block_exp','init.py',265),
-  ('domain_block_exp -> domain_block_exp DOT NUMBER','domain_block_exp',3,'p_domain_block_exp','init.py',266),
-  ('number_block_exp -> number_exp','number_block_exp',1,'p_number_block_exp','init.py',279),
-  ('number_block_exp -> number_block_exp COMMA number_exp','number_block_exp',3,'p_number_block_exp','init.py',280),
-  ('number_exp -> NUMBER','number_exp',1,'p_number_exp','init.py',297),
-  ('number_exp -> NUMBER RANGE NUMBER','number_exp',3,'p_number_exp','init.py',298),
-  ('number_exp -> NUMBER RANGE NUMBER MOD NUMBER','number_exp',5,'p_number_exp','init.py',299),
-  ('param_exp -> INNER EQ sn_exp','param_exp',3,'p_param_exp','init.py',313),
-  ('param_exp -> INNER EQ address_exp','param_exp',3,'p_param_exp','init.py',314),
-  ('param_exp -> INNER EQ NULL','param_exp',3,'p_param_exp','init.py',315),
-  ('param_exp -> INNER EQ port_number_block_exp','param_exp',3,'p_param_exp','init.py',316),
-  ('param_exp -> INNER EQ sn_exp NULL param_exp','param_exp',5,'p_param_exp','init.py',317),
-  ('param_exp -> INNER EQ address_exp NULL param_exp','param_exp',5,'p_param_exp','init.py',318),
-  ('param_exp -> INNER EQ port_number_block_exp NULL param_exp','param_exp',5,'p_param_exp','init.py',319),
+  ("S' -> init_exp","S'",1,None,None,None),
+  ('init_exp -> at_protocol_exp','init_exp',1,'p_init_exp','init.py',89),
+  ('init_exp -> at_param_exp','init_exp',1,'p_init_exp','init.py',90),
+  ('init_exp -> at_protocol_exp NULL at_param_exp','init_exp',3,'p_init_exp','init.py',91),
+  ('init_exp -> at_param_exp NULL at_protocol_exp','init_exp',3,'p_init_exp','init.py',92),
+  ('init_exp -> PROTOCOL NULL address_exp','init_exp',3,'p_init_exp','init.py',93),
+  ('init_exp -> PROTOCOL NULL address_exp NULL param_exp','init_exp',5,'p_init_exp','init.py',94),
+  ('init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp','init_exp',5,'p_init_exp','init.py',95),
+  ('init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp NULL param_exp','init_exp',7,'p_init_exp','init.py',96),
+  ('at_protocol_exp -> AT','at_protocol_exp',1,'p_at_protocol_exp','init.py',138),
+  ('at_protocol_exp -> AT PROTOCOL','at_protocol_exp',2,'p_at_protocol_exp','init.py',139),
+  ('at_protocol_exp -> AT NOT PROTOCOL','at_protocol_exp',3,'p_at_protocol_exp','init.py',140),
+  ('at_protocol_exp -> at_protocol_exp COMMA PROTOCOL','at_protocol_exp',3,'p_at_protocol_exp','init.py',141),
+  ('at_protocol_exp -> at_protocol_exp COMMA NOT PROTOCOL','at_protocol_exp',4,'p_at_protocol_exp','init.py',142),
+  ('at_param_exp -> INNER AT address_exp','at_param_exp',3,'p_at_param_exp','init.py',159),
+  ('at_param_exp -> INNER COMMA at_param_exp','at_param_exp',3,'p_at_param_exp','init.py',160),
+  ('at_param_exp -> AT address_exp','at_param_exp',2,'p_at_param_exp','init.py',161),
+  ('at_param_exp -> INNER AT address_exp EQ sn_exp','at_param_exp',5,'p_at_param_exp','init.py',162),
+  ('at_param_exp -> INNER AT address_exp EQ NUMBER','at_param_exp',5,'p_at_param_exp','init.py',163),
+  ('at_param_exp -> at_param_exp NULL INNER AT address_exp EQ sn_exp','at_param_exp',7,'p_at_param_exp','init.py',164),
+  ('at_param_exp -> at_param_exp NULL INNER AT address_exp EQ NUMBER','at_param_exp',7,'p_at_param_exp','init.py',165),
+  ('address_exp -> ipv4_exp','address_exp',1,'p_address_exp','init.py',192),
+  ('address_exp -> domain_exp','address_exp',1,'p_address_exp','init.py',193),
+  ('address_exp -> address_exp SEMICOLON ipv4_exp','address_exp',3,'p_address_exp','init.py',194),
+  ('address_exp -> address_exp SEMICOLON domain_exp','address_exp',3,'p_address_exp','init.py',195),
+  ('domain_exp -> domain_block_exp','domain_exp',1,'p_domain_exp','init.py',206),
+  ('domain_exp -> domain_exp COMMA domain_block_exp','domain_exp',3,'p_domain_exp','init.py',207),
+  ('ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp','ipv4_exp',7,'p_ipv4_exp','init.py',219),
+  ('port_number_block_exp -> number_block_exp','port_number_block_exp',1,'p_port_number_block_exp','init.py',226),
+  ('port_number_block_exp -> NOT number_block_exp','port_number_block_exp',2,'p_port_number_block_exp','init.py',227),
+  ('port_number_block_exp -> number_block_exp NOT number_block_exp','port_number_block_exp',3,'p_port_number_block_exp','init.py',228),
+  ('ipv4_number_block_exp -> number_block_exp','ipv4_number_block_exp',1,'p_ipv4_number_block_exp','init.py',244),
+  ('ipv4_number_block_exp -> NOT number_block_exp','ipv4_number_block_exp',2,'p_ipv4_number_block_exp','init.py',245),
+  ('ipv4_number_block_exp -> number_block_exp NOT number_block_exp','ipv4_number_block_exp',3,'p_ipv4_number_block_exp','init.py',246),
+  ('sn_exp -> WORD','sn_exp',1,'p_sn_exp','init.py',265),
+  ('sn_exp -> NUMBER WORD','sn_exp',2,'p_sn_exp','init.py',266),
+  ('sn_exp -> sn_exp WORD','sn_exp',2,'p_sn_exp','init.py',267),
+  ('sn_exp -> sn_exp NUMBER','sn_exp',2,'p_sn_exp','init.py',268),
+  ('domain_block_exp -> sn_exp DOT sn_exp','domain_block_exp',3,'p_domain_block_exp','init.py',277),
+  ('domain_block_exp -> ipv4_number_block_exp DOT sn_exp','domain_block_exp',3,'p_domain_block_exp','init.py',278),
+  ('domain_block_exp -> domain_block_exp DOT sn_exp','domain_block_exp',3,'p_domain_block_exp','init.py',279),
+  ('domain_block_exp -> domain_block_exp DOT NUMBER','domain_block_exp',3,'p_domain_block_exp','init.py',280),
+  ('number_block_exp -> number_exp','number_block_exp',1,'p_number_block_exp','init.py',293),
+  ('number_block_exp -> number_block_exp COMMA number_exp','number_block_exp',3,'p_number_block_exp','init.py',294),
+  ('number_exp -> NUMBER','number_exp',1,'p_number_exp','init.py',311),
+  ('number_exp -> NUMBER RANGE NUMBER','number_exp',3,'p_number_exp','init.py',312),
+  ('number_exp -> NUMBER RANGE NUMBER MOD NUMBER','number_exp',5,'p_number_exp','init.py',313),
+  ('param_exp -> INNER EQ sn_exp','param_exp',3,'p_param_exp','init.py',327),
+  ('param_exp -> INNER EQ address_exp','param_exp',3,'p_param_exp','init.py',328),
+  ('param_exp -> INNER EQ NULL','param_exp',3,'p_param_exp','init.py',329),
+  ('param_exp -> INNER EQ port_number_block_exp','param_exp',3,'p_param_exp','init.py',330),
+  ('param_exp -> INNER EQ sn_exp NULL param_exp','param_exp',5,'p_param_exp','init.py',331),
+  ('param_exp -> INNER EQ address_exp NULL param_exp','param_exp',5,'p_param_exp','init.py',332),
+  ('param_exp -> INNER EQ port_number_block_exp NULL param_exp','param_exp',5,'p_param_exp','init.py',333),
 ]

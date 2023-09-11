@@ -4,7 +4,7 @@ from itertools import product
 from socket import gethostbyname
 from handler.protocol import Protocol_Excute
 from global_var import Global_Var 
-from tools import at_obj
+from tools import inner_param
 
 
 var=Global_Var()
@@ -26,8 +26,12 @@ tokens=(
 'COMMA',
 'NULL',
 'AT',
-
+'SEMICOLON'
 )
+
+def t_SEMICOLON(t):
+    r';'
+    return t
 
 def t_AT(t):
     r'@'
@@ -80,19 +84,23 @@ def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
-def p_protocol_exp(p):
+def p_init_exp(p):
     '''
-    protocol_exp : at_exp 
-                 | PROTOCOL NULL address_exp
+        init_exp : at_exp
+                 | PROTOCOL NULL address_exp 
                  | PROTOCOL NULL address_exp NULL param_exp
                  | PROTOCOL NULL address_exp NULL port_number_block_exp
                  | PROTOCOL NULL address_exp NULL port_number_block_exp NULL param_exp
     ''' 
-    p[0]={}
+    # 
     if len(p)==2:
-        # print(p[1]) 
-        # at_obj(p[1].strip('@'),True,False)
+        print(p[1])
+        # if isinstance(p[0],str):at_obj(p[1].strip('@'),True,False)
+        # if isinstance(p[0],dict):
+        #     for ip_kv_dict in p[0]:
+        #         var.param=ip_kv_dict
         return
+    p[0]={}
     if len(p)==4:
         p[0]['protocol']=p[1]
         p[0]['address']=p[3]
@@ -121,32 +129,63 @@ def p_protocol_exp(p):
     MAP[p[1]](p[0])
 
 def p_at_exp(p):
- 
     '''
-        at_exp : AT
-               | AT PROTOCOL
-               | AT NOT PROTOCOL 
-               | at_exp COMMA PROTOCOL
-               | at_exp COMMA NOT PROTOCOL
-               | INNER AT address_exp EQ sn_exp
-               | INNER AT address_exp EQ NUMBER
-               | at_exp NULL INNER AT address_exp EQ sn_exp
-               | at_exp NULL INNER AT address_exp EQ NUMBER
+        at_exp : at_protocol_exp
+               | at_param_exp
+               | at_exp NULL at_protocol_exp
+               | at_exp NULL at_param_exp
     '''
-    if p[1][0]=='@':
-        if len(p)==2:
-            p[0]='all'
-        if len(p)==3:
-            p[0]=f'{p[1]}{p[2]}'
-        if len(p)==4:
-            if p[2]=='!':
-                p[0]=f'{p[1]}!{p[3]}'
-            else:
-                p[0]=f'{p[1]},{p[3]}'
-        if len(p)==5:
-            p[0]=f'{p[1]},!{p[4]}'
-    else:
-        if len(p)==6:
+    if len(p)==2:
+        if isinstance(p[1],list):
+            for ip_kv in p[1]:
+                var.extend_param=ip_kv
+        if isinstance(p[1],str):
+            print(p[1])
+    if len(p)==4:
+        pass 
+
+def p_at_protocol_exp(p):
+    '''
+    at_protocol_exp : AT  
+                    | AT PROTOCOL 
+                    | AT NOT PROTOCOL
+                    | at_protocol_exp COMMA PROTOCOL
+                    | at_protocol_exp COMMA NOT PROTOCOL
+    '''
+    if len(p)==2:
+        p[0]='all'
+    if len(p)==3:
+        p[0]=f'{p[1]}{p[2]}'
+    if len(p)==4:
+        if p[2]=='!':
+            p[0]=f'{p[1]}!{p[3]}'
+        if p[2]==',':
+            p[0]=f'{p[1]},{p[3]}'
+    if len(p)==5:
+        p[0]=f'{p[1]},!{p[4]}'
+
+
+def p_at_param_exp(p):
+    '''
+    at_param_exp : INNER AT address_exp 
+                 | INNER COMMA at_param_exp 
+                 | AT address_exp 
+                 | INNER AT address_exp EQ sn_exp 
+                 | INNER AT address_exp EQ NUMBER 
+    '''  
+    if len(p)==3:
+        p[0]={
+            'ip':p[2]
+        }
+    if len(p)==4:
+        if isinstance(p[3],list):
+            p[0]={
+                'ip':p[3],
+                'key':[p[1]]
+            }    
+        if isinstance(p[3],dict):
+            p[0]=p[3]['key'].append(p[1])
+    if len(p)==6:
             p[0]=[]
             for ip in p[3]:
                 p[0].append({
@@ -154,31 +193,14 @@ def p_at_exp(p):
                     'key':p[1],
                     'value':p[5],
                 })
-            for ip_kv_dict in  p[0]:
-                var.param=ip_kv_dict
-        if len(p)==8:
-            new_ip_kv_list=[]
-            for ip in p[5]:
-                new_ip_kv_list.append({
-                    'ip':ip,
-                    'key':p[3],
-                    'value':p[7],
-                })
-            p[0]=p[1]+new_ip_kv_list
-            
-            for ip_kv_dict in  p[0]:
-                var.param=ip_kv_dict
-            
-       
-          
 
 
 def p_address_exp(p):
     '''
         address_exp : ipv4_exp 
                     | domain_exp
-                    | address_exp NULL ipv4_exp
-                    | address_exp NULL domain_exp
+                    | address_exp SEMICOLON ipv4_exp
+                    | address_exp SEMICOLON domain_exp
     '''
 
     p[0]=[]

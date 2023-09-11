@@ -5,12 +5,12 @@ import socket
 from global_var import Global_Var 
 import paramiko
 import time
-from pprint import pprint
+
 
 var=Global_Var()
 
-def at_obj(p,show,result):
-    printlist={
+def inner_param(p,show,result):
+    inner_p={
         'ping':var.ping_open,
         '!ping':var.ping_close,
         'tcping':var.tcping_open,
@@ -19,18 +19,55 @@ def at_obj(p,show,result):
         '!ssh':var.ssh_close
     }
 
-
     if show:
         if p=='all':
-           for key,value in printlist.items():
+           for key,value in inner_p.items():
                 print(f'{key}=>{value}')
         else:
-            for key,value in printlist.items():
+            for key,value in inner_p.items():
                 if key in p.split(','):
                     print(f"{key}=>{value}")
     if result:
-        return printlist
-    
+        result_dict={}
+        for key,value in inner_p():
+            if key in p.split(','):
+                result_dict[key]=value
+        return result_dict
+
+def extend_param(p,show,result):
+    extend_p=var.extend_param
+
+    if show:
+        if 'key' not in p :
+            for key,value in extend_p.items():
+                if key in p['ip']:
+                    print(f'{key}=>')
+                    for k,v in value.items():
+                        print(f'{k}:{v}')
+        else:
+            for key,value in extend_p.items():
+                if key in p['ip']:
+                    print(f'{key}=>')
+                    for k,v in value.items():
+                        if k in p['key']:
+                            print(f'{k}:{v}')
+    if result:
+        if 'key' not in p :
+            for key,value in extend_p.items():
+                if key in p['ip']:
+                    var.temp_param={
+                        'ip':key,
+                        'param':value
+                    }
+        else:
+            for key,value in extend_p.items():
+                if key in p['ip']:
+                    var.temp_param={
+                        'ip':key,
+                        'param':value
+                    }
+
+
 
 def tcp_port_check(target,timeout):
 
