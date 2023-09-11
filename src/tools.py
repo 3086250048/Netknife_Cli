@@ -10,6 +10,7 @@ import time
 var=Global_Var()
 
 def inner_param(p,show,result):
+    p=p.strip('@')
     inner_p={
         'ping':var.ping_open,
         '!ping':var.ping_close,
@@ -29,7 +30,7 @@ def inner_param(p,show,result):
                     print(f"{key}=>{value}")
     if result:
         result_dict={}
-        for key,value in inner_p():
+        for key,value in inner_p.items():
             if key in p.split(','):
                 result_dict[key]=value
         return result_dict

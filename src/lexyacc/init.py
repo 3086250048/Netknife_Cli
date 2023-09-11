@@ -135,14 +135,31 @@ def p_at_exp(p):
                | at_exp NULL at_protocol_exp
                | at_exp NULL at_param_exp
     '''
+
+
     if len(p)==2:
-        if isinstance(p[1],list):
-            for ip_kv in p[1]:
-                var.extend_param=ip_kv
+        p[0]={
+            'protocol_set_get':[],
+            'param_get':[],
+            'param_set':[]
+        }
         if isinstance(p[1],str):
-            print(p[1])
+            p[0]['protocol_set_get']=p[1].strip('@').split(',')
+        if isinstance(p[1],dict):
+            p[0]['param_get']=[p[1]]
+        if isinstance(p[1],list):
+            p[0]['param_set']=p[1]
     if len(p)==4:
-        pass 
+        p[0]=p[1]
+        if isinstance(p[3],str):
+            p[0]['protocol_set_get']+=p[3].strip('@').split(',')
+        if isinstance(p[3],dict):
+            p[0]['param_get']+=[p[3]]
+        if isinstance(p[3],list):
+            p[0]['param_set']+=p[3]
+    print(p[0])
+        
+
 
 def p_at_protocol_exp(p):
     '''
@@ -168,7 +185,6 @@ def p_at_protocol_exp(p):
 def p_at_param_exp(p):
     '''
     at_param_exp : INNER AT address_exp 
-                 | INNER COMMA at_param_exp 
                  | AT address_exp 
                  | INNER AT address_exp EQ sn_exp 
                  | INNER AT address_exp EQ NUMBER 
