@@ -4,7 +4,12 @@ from itertools import product
 from socket import gethostbyname
 from handler.protocol import Protocol_Excute
 from global_var import Global_Var 
-from tools import inner_param,extend_param
+from tools import (
+inner_param_print,
+inner_param_get,
+extend_param_get,
+extend_param_print
+)
 from tools import  (
     init_exp__four__dict
 )
@@ -98,22 +103,33 @@ def p_init_exp(p):
     ''' 
     # 
     if len(p)==2:
-        if  p[1]['protocol_get']:
-            inner_param(p[1]['protocol_get'],True,False)
-        if p[1]['param_get']:
-            for set_dic in p[1]['param_get']:
-                extend_param(set_dic,True,False)
+        if  p[1]['protocol_about']:
+            inner_param_print(p[1]['protocol_about'])
+        if p[1]['param_about']:
+            for set_dic in p[1]['param_about']:
+                extend_param_print(set_dic)
         if p[1]['param_set']:
             for value in p[1]['param_set']:
                 var.extend_param=value
-        #这里return 防止只进行get set 操作时进行执行
+        #这里return 防止只进行about set 操作时进行执行
         return
     p[0]={}
     if len(p)==4:
         p[0]['protocol']=p[1]
         #判断 PROTOCOL NULL at_exp | PROTOCOL NULL address_exp 这两种句型
         if isinstance(p[3],dict):
-            p[0]['address']=init_exp__four__dict(p[1],p[3]['protocol_get'])
+            print(p[3])
+            if p[1]=='ping':
+                p[0]['address']=init_exp__four__dict(p[3]['protocol_about'])['ip']
+            if p[1]=='tcping':
+                result=init_exp__four__dict(p[3]['protocol_aboout'],True,True)
+                p[0]['address']=result['ip']
+                p[0]['ip_port']=result['ip_port']
+            if p[1]=='ssh':
+                result=init_exp__four__dict(p[3]['protocol_aboout'],True,True,True)
+                p[0]['address']=result['ip']
+                p[0]['ip_port']=result['ip_port']
+                p[0]['ip_port_user_pwd']=result['ip_port_user_pwd']
         else:
             #list
             p[0]['address']=p[3]
@@ -149,23 +165,27 @@ def p_at_exp(p):
                | at_exp NULL at_param_exp
     '''
     if len(p)==2:
+        '''
+        由于protocol 为设定上为内置变量所以无法进行手动赋值，只能通过ping\tcping\ssh...操作被动添加
+        所以没有protocol_set key,带有about后缀的key主要为get和print相关函数提供查询索引。
+        '''
         p[0]={
-            'protocol_get':[],
-            'param_get':[],
+            'protocol_about':[],
+            'param_about':[],
             'param_set':[]
         }
         if isinstance(p[1],str):
-            p[0]['protocol_get']=p[1].strip('@').split(',')
+            p[0]['protocol_about']=p[1].strip('@').split(',')
         if isinstance(p[1],dict):
-            p[0]['param_get']=[p[1]]
+            p[0]['param_about']=[p[1]]
         if isinstance(p[1],list):
             p[0]['param_set']=p[1]
     if len(p)==4:
         p[0]=p[1]
         if isinstance(p[3],str):
-            p[0]['protocol_get']+=p[3].strip('@').split(',')
+            p[0]['protocol_about']+=p[3].strip('@').split(',')
         if isinstance(p[3],dict):
-            p[0]['param_get']+=[p[3]]
+            p[0]['param_about']+=[p[3]]
         if isinstance(p[3],list):
             p[0]['param_set']+=p[3]
    

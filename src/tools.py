@@ -6,11 +6,12 @@ from global_var import Global_Var
 import paramiko
 import time
 
-
+'''
+公共变量
+'''
 var=Global_Var()
 
-'''
-'''
+
 class Tools_Error(ValueError):
     def __init__(self,error) -> None:
         super().__init__(self)
@@ -22,78 +23,85 @@ class Tools_Error(ValueError):
 '''
 上下文参数相关函数
 '''
-def inner_param(p,show,result):
-    inner_p={
-        'ping':var.ping_open,
-        '!ping':var.ping_close,
-        'tcping':var.tcping_open,
-        '!tcping': var.tcping_close,
-        'ssh':var.ssh_open,
-        '!ssh':var.ssh_close
+def inner_param_print(p):
+    INNER_P={
+    'ping':var.ping_open,
+    '!ping':var.ping_close,
+    'tcping':var.tcping_open,
+    '!tcping': var.tcping_close,
+    'ssh':var.ssh_open,
+    '!ssh':var.ssh_close
     }
-
-    if show:
-        if p=='all':
-           for key,value in inner_p.items():
-                print(f'{key}=>{value}')
-        else:
-            for key,value in inner_p.items():
-                if key in p:
-                    print(f"{key}=>{value}")
-    if result:
-        result_dict={}
-        for key,value in inner_p.items():
+    if p[0]=='all':
+        for key,value in INNER_P.items():
+            print(f'{key}=>{value}')
+    else:
+        for key,value in INNER_P.items():
             if key in p:
-                result_dict[key]=value
-        return result_dict
+                print(f"{key}=>{value}")
 
-def extend_param(p,show,result):
-    extend_p=var.extend_param
-    if show:
-        if 'key' not in p :
-            for key,value in extend_p.items():
-                if key in p['ip']:
-                    print(f'{key}=>')
-                    for k,v in value.items():
+def inner_param_get(p):
+    INNER_P={
+    'ping':var.ping_open,
+    '!ping':var.ping_close,
+    'tcping':var.tcping_open,
+    '!tcping': var.tcping_close,
+    'ssh':var.ssh_open,
+    '!ssh':var.ssh_close
+    }
+    result_dict={}
+    for key,value in INNER_P.items():
+        if key in p:
+            result_dict[key]=value
+    return result_dict
+
+def extend_param_print(p):
+    EXTEND_P=var.extend_param
+    if 'key' not in p :
+        for key,value in EXTEND_P.items():
+            if key in p['ip']:
+                print(f'{key}=>')
+                for k,v in value.items():
+                    print(f'{k}:{v}')
+    else:
+        for key,value in EXTEND_P.items():
+            if key in p['ip']:
+                print(f'{key}=>')
+                for k,v in value.items():
+                    if k in p['key']:
                         print(f'{k}:{v}')
-        else:
-            for key,value in extend_p.items():
-                if key in p['ip']:
-                    print(f'{key}=>')
-                    for k,v in value.items():
-                        if k in p['key']:
-                            print(f'{k}:{v}')
-    if result:
-        if 'key' not in p :
-            for key,value in extend_p.items():
-                if key in p['ip']:
-                    var.temp_ip_about_param={
-                        'ip':key,
-                        'param':value
-                    }
-        else:
-            for key,value in extend_p.items():
-                print(key,value,p)
-                if key in p['ip']:
-                    param_dic={}
-                    for k,v in value.items():
-                        if k in p['key']:
-                            param_dic[k]=value[k]
+
+def extend_param_get(p):
+    EXTEND_P=var.extend_param
+    if 'key' not in p :
+        for key,value in EXTEND_P.items():
+            if key in p['ip']:
                 var.temp_ip_about_param={
                     'ip':key,
-                    'param':param_dic
+                    'param':value
                 }
-        print(f'tools.py:第83行{var.temp_ip_about_param}')
+    else:
+        for key,value in EXTEND_P.items():
+            print(key,value,p)
+            if key in p['ip']:
+                param_dic={}
+                for k,v in value.items():
+                    if k in p['key']:
+                        param_dic[k]=value[k]
+            var.temp_ip_about_param={
+                'ip':key,
+                'param':param_dic
+            }
+    print(f'tools.py:第83行{var.temp_ip_about_param}')
 '''
 以下是protocol.py文件依赖函数
 '''
 
 def tcp_port_check(target,timeout):
-
-     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-     sock.settimeout(timeout) 
-     result = sock.connect_ex(target)
-     return (result,target)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(timeout) 
+    result = sock.connect_ex(target)
+    return (result,target)
 
 def tcp_port_scan(targets,timeout=1):
     dic={}
@@ -120,7 +128,7 @@ def tcp_port_scan(targets,timeout=1):
     dic['close']=close_str
     return dic
 
-#
+#['ip'...]
 def ping_scan(address,timeout,retry,sort):
         
         result={
@@ -160,7 +168,6 @@ def ping_scan(address,timeout,retry,sort):
         print(var.ping_open)
         return result
 
-#
 def connect_ssh_shell(connect):
     try:
         #添加ssh记录
@@ -194,21 +201,33 @@ def send_ssh_command(shell,cmd):
     3.状态名称__参与判断的参数类型
 '''
 
-def init_exp__four__dict(ori_protocol,at_protocol):
-    if ori_protocol=='ping':
-        if len(at_protocol)==1 :
-            _at_protocol=at_protocol[0]
-            if _at_protocol=='ping':
-                address=inner_param(at_protocol,False,True)['ping']
-                print(address)
-            if _at_protocol=='tcping':
-                address=[p[0] for p in inner_param(at_protocol,False,True)['tcping']]
-            if _at_protocol=='ssh':
-                address=[p[0] for p in inner_param(at_protocol,False,True)['ssh']]
-            return address
-        else:
-            pass
-
+def init_exp__four__dict(at_protocol,ip=True,ip_port=False,ip_user_pwd=False):
+    result={
+        'ip':[],
+        'ip_port':[],
+        'ip_port_user_pwd':[]
+    }
+    print(f'tools.py文件第214行{at_protocol}')
+    for _at_protocol in at_protocol:
+        print(_at_protocol)
+        if _at_protocol=='ping' or _at_protocol=='!ping':
+            result['ip']+=inner_param_get(at_protocol)[_at_protocol]
+        if _at_protocol=='tcping' or  _at_protocol=='!tcping':
+            if ip:
+                result['ip']+=[p[0] for p in inner_param_get(at_protocol)[_at_protocol]]
+            if ip_port:
+                result['ip_port']+=[p for p in inner_param_get(at_protocol)[_at_protocol]]
+        if _at_protocol=='ssh' or _at_protocol=='!ssh':
+            if ip:
+                result['ip']+=[p[0] for p in inner_param_get(at_protocol)[_at_protocol]]
+            if ip_port:
+                result['ip_port']+=[p[0:2] for p in inner_param_get(at_protocol)[_at_protocol]]
+            if ip_user_pwd:
+                result['ip_port_user_pwd']+=[p for p in inner_param_get(at_protocol)[_at_protocol] ]
+        print(f'tools.py第226行:{result}')
+    return result
+  
+        
 if __name__ =='__main__':
     tcp_port_scan([['192.168.2.254','443']])
 
