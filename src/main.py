@@ -35,15 +35,16 @@ class Netknife:
             else:
                 if input_raw:
                     _in=input_raw.rstrip()   
-                    self.parser.parse(_in)
+                    # self.parser.parse(_in)
+                            
+                    try:
+                        self.parser.parse(_in) 
+                    except Exception as e:
+                        print(e)
+            
                 if self.var.current_state=='send' and not input_raw:
                     self.parser.parse('enter')
-            
-            # try:
-            #     self.parser.parse(_in) 
-            # except Exception as e:
-            #     print(e)
-            
+          
          
         
     

@@ -23,7 +23,8 @@ class Global_Var:
             self._extend_param={}
 
             #根据@语法临时给协议使用的参数
-            self._temp_param={}
+            self._temp_ip_about_param={}
+            self._temp_ip_list=[]
             
     @property
     def current_state(self):
@@ -54,9 +55,14 @@ class Global_Var:
     def extend_param(self):
         return self._extend_param
     @property
-    def temp_param(self):
-        return self._temp_param
+    def temp_ip_about_param(self):
+        return self._temp_ip_about_param
 
+    @property
+    def temp_ip_list(self):
+        return self._temp_ip_list
+    
+    
     @current_state.setter
     def current_state(self,value):
         self._current_state=value
@@ -102,14 +108,18 @@ class Global_Var:
         else:
             self._ssh_close.append(value)
     @extend_param.setter
-    def param(self,value):
-
-        keys=list(self._param.keys())
-        if value['ip'] not in keys:
+    def extend_param(self,value):
+        if value['ip'] not in self._extend_param:
             self.extend_param[value['ip']]={}
-        
         self.extend_param[value['ip']][value['key']]=value['value']
+    
 
-    @temp_param.setter
-    def temp_param(self,value):
-        self._temp_param[value['ip']]=value['param']
+    @temp_ip_about_param.setter
+    def temp_ip_about_param(self,value):
+        self._temp_ip_about_param[value['ip']]=value['param']
+    
+    
+    @temp_ip_list.setter
+    def temp_ip_list(self,value):
+        self._temp_ip_list=value
+    

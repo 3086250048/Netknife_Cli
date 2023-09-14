@@ -4,90 +4,91 @@ Grammar
 
 Rule 0     S' -> init_exp
 Rule 1     init_exp -> at_exp
-Rule 2     init_exp -> PROTOCOL NULL address_exp
-Rule 3     init_exp -> PROTOCOL NULL address_exp NULL param_exp
-Rule 4     init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp
-Rule 5     init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp NULL param_exp
-Rule 6     at_exp -> at_protocol_exp
-Rule 7     at_exp -> at_param_exp
-Rule 8     at_exp -> at_exp NULL at_protocol_exp
-Rule 9     at_exp -> at_exp NULL at_param_exp
-Rule 10    at_protocol_exp -> AT
-Rule 11    at_protocol_exp -> AT PROTOCOL
-Rule 12    at_protocol_exp -> AT NOT PROTOCOL
-Rule 13    at_protocol_exp -> at_protocol_exp COMMA PROTOCOL
-Rule 14    at_protocol_exp -> at_protocol_exp COMMA NOT PROTOCOL
-Rule 15    at_param_exp -> INNER AT address_exp
-Rule 16    at_param_exp -> AT address_exp
-Rule 17    at_param_exp -> INNER AT address_exp EQ sn_exp
-Rule 18    at_param_exp -> INNER AT address_exp EQ NUMBER
-Rule 19    address_exp -> ipv4_exp
-Rule 20    address_exp -> domain_exp
-Rule 21    address_exp -> address_exp SEMICOLON ipv4_exp
-Rule 22    address_exp -> address_exp SEMICOLON domain_exp
-Rule 23    domain_exp -> domain_block_exp
-Rule 24    domain_exp -> domain_exp COMMA domain_block_exp
-Rule 25    ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp
-Rule 26    port_number_block_exp -> number_block_exp
-Rule 27    port_number_block_exp -> NOT number_block_exp
-Rule 28    port_number_block_exp -> number_block_exp NOT number_block_exp
-Rule 29    ipv4_number_block_exp -> number_block_exp
-Rule 30    ipv4_number_block_exp -> NOT number_block_exp
-Rule 31    ipv4_number_block_exp -> number_block_exp NOT number_block_exp
-Rule 32    sn_exp -> WORD
-Rule 33    sn_exp -> NUMBER WORD
-Rule 34    sn_exp -> sn_exp WORD
-Rule 35    sn_exp -> sn_exp NUMBER
-Rule 36    domain_block_exp -> sn_exp DOT sn_exp
-Rule 37    domain_block_exp -> ipv4_number_block_exp DOT sn_exp
-Rule 38    domain_block_exp -> domain_block_exp DOT sn_exp
-Rule 39    domain_block_exp -> domain_block_exp DOT NUMBER
-Rule 40    number_block_exp -> number_exp
-Rule 41    number_block_exp -> number_block_exp COMMA number_exp
-Rule 42    number_exp -> NUMBER
-Rule 43    number_exp -> NUMBER RANGE NUMBER
-Rule 44    number_exp -> NUMBER RANGE NUMBER MOD NUMBER
-Rule 45    param_exp -> INNER EQ sn_exp
-Rule 46    param_exp -> INNER EQ address_exp
-Rule 47    param_exp -> INNER EQ NULL
-Rule 48    param_exp -> INNER EQ port_number_block_exp
-Rule 49    param_exp -> INNER EQ sn_exp NULL param_exp
-Rule 50    param_exp -> INNER EQ address_exp NULL param_exp
-Rule 51    param_exp -> INNER EQ port_number_block_exp NULL param_exp
+Rule 2     init_exp -> PROTOCOL NULL at_exp
+Rule 3     init_exp -> PROTOCOL NULL address_exp
+Rule 4     init_exp -> PROTOCOL NULL address_exp NULL param_exp
+Rule 5     init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp
+Rule 6     init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp NULL param_exp
+Rule 7     at_exp -> at_protocol_exp
+Rule 8     at_exp -> at_param_exp
+Rule 9     at_exp -> at_exp NULL at_protocol_exp
+Rule 10    at_exp -> at_exp NULL at_param_exp
+Rule 11    at_protocol_exp -> AT
+Rule 12    at_protocol_exp -> AT PROTOCOL
+Rule 13    at_protocol_exp -> AT NOT PROTOCOL
+Rule 14    at_protocol_exp -> at_protocol_exp COMMA PROTOCOL
+Rule 15    at_protocol_exp -> at_protocol_exp COMMA NOT PROTOCOL
+Rule 16    at_param_exp -> INNER AT address_exp
+Rule 17    at_param_exp -> AT address_exp
+Rule 18    at_param_exp -> INNER AT address_exp EQ sn_exp
+Rule 19    at_param_exp -> INNER AT address_exp EQ NUMBER
+Rule 20    address_exp -> ipv4_exp
+Rule 21    address_exp -> domain_exp
+Rule 22    address_exp -> address_exp SEMICOLON ipv4_exp
+Rule 23    address_exp -> address_exp SEMICOLON domain_exp
+Rule 24    domain_exp -> domain_block_exp
+Rule 25    domain_exp -> domain_exp COMMA domain_block_exp
+Rule 26    ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp
+Rule 27    port_number_block_exp -> number_block_exp
+Rule 28    port_number_block_exp -> NOT number_block_exp
+Rule 29    port_number_block_exp -> number_block_exp NOT number_block_exp
+Rule 30    ipv4_number_block_exp -> number_block_exp
+Rule 31    ipv4_number_block_exp -> NOT number_block_exp
+Rule 32    ipv4_number_block_exp -> number_block_exp NOT number_block_exp
+Rule 33    sn_exp -> WORD
+Rule 34    sn_exp -> NUMBER WORD
+Rule 35    sn_exp -> sn_exp WORD
+Rule 36    sn_exp -> sn_exp NUMBER
+Rule 37    domain_block_exp -> sn_exp DOT sn_exp
+Rule 38    domain_block_exp -> ipv4_number_block_exp DOT sn_exp
+Rule 39    domain_block_exp -> domain_block_exp DOT sn_exp
+Rule 40    domain_block_exp -> domain_block_exp DOT NUMBER
+Rule 41    number_block_exp -> number_exp
+Rule 42    number_block_exp -> number_block_exp COMMA number_exp
+Rule 43    number_exp -> NUMBER
+Rule 44    number_exp -> NUMBER RANGE NUMBER
+Rule 45    number_exp -> NUMBER RANGE NUMBER MOD NUMBER
+Rule 46    param_exp -> INNER EQ sn_exp
+Rule 47    param_exp -> INNER EQ address_exp
+Rule 48    param_exp -> INNER EQ NULL
+Rule 49    param_exp -> INNER EQ port_number_block_exp
+Rule 50    param_exp -> INNER EQ sn_exp NULL param_exp
+Rule 51    param_exp -> INNER EQ address_exp NULL param_exp
+Rule 52    param_exp -> INNER EQ port_number_block_exp NULL param_exp
 
 Terminals, with rules where they appear
 
-AT                   : 10 11 12 15 16 17 18
-COMMA                : 13 14 24 41
-DOT                  : 25 25 25 36 37 38 39
-EQ                   : 17 18 45 46 47 48 49 50 51
-INNER                : 15 17 18 45 46 47 48 49 50 51
-MOD                  : 44
-NOT                  : 12 14 27 28 30 31
-NULL                 : 2 3 3 4 4 5 5 5 8 9 47 49 50 51
-NUMBER               : 18 33 35 39 42 43 43 44 44 44
-PROTOCOL             : 2 3 4 5 11 12 13 14
-RANGE                : 43 44
-SEMICOLON            : 21 22
-WORD                 : 32 33 34
+AT                   : 11 12 13 16 17 18 19
+COMMA                : 14 15 25 42
+DOT                  : 26 26 26 37 38 39 40
+EQ                   : 18 19 46 47 48 49 50 51 52
+INNER                : 16 18 19 46 47 48 49 50 51 52
+MOD                  : 45
+NOT                  : 13 15 28 29 31 32
+NULL                 : 2 3 4 4 5 5 6 6 6 9 10 48 50 51 52
+NUMBER               : 19 34 36 40 43 44 44 45 45 45
+PROTOCOL             : 2 3 4 5 6 12 13 14 15
+RANGE                : 44 45
+SEMICOLON            : 22 23
+WORD                 : 33 34 35
 error                : 
 
 Nonterminals, with rules where they appear
 
-address_exp          : 2 3 4 5 15 16 17 18 21 22 46 50
-at_exp               : 1 8 9
-at_param_exp         : 7 9
-at_protocol_exp      : 6 8 13 14
-domain_block_exp     : 23 24 38 39
-domain_exp           : 20 22 24
+address_exp          : 3 4 5 6 16 17 18 19 22 23 47 51
+at_exp               : 1 2 9 10
+at_param_exp         : 8 10
+at_protocol_exp      : 7 9 14 15
+domain_block_exp     : 24 25 39 40
+domain_exp           : 21 23 25
 init_exp             : 0
-ipv4_exp             : 19 21
-ipv4_number_block_exp : 25 25 25 25 37
-number_block_exp     : 26 27 28 28 29 30 31 31 41
-number_exp           : 40 41
-param_exp            : 3 5 49 50 51
-port_number_block_exp : 4 5 48 51
-sn_exp               : 17 34 35 36 36 37 38 45 49
+ipv4_exp             : 20 22
+ipv4_number_block_exp : 26 26 26 26 38
+number_block_exp     : 27 28 29 29 30 31 32 32 42
+number_exp           : 41 42
+param_exp            : 4 6 50 51 52
+port_number_block_exp : 5 6 49 52
+sn_exp               : 18 35 36 37 37 38 39 46 50
 
 Parsing method: LALR
 
@@ -95,23 +96,24 @@ state 0
 
     (0) S' -> . init_exp
     (1) init_exp -> . at_exp
-    (2) init_exp -> . PROTOCOL NULL address_exp
-    (3) init_exp -> . PROTOCOL NULL address_exp NULL param_exp
-    (4) init_exp -> . PROTOCOL NULL address_exp NULL port_number_block_exp
-    (5) init_exp -> . PROTOCOL NULL address_exp NULL port_number_block_exp NULL param_exp
-    (6) at_exp -> . at_protocol_exp
-    (7) at_exp -> . at_param_exp
-    (8) at_exp -> . at_exp NULL at_protocol_exp
-    (9) at_exp -> . at_exp NULL at_param_exp
-    (10) at_protocol_exp -> . AT
-    (11) at_protocol_exp -> . AT PROTOCOL
-    (12) at_protocol_exp -> . AT NOT PROTOCOL
-    (13) at_protocol_exp -> . at_protocol_exp COMMA PROTOCOL
-    (14) at_protocol_exp -> . at_protocol_exp COMMA NOT PROTOCOL
-    (15) at_param_exp -> . INNER AT address_exp
-    (16) at_param_exp -> . AT address_exp
-    (17) at_param_exp -> . INNER AT address_exp EQ sn_exp
-    (18) at_param_exp -> . INNER AT address_exp EQ NUMBER
+    (2) init_exp -> . PROTOCOL NULL at_exp
+    (3) init_exp -> . PROTOCOL NULL address_exp
+    (4) init_exp -> . PROTOCOL NULL address_exp NULL param_exp
+    (5) init_exp -> . PROTOCOL NULL address_exp NULL port_number_block_exp
+    (6) init_exp -> . PROTOCOL NULL address_exp NULL port_number_block_exp NULL param_exp
+    (7) at_exp -> . at_protocol_exp
+    (8) at_exp -> . at_param_exp
+    (9) at_exp -> . at_exp NULL at_protocol_exp
+    (10) at_exp -> . at_exp NULL at_param_exp
+    (11) at_protocol_exp -> . AT
+    (12) at_protocol_exp -> . AT PROTOCOL
+    (13) at_protocol_exp -> . AT NOT PROTOCOL
+    (14) at_protocol_exp -> . at_protocol_exp COMMA PROTOCOL
+    (15) at_protocol_exp -> . at_protocol_exp COMMA NOT PROTOCOL
+    (16) at_param_exp -> . INNER AT address_exp
+    (17) at_param_exp -> . AT address_exp
+    (18) at_param_exp -> . INNER AT address_exp EQ sn_exp
+    (19) at_param_exp -> . INNER AT address_exp EQ NUMBER
 
     PROTOCOL        shift and go to state 3
     AT              shift and go to state 6
@@ -131,8 +133,8 @@ state 1
 state 2
 
     (1) init_exp -> at_exp .
-    (8) at_exp -> at_exp . NULL at_protocol_exp
-    (9) at_exp -> at_exp . NULL at_param_exp
+    (9) at_exp -> at_exp . NULL at_protocol_exp
+    (10) at_exp -> at_exp . NULL at_param_exp
 
     $end            reduce using rule 1 (init_exp -> at_exp .)
     NULL            shift and go to state 8
@@ -140,66 +142,67 @@ state 2
 
 state 3
 
-    (2) init_exp -> PROTOCOL . NULL address_exp
-    (3) init_exp -> PROTOCOL . NULL address_exp NULL param_exp
-    (4) init_exp -> PROTOCOL . NULL address_exp NULL port_number_block_exp
-    (5) init_exp -> PROTOCOL . NULL address_exp NULL port_number_block_exp NULL param_exp
+    (2) init_exp -> PROTOCOL . NULL at_exp
+    (3) init_exp -> PROTOCOL . NULL address_exp
+    (4) init_exp -> PROTOCOL . NULL address_exp NULL param_exp
+    (5) init_exp -> PROTOCOL . NULL address_exp NULL port_number_block_exp
+    (6) init_exp -> PROTOCOL . NULL address_exp NULL port_number_block_exp NULL param_exp
 
     NULL            shift and go to state 9
 
 
 state 4
 
-    (6) at_exp -> at_protocol_exp .
-    (13) at_protocol_exp -> at_protocol_exp . COMMA PROTOCOL
-    (14) at_protocol_exp -> at_protocol_exp . COMMA NOT PROTOCOL
+    (7) at_exp -> at_protocol_exp .
+    (14) at_protocol_exp -> at_protocol_exp . COMMA PROTOCOL
+    (15) at_protocol_exp -> at_protocol_exp . COMMA NOT PROTOCOL
 
-    NULL            reduce using rule 6 (at_exp -> at_protocol_exp .)
-    $end            reduce using rule 6 (at_exp -> at_protocol_exp .)
+    NULL            reduce using rule 7 (at_exp -> at_protocol_exp .)
+    $end            reduce using rule 7 (at_exp -> at_protocol_exp .)
     COMMA           shift and go to state 10
 
 
 state 5
 
-    (7) at_exp -> at_param_exp .
+    (8) at_exp -> at_param_exp .
 
-    NULL            reduce using rule 7 (at_exp -> at_param_exp .)
-    $end            reduce using rule 7 (at_exp -> at_param_exp .)
+    NULL            reduce using rule 8 (at_exp -> at_param_exp .)
+    $end            reduce using rule 8 (at_exp -> at_param_exp .)
 
 
 state 6
 
-    (10) at_protocol_exp -> AT .
-    (11) at_protocol_exp -> AT . PROTOCOL
-    (12) at_protocol_exp -> AT . NOT PROTOCOL
-    (16) at_param_exp -> AT . address_exp
-    (19) address_exp -> . ipv4_exp
-    (20) address_exp -> . domain_exp
-    (21) address_exp -> . address_exp SEMICOLON ipv4_exp
-    (22) address_exp -> . address_exp SEMICOLON domain_exp
-    (25) ipv4_exp -> . ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp
-    (23) domain_exp -> . domain_block_exp
-    (24) domain_exp -> . domain_exp COMMA domain_block_exp
-    (29) ipv4_number_block_exp -> . number_block_exp
-    (30) ipv4_number_block_exp -> . NOT number_block_exp
-    (31) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
-    (36) domain_block_exp -> . sn_exp DOT sn_exp
-    (37) domain_block_exp -> . ipv4_number_block_exp DOT sn_exp
-    (38) domain_block_exp -> . domain_block_exp DOT sn_exp
-    (39) domain_block_exp -> . domain_block_exp DOT NUMBER
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (32) sn_exp -> . WORD
-    (33) sn_exp -> . NUMBER WORD
-    (34) sn_exp -> . sn_exp WORD
-    (35) sn_exp -> . sn_exp NUMBER
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (11) at_protocol_exp -> AT .
+    (12) at_protocol_exp -> AT . PROTOCOL
+    (13) at_protocol_exp -> AT . NOT PROTOCOL
+    (17) at_param_exp -> AT . address_exp
+    (20) address_exp -> . ipv4_exp
+    (21) address_exp -> . domain_exp
+    (22) address_exp -> . address_exp SEMICOLON ipv4_exp
+    (23) address_exp -> . address_exp SEMICOLON domain_exp
+    (26) ipv4_exp -> . ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp
+    (24) domain_exp -> . domain_block_exp
+    (25) domain_exp -> . domain_exp COMMA domain_block_exp
+    (30) ipv4_number_block_exp -> . number_block_exp
+    (31) ipv4_number_block_exp -> . NOT number_block_exp
+    (32) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
+    (37) domain_block_exp -> . sn_exp DOT sn_exp
+    (38) domain_block_exp -> . ipv4_number_block_exp DOT sn_exp
+    (39) domain_block_exp -> . domain_block_exp DOT sn_exp
+    (40) domain_block_exp -> . domain_block_exp DOT NUMBER
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (33) sn_exp -> . WORD
+    (34) sn_exp -> . NUMBER WORD
+    (35) sn_exp -> . sn_exp WORD
+    (36) sn_exp -> . sn_exp NUMBER
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    COMMA           reduce using rule 10 (at_protocol_exp -> AT .)
-    NULL            reduce using rule 10 (at_protocol_exp -> AT .)
-    $end            reduce using rule 10 (at_protocol_exp -> AT .)
+    COMMA           reduce using rule 11 (at_protocol_exp -> AT .)
+    NULL            reduce using rule 11 (at_protocol_exp -> AT .)
+    $end            reduce using rule 11 (at_protocol_exp -> AT .)
     PROTOCOL        shift and go to state 11
     NOT             shift and go to state 12
     WORD            shift and go to state 22
@@ -216,26 +219,26 @@ state 6
 
 state 7
 
-    (15) at_param_exp -> INNER . AT address_exp
-    (17) at_param_exp -> INNER . AT address_exp EQ sn_exp
-    (18) at_param_exp -> INNER . AT address_exp EQ NUMBER
+    (16) at_param_exp -> INNER . AT address_exp
+    (18) at_param_exp -> INNER . AT address_exp EQ sn_exp
+    (19) at_param_exp -> INNER . AT address_exp EQ NUMBER
 
     AT              shift and go to state 23
 
 
 state 8
 
-    (8) at_exp -> at_exp NULL . at_protocol_exp
-    (9) at_exp -> at_exp NULL . at_param_exp
-    (10) at_protocol_exp -> . AT
-    (11) at_protocol_exp -> . AT PROTOCOL
-    (12) at_protocol_exp -> . AT NOT PROTOCOL
-    (13) at_protocol_exp -> . at_protocol_exp COMMA PROTOCOL
-    (14) at_protocol_exp -> . at_protocol_exp COMMA NOT PROTOCOL
-    (15) at_param_exp -> . INNER AT address_exp
-    (16) at_param_exp -> . AT address_exp
-    (17) at_param_exp -> . INNER AT address_exp EQ sn_exp
-    (18) at_param_exp -> . INNER AT address_exp EQ NUMBER
+    (9) at_exp -> at_exp NULL . at_protocol_exp
+    (10) at_exp -> at_exp NULL . at_param_exp
+    (11) at_protocol_exp -> . AT
+    (12) at_protocol_exp -> . AT PROTOCOL
+    (13) at_protocol_exp -> . AT NOT PROTOCOL
+    (14) at_protocol_exp -> . at_protocol_exp COMMA PROTOCOL
+    (15) at_protocol_exp -> . at_protocol_exp COMMA NOT PROTOCOL
+    (16) at_param_exp -> . INNER AT address_exp
+    (17) at_param_exp -> . AT address_exp
+    (18) at_param_exp -> . INNER AT address_exp EQ sn_exp
+    (19) at_param_exp -> . INNER AT address_exp EQ NUMBER
 
     AT              shift and go to state 6
     INNER           shift and go to state 7
@@ -245,239 +248,258 @@ state 8
 
 state 9
 
-    (2) init_exp -> PROTOCOL NULL . address_exp
-    (3) init_exp -> PROTOCOL NULL . address_exp NULL param_exp
-    (4) init_exp -> PROTOCOL NULL . address_exp NULL port_number_block_exp
-    (5) init_exp -> PROTOCOL NULL . address_exp NULL port_number_block_exp NULL param_exp
-    (19) address_exp -> . ipv4_exp
-    (20) address_exp -> . domain_exp
-    (21) address_exp -> . address_exp SEMICOLON ipv4_exp
-    (22) address_exp -> . address_exp SEMICOLON domain_exp
-    (25) ipv4_exp -> . ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp
-    (23) domain_exp -> . domain_block_exp
-    (24) domain_exp -> . domain_exp COMMA domain_block_exp
-    (29) ipv4_number_block_exp -> . number_block_exp
-    (30) ipv4_number_block_exp -> . NOT number_block_exp
-    (31) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
-    (36) domain_block_exp -> . sn_exp DOT sn_exp
-    (37) domain_block_exp -> . ipv4_number_block_exp DOT sn_exp
-    (38) domain_block_exp -> . domain_block_exp DOT sn_exp
-    (39) domain_block_exp -> . domain_block_exp DOT NUMBER
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (32) sn_exp -> . WORD
-    (33) sn_exp -> . NUMBER WORD
-    (34) sn_exp -> . sn_exp WORD
-    (35) sn_exp -> . sn_exp NUMBER
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (2) init_exp -> PROTOCOL NULL . at_exp
+    (3) init_exp -> PROTOCOL NULL . address_exp
+    (4) init_exp -> PROTOCOL NULL . address_exp NULL param_exp
+    (5) init_exp -> PROTOCOL NULL . address_exp NULL port_number_block_exp
+    (6) init_exp -> PROTOCOL NULL . address_exp NULL port_number_block_exp NULL param_exp
+    (7) at_exp -> . at_protocol_exp
+    (8) at_exp -> . at_param_exp
+    (9) at_exp -> . at_exp NULL at_protocol_exp
+    (10) at_exp -> . at_exp NULL at_param_exp
+    (20) address_exp -> . ipv4_exp
+    (21) address_exp -> . domain_exp
+    (22) address_exp -> . address_exp SEMICOLON ipv4_exp
+    (23) address_exp -> . address_exp SEMICOLON domain_exp
+    (11) at_protocol_exp -> . AT
+    (12) at_protocol_exp -> . AT PROTOCOL
+    (13) at_protocol_exp -> . AT NOT PROTOCOL
+    (14) at_protocol_exp -> . at_protocol_exp COMMA PROTOCOL
+    (15) at_protocol_exp -> . at_protocol_exp COMMA NOT PROTOCOL
+    (16) at_param_exp -> . INNER AT address_exp
+    (17) at_param_exp -> . AT address_exp
+    (18) at_param_exp -> . INNER AT address_exp EQ sn_exp
+    (19) at_param_exp -> . INNER AT address_exp EQ NUMBER
+    (26) ipv4_exp -> . ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp
+    (24) domain_exp -> . domain_block_exp
+    (25) domain_exp -> . domain_exp COMMA domain_block_exp
+    (30) ipv4_number_block_exp -> . number_block_exp
+    (31) ipv4_number_block_exp -> . NOT number_block_exp
+    (32) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
+    (37) domain_block_exp -> . sn_exp DOT sn_exp
+    (38) domain_block_exp -> . ipv4_number_block_exp DOT sn_exp
+    (39) domain_block_exp -> . domain_block_exp DOT sn_exp
+    (40) domain_block_exp -> . domain_block_exp DOT NUMBER
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (33) sn_exp -> . WORD
+    (34) sn_exp -> . NUMBER WORD
+    (35) sn_exp -> . sn_exp WORD
+    (36) sn_exp -> . sn_exp NUMBER
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    NOT             shift and go to state 27
+    AT              shift and go to state 6
+    INNER           shift and go to state 7
+    NOT             shift and go to state 28
     WORD            shift and go to state 22
     NUMBER          shift and go to state 20
 
-    address_exp                    shift and go to state 26
+    at_exp                         shift and go to state 26
+    address_exp                    shift and go to state 27
+    at_protocol_exp                shift and go to state 4
+    at_param_exp                   shift and go to state 5
     ipv4_exp                       shift and go to state 14
     domain_exp                     shift and go to state 15
+    sn_exp                         shift and go to state 19
     ipv4_number_block_exp          shift and go to state 16
     domain_block_exp               shift and go to state 17
     number_block_exp               shift and go to state 18
-    sn_exp                         shift and go to state 19
     number_exp                     shift and go to state 21
 
 state 10
 
-    (13) at_protocol_exp -> at_protocol_exp COMMA . PROTOCOL
-    (14) at_protocol_exp -> at_protocol_exp COMMA . NOT PROTOCOL
+    (14) at_protocol_exp -> at_protocol_exp COMMA . PROTOCOL
+    (15) at_protocol_exp -> at_protocol_exp COMMA . NOT PROTOCOL
 
-    PROTOCOL        shift and go to state 28
-    NOT             shift and go to state 29
+    PROTOCOL        shift and go to state 29
+    NOT             shift and go to state 30
 
 
 state 11
 
-    (11) at_protocol_exp -> AT PROTOCOL .
+    (12) at_protocol_exp -> AT PROTOCOL .
 
-    COMMA           reduce using rule 11 (at_protocol_exp -> AT PROTOCOL .)
-    NULL            reduce using rule 11 (at_protocol_exp -> AT PROTOCOL .)
-    $end            reduce using rule 11 (at_protocol_exp -> AT PROTOCOL .)
+    COMMA           reduce using rule 12 (at_protocol_exp -> AT PROTOCOL .)
+    NULL            reduce using rule 12 (at_protocol_exp -> AT PROTOCOL .)
+    $end            reduce using rule 12 (at_protocol_exp -> AT PROTOCOL .)
 
 
 state 12
 
-    (12) at_protocol_exp -> AT NOT . PROTOCOL
-    (30) ipv4_number_block_exp -> NOT . number_block_exp
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (13) at_protocol_exp -> AT NOT . PROTOCOL
+    (31) ipv4_number_block_exp -> NOT . number_block_exp
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    PROTOCOL        shift and go to state 30
-    NUMBER          shift and go to state 32
+    PROTOCOL        shift and go to state 31
+    NUMBER          shift and go to state 33
 
-    number_block_exp               shift and go to state 31
+    number_block_exp               shift and go to state 32
     number_exp                     shift and go to state 21
 
 state 13
 
-    (16) at_param_exp -> AT address_exp .
-    (21) address_exp -> address_exp . SEMICOLON ipv4_exp
-    (22) address_exp -> address_exp . SEMICOLON domain_exp
+    (17) at_param_exp -> AT address_exp .
+    (22) address_exp -> address_exp . SEMICOLON ipv4_exp
+    (23) address_exp -> address_exp . SEMICOLON domain_exp
 
-    NULL            reduce using rule 16 (at_param_exp -> AT address_exp .)
-    $end            reduce using rule 16 (at_param_exp -> AT address_exp .)
-    SEMICOLON       shift and go to state 33
+    NULL            reduce using rule 17 (at_param_exp -> AT address_exp .)
+    $end            reduce using rule 17 (at_param_exp -> AT address_exp .)
+    SEMICOLON       shift and go to state 34
 
 
 state 14
 
-    (19) address_exp -> ipv4_exp .
+    (20) address_exp -> ipv4_exp .
 
-    SEMICOLON       reduce using rule 19 (address_exp -> ipv4_exp .)
-    NULL            reduce using rule 19 (address_exp -> ipv4_exp .)
-    $end            reduce using rule 19 (address_exp -> ipv4_exp .)
-    EQ              reduce using rule 19 (address_exp -> ipv4_exp .)
+    SEMICOLON       reduce using rule 20 (address_exp -> ipv4_exp .)
+    NULL            reduce using rule 20 (address_exp -> ipv4_exp .)
+    $end            reduce using rule 20 (address_exp -> ipv4_exp .)
+    EQ              reduce using rule 20 (address_exp -> ipv4_exp .)
 
 
 state 15
 
-    (20) address_exp -> domain_exp .
-    (24) domain_exp -> domain_exp . COMMA domain_block_exp
+    (21) address_exp -> domain_exp .
+    (25) domain_exp -> domain_exp . COMMA domain_block_exp
 
-    SEMICOLON       reduce using rule 20 (address_exp -> domain_exp .)
-    NULL            reduce using rule 20 (address_exp -> domain_exp .)
-    $end            reduce using rule 20 (address_exp -> domain_exp .)
-    EQ              reduce using rule 20 (address_exp -> domain_exp .)
-    COMMA           shift and go to state 34
+    SEMICOLON       reduce using rule 21 (address_exp -> domain_exp .)
+    NULL            reduce using rule 21 (address_exp -> domain_exp .)
+    $end            reduce using rule 21 (address_exp -> domain_exp .)
+    EQ              reduce using rule 21 (address_exp -> domain_exp .)
+    COMMA           shift and go to state 35
 
 
 state 16
 
-    (25) ipv4_exp -> ipv4_number_block_exp . DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp
-    (37) domain_block_exp -> ipv4_number_block_exp . DOT sn_exp
+    (26) ipv4_exp -> ipv4_number_block_exp . DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp
+    (38) domain_block_exp -> ipv4_number_block_exp . DOT sn_exp
 
-    DOT             shift and go to state 35
+    DOT             shift and go to state 36
 
 
 state 17
 
-    (23) domain_exp -> domain_block_exp .
-    (38) domain_block_exp -> domain_block_exp . DOT sn_exp
-    (39) domain_block_exp -> domain_block_exp . DOT NUMBER
+    (24) domain_exp -> domain_block_exp .
+    (39) domain_block_exp -> domain_block_exp . DOT sn_exp
+    (40) domain_block_exp -> domain_block_exp . DOT NUMBER
 
-    COMMA           reduce using rule 23 (domain_exp -> domain_block_exp .)
-    SEMICOLON       reduce using rule 23 (domain_exp -> domain_block_exp .)
-    NULL            reduce using rule 23 (domain_exp -> domain_block_exp .)
-    $end            reduce using rule 23 (domain_exp -> domain_block_exp .)
-    EQ              reduce using rule 23 (domain_exp -> domain_block_exp .)
-    DOT             shift and go to state 36
+    COMMA           reduce using rule 24 (domain_exp -> domain_block_exp .)
+    SEMICOLON       reduce using rule 24 (domain_exp -> domain_block_exp .)
+    NULL            reduce using rule 24 (domain_exp -> domain_block_exp .)
+    $end            reduce using rule 24 (domain_exp -> domain_block_exp .)
+    EQ              reduce using rule 24 (domain_exp -> domain_block_exp .)
+    DOT             shift and go to state 37
 
 
 state 18
 
-    (29) ipv4_number_block_exp -> number_block_exp .
-    (31) ipv4_number_block_exp -> number_block_exp . NOT number_block_exp
-    (41) number_block_exp -> number_block_exp . COMMA number_exp
+    (30) ipv4_number_block_exp -> number_block_exp .
+    (32) ipv4_number_block_exp -> number_block_exp . NOT number_block_exp
+    (42) number_block_exp -> number_block_exp . COMMA number_exp
 
-    DOT             reduce using rule 29 (ipv4_number_block_exp -> number_block_exp .)
-    SEMICOLON       reduce using rule 29 (ipv4_number_block_exp -> number_block_exp .)
-    NULL            reduce using rule 29 (ipv4_number_block_exp -> number_block_exp .)
-    $end            reduce using rule 29 (ipv4_number_block_exp -> number_block_exp .)
-    EQ              reduce using rule 29 (ipv4_number_block_exp -> number_block_exp .)
-    NOT             shift and go to state 37
-    COMMA           shift and go to state 38
+    DOT             reduce using rule 30 (ipv4_number_block_exp -> number_block_exp .)
+    SEMICOLON       reduce using rule 30 (ipv4_number_block_exp -> number_block_exp .)
+    NULL            reduce using rule 30 (ipv4_number_block_exp -> number_block_exp .)
+    $end            reduce using rule 30 (ipv4_number_block_exp -> number_block_exp .)
+    EQ              reduce using rule 30 (ipv4_number_block_exp -> number_block_exp .)
+    NOT             shift and go to state 38
+    COMMA           shift and go to state 39
 
 
 state 19
 
-    (36) domain_block_exp -> sn_exp . DOT sn_exp
-    (34) sn_exp -> sn_exp . WORD
-    (35) sn_exp -> sn_exp . NUMBER
+    (37) domain_block_exp -> sn_exp . DOT sn_exp
+    (35) sn_exp -> sn_exp . WORD
+    (36) sn_exp -> sn_exp . NUMBER
 
-    DOT             shift and go to state 39
-    WORD            shift and go to state 40
-    NUMBER          shift and go to state 41
+    DOT             shift and go to state 40
+    WORD            shift and go to state 41
+    NUMBER          shift and go to state 42
 
 
 state 20
 
-    (33) sn_exp -> NUMBER . WORD
-    (42) number_exp -> NUMBER .
-    (43) number_exp -> NUMBER . RANGE NUMBER
-    (44) number_exp -> NUMBER . RANGE NUMBER MOD NUMBER
+    (34) sn_exp -> NUMBER . WORD
+    (43) number_exp -> NUMBER .
+    (44) number_exp -> NUMBER . RANGE NUMBER
+    (45) number_exp -> NUMBER . RANGE NUMBER MOD NUMBER
 
-    WORD            shift and go to state 42
-    NOT             reduce using rule 42 (number_exp -> NUMBER .)
-    COMMA           reduce using rule 42 (number_exp -> NUMBER .)
-    DOT             reduce using rule 42 (number_exp -> NUMBER .)
-    NULL            reduce using rule 42 (number_exp -> NUMBER .)
-    $end            reduce using rule 42 (number_exp -> NUMBER .)
-    RANGE           shift and go to state 43
+    WORD            shift and go to state 43
+    NOT             reduce using rule 43 (number_exp -> NUMBER .)
+    COMMA           reduce using rule 43 (number_exp -> NUMBER .)
+    DOT             reduce using rule 43 (number_exp -> NUMBER .)
+    NULL            reduce using rule 43 (number_exp -> NUMBER .)
+    $end            reduce using rule 43 (number_exp -> NUMBER .)
+    RANGE           shift and go to state 44
 
 
 state 21
 
-    (40) number_block_exp -> number_exp .
+    (41) number_block_exp -> number_exp .
 
-    NOT             reduce using rule 40 (number_block_exp -> number_exp .)
-    COMMA           reduce using rule 40 (number_block_exp -> number_exp .)
-    DOT             reduce using rule 40 (number_block_exp -> number_exp .)
-    SEMICOLON       reduce using rule 40 (number_block_exp -> number_exp .)
-    NULL            reduce using rule 40 (number_block_exp -> number_exp .)
-    $end            reduce using rule 40 (number_block_exp -> number_exp .)
-    EQ              reduce using rule 40 (number_block_exp -> number_exp .)
+    NOT             reduce using rule 41 (number_block_exp -> number_exp .)
+    COMMA           reduce using rule 41 (number_block_exp -> number_exp .)
+    DOT             reduce using rule 41 (number_block_exp -> number_exp .)
+    SEMICOLON       reduce using rule 41 (number_block_exp -> number_exp .)
+    NULL            reduce using rule 41 (number_block_exp -> number_exp .)
+    $end            reduce using rule 41 (number_block_exp -> number_exp .)
+    EQ              reduce using rule 41 (number_block_exp -> number_exp .)
 
 
 state 22
 
-    (32) sn_exp -> WORD .
+    (33) sn_exp -> WORD .
 
-    DOT             reduce using rule 32 (sn_exp -> WORD .)
-    WORD            reduce using rule 32 (sn_exp -> WORD .)
-    NUMBER          reduce using rule 32 (sn_exp -> WORD .)
-    COMMA           reduce using rule 32 (sn_exp -> WORD .)
-    SEMICOLON       reduce using rule 32 (sn_exp -> WORD .)
-    NULL            reduce using rule 32 (sn_exp -> WORD .)
-    $end            reduce using rule 32 (sn_exp -> WORD .)
-    EQ              reduce using rule 32 (sn_exp -> WORD .)
+    DOT             reduce using rule 33 (sn_exp -> WORD .)
+    WORD            reduce using rule 33 (sn_exp -> WORD .)
+    NUMBER          reduce using rule 33 (sn_exp -> WORD .)
+    COMMA           reduce using rule 33 (sn_exp -> WORD .)
+    SEMICOLON       reduce using rule 33 (sn_exp -> WORD .)
+    NULL            reduce using rule 33 (sn_exp -> WORD .)
+    $end            reduce using rule 33 (sn_exp -> WORD .)
+    EQ              reduce using rule 33 (sn_exp -> WORD .)
 
 
 state 23
 
-    (15) at_param_exp -> INNER AT . address_exp
-    (17) at_param_exp -> INNER AT . address_exp EQ sn_exp
-    (18) at_param_exp -> INNER AT . address_exp EQ NUMBER
-    (19) address_exp -> . ipv4_exp
-    (20) address_exp -> . domain_exp
-    (21) address_exp -> . address_exp SEMICOLON ipv4_exp
-    (22) address_exp -> . address_exp SEMICOLON domain_exp
-    (25) ipv4_exp -> . ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp
-    (23) domain_exp -> . domain_block_exp
-    (24) domain_exp -> . domain_exp COMMA domain_block_exp
-    (29) ipv4_number_block_exp -> . number_block_exp
-    (30) ipv4_number_block_exp -> . NOT number_block_exp
-    (31) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
-    (36) domain_block_exp -> . sn_exp DOT sn_exp
-    (37) domain_block_exp -> . ipv4_number_block_exp DOT sn_exp
-    (38) domain_block_exp -> . domain_block_exp DOT sn_exp
-    (39) domain_block_exp -> . domain_block_exp DOT NUMBER
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (32) sn_exp -> . WORD
-    (33) sn_exp -> . NUMBER WORD
-    (34) sn_exp -> . sn_exp WORD
-    (35) sn_exp -> . sn_exp NUMBER
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (16) at_param_exp -> INNER AT . address_exp
+    (18) at_param_exp -> INNER AT . address_exp EQ sn_exp
+    (19) at_param_exp -> INNER AT . address_exp EQ NUMBER
+    (20) address_exp -> . ipv4_exp
+    (21) address_exp -> . domain_exp
+    (22) address_exp -> . address_exp SEMICOLON ipv4_exp
+    (23) address_exp -> . address_exp SEMICOLON domain_exp
+    (26) ipv4_exp -> . ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp
+    (24) domain_exp -> . domain_block_exp
+    (25) domain_exp -> . domain_exp COMMA domain_block_exp
+    (30) ipv4_number_block_exp -> . number_block_exp
+    (31) ipv4_number_block_exp -> . NOT number_block_exp
+    (32) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
+    (37) domain_block_exp -> . sn_exp DOT sn_exp
+    (38) domain_block_exp -> . ipv4_number_block_exp DOT sn_exp
+    (39) domain_block_exp -> . domain_block_exp DOT sn_exp
+    (40) domain_block_exp -> . domain_block_exp DOT NUMBER
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (33) sn_exp -> . WORD
+    (34) sn_exp -> . NUMBER WORD
+    (35) sn_exp -> . sn_exp WORD
+    (36) sn_exp -> . sn_exp NUMBER
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    NOT             shift and go to state 27
+    NOT             shift and go to state 28
     WORD            shift and go to state 22
     NUMBER          shift and go to state 20
 
-    address_exp                    shift and go to state 44
+    address_exp                    shift and go to state 45
     sn_exp                         shift and go to state 19
     ipv4_exp                       shift and go to state 14
     domain_exp                     shift and go to state 15
@@ -488,972 +510,982 @@ state 23
 
 state 24
 
-    (8) at_exp -> at_exp NULL at_protocol_exp .
-    (13) at_protocol_exp -> at_protocol_exp . COMMA PROTOCOL
-    (14) at_protocol_exp -> at_protocol_exp . COMMA NOT PROTOCOL
+    (9) at_exp -> at_exp NULL at_protocol_exp .
+    (14) at_protocol_exp -> at_protocol_exp . COMMA PROTOCOL
+    (15) at_protocol_exp -> at_protocol_exp . COMMA NOT PROTOCOL
 
-    NULL            reduce using rule 8 (at_exp -> at_exp NULL at_protocol_exp .)
-    $end            reduce using rule 8 (at_exp -> at_exp NULL at_protocol_exp .)
+    NULL            reduce using rule 9 (at_exp -> at_exp NULL at_protocol_exp .)
+    $end            reduce using rule 9 (at_exp -> at_exp NULL at_protocol_exp .)
     COMMA           shift and go to state 10
 
 
 state 25
 
-    (9) at_exp -> at_exp NULL at_param_exp .
+    (10) at_exp -> at_exp NULL at_param_exp .
 
-    NULL            reduce using rule 9 (at_exp -> at_exp NULL at_param_exp .)
-    $end            reduce using rule 9 (at_exp -> at_exp NULL at_param_exp .)
+    NULL            reduce using rule 10 (at_exp -> at_exp NULL at_param_exp .)
+    $end            reduce using rule 10 (at_exp -> at_exp NULL at_param_exp .)
 
 
 state 26
 
-    (2) init_exp -> PROTOCOL NULL address_exp .
-    (3) init_exp -> PROTOCOL NULL address_exp . NULL param_exp
-    (4) init_exp -> PROTOCOL NULL address_exp . NULL port_number_block_exp
-    (5) init_exp -> PROTOCOL NULL address_exp . NULL port_number_block_exp NULL param_exp
-    (21) address_exp -> address_exp . SEMICOLON ipv4_exp
-    (22) address_exp -> address_exp . SEMICOLON domain_exp
+    (2) init_exp -> PROTOCOL NULL at_exp .
+    (9) at_exp -> at_exp . NULL at_protocol_exp
+    (10) at_exp -> at_exp . NULL at_param_exp
 
-    $end            reduce using rule 2 (init_exp -> PROTOCOL NULL address_exp .)
-    NULL            shift and go to state 45
-    SEMICOLON       shift and go to state 33
+    $end            reduce using rule 2 (init_exp -> PROTOCOL NULL at_exp .)
+    NULL            shift and go to state 8
 
 
 state 27
 
-    (30) ipv4_number_block_exp -> NOT . number_block_exp
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (3) init_exp -> PROTOCOL NULL address_exp .
+    (4) init_exp -> PROTOCOL NULL address_exp . NULL param_exp
+    (5) init_exp -> PROTOCOL NULL address_exp . NULL port_number_block_exp
+    (6) init_exp -> PROTOCOL NULL address_exp . NULL port_number_block_exp NULL param_exp
+    (22) address_exp -> address_exp . SEMICOLON ipv4_exp
+    (23) address_exp -> address_exp . SEMICOLON domain_exp
 
-    NUMBER          shift and go to state 32
+    $end            reduce using rule 3 (init_exp -> PROTOCOL NULL address_exp .)
+    NULL            shift and go to state 46
+    SEMICOLON       shift and go to state 34
 
-    number_block_exp               shift and go to state 31
-    number_exp                     shift and go to state 21
 
 state 28
 
-    (13) at_protocol_exp -> at_protocol_exp COMMA PROTOCOL .
+    (31) ipv4_number_block_exp -> NOT . number_block_exp
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    COMMA           reduce using rule 13 (at_protocol_exp -> at_protocol_exp COMMA PROTOCOL .)
-    NULL            reduce using rule 13 (at_protocol_exp -> at_protocol_exp COMMA PROTOCOL .)
-    $end            reduce using rule 13 (at_protocol_exp -> at_protocol_exp COMMA PROTOCOL .)
+    NUMBER          shift and go to state 33
 
+    number_block_exp               shift and go to state 32
+    number_exp                     shift and go to state 21
 
 state 29
 
-    (14) at_protocol_exp -> at_protocol_exp COMMA NOT . PROTOCOL
+    (14) at_protocol_exp -> at_protocol_exp COMMA PROTOCOL .
 
-    PROTOCOL        shift and go to state 46
+    COMMA           reduce using rule 14 (at_protocol_exp -> at_protocol_exp COMMA PROTOCOL .)
+    NULL            reduce using rule 14 (at_protocol_exp -> at_protocol_exp COMMA PROTOCOL .)
+    $end            reduce using rule 14 (at_protocol_exp -> at_protocol_exp COMMA PROTOCOL .)
 
 
 state 30
 
-    (12) at_protocol_exp -> AT NOT PROTOCOL .
+    (15) at_protocol_exp -> at_protocol_exp COMMA NOT . PROTOCOL
 
-    COMMA           reduce using rule 12 (at_protocol_exp -> AT NOT PROTOCOL .)
-    NULL            reduce using rule 12 (at_protocol_exp -> AT NOT PROTOCOL .)
-    $end            reduce using rule 12 (at_protocol_exp -> AT NOT PROTOCOL .)
+    PROTOCOL        shift and go to state 47
 
 
 state 31
 
-    (30) ipv4_number_block_exp -> NOT number_block_exp .
-    (41) number_block_exp -> number_block_exp . COMMA number_exp
+    (13) at_protocol_exp -> AT NOT PROTOCOL .
 
-    DOT             reduce using rule 30 (ipv4_number_block_exp -> NOT number_block_exp .)
-    SEMICOLON       reduce using rule 30 (ipv4_number_block_exp -> NOT number_block_exp .)
-    NULL            reduce using rule 30 (ipv4_number_block_exp -> NOT number_block_exp .)
-    $end            reduce using rule 30 (ipv4_number_block_exp -> NOT number_block_exp .)
-    EQ              reduce using rule 30 (ipv4_number_block_exp -> NOT number_block_exp .)
-    COMMA           shift and go to state 38
+    COMMA           reduce using rule 13 (at_protocol_exp -> AT NOT PROTOCOL .)
+    NULL            reduce using rule 13 (at_protocol_exp -> AT NOT PROTOCOL .)
+    $end            reduce using rule 13 (at_protocol_exp -> AT NOT PROTOCOL .)
 
 
 state 32
 
-    (42) number_exp -> NUMBER .
-    (43) number_exp -> NUMBER . RANGE NUMBER
-    (44) number_exp -> NUMBER . RANGE NUMBER MOD NUMBER
+    (31) ipv4_number_block_exp -> NOT number_block_exp .
+    (42) number_block_exp -> number_block_exp . COMMA number_exp
 
-    COMMA           reduce using rule 42 (number_exp -> NUMBER .)
-    DOT             reduce using rule 42 (number_exp -> NUMBER .)
-    SEMICOLON       reduce using rule 42 (number_exp -> NUMBER .)
-    NULL            reduce using rule 42 (number_exp -> NUMBER .)
-    $end            reduce using rule 42 (number_exp -> NUMBER .)
-    EQ              reduce using rule 42 (number_exp -> NUMBER .)
-    NOT             reduce using rule 42 (number_exp -> NUMBER .)
-    RANGE           shift and go to state 43
+    DOT             reduce using rule 31 (ipv4_number_block_exp -> NOT number_block_exp .)
+    SEMICOLON       reduce using rule 31 (ipv4_number_block_exp -> NOT number_block_exp .)
+    NULL            reduce using rule 31 (ipv4_number_block_exp -> NOT number_block_exp .)
+    $end            reduce using rule 31 (ipv4_number_block_exp -> NOT number_block_exp .)
+    EQ              reduce using rule 31 (ipv4_number_block_exp -> NOT number_block_exp .)
+    COMMA           shift and go to state 39
 
 
 state 33
 
-    (21) address_exp -> address_exp SEMICOLON . ipv4_exp
-    (22) address_exp -> address_exp SEMICOLON . domain_exp
-    (25) ipv4_exp -> . ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp
-    (23) domain_exp -> . domain_block_exp
-    (24) domain_exp -> . domain_exp COMMA domain_block_exp
-    (29) ipv4_number_block_exp -> . number_block_exp
-    (30) ipv4_number_block_exp -> . NOT number_block_exp
-    (31) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
-    (36) domain_block_exp -> . sn_exp DOT sn_exp
-    (37) domain_block_exp -> . ipv4_number_block_exp DOT sn_exp
-    (38) domain_block_exp -> . domain_block_exp DOT sn_exp
-    (39) domain_block_exp -> . domain_block_exp DOT NUMBER
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (32) sn_exp -> . WORD
-    (33) sn_exp -> . NUMBER WORD
-    (34) sn_exp -> . sn_exp WORD
-    (35) sn_exp -> . sn_exp NUMBER
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (43) number_exp -> NUMBER .
+    (44) number_exp -> NUMBER . RANGE NUMBER
+    (45) number_exp -> NUMBER . RANGE NUMBER MOD NUMBER
 
-    NOT             shift and go to state 27
+    COMMA           reduce using rule 43 (number_exp -> NUMBER .)
+    DOT             reduce using rule 43 (number_exp -> NUMBER .)
+    SEMICOLON       reduce using rule 43 (number_exp -> NUMBER .)
+    NULL            reduce using rule 43 (number_exp -> NUMBER .)
+    $end            reduce using rule 43 (number_exp -> NUMBER .)
+    EQ              reduce using rule 43 (number_exp -> NUMBER .)
+    NOT             reduce using rule 43 (number_exp -> NUMBER .)
+    RANGE           shift and go to state 44
+
+
+state 34
+
+    (22) address_exp -> address_exp SEMICOLON . ipv4_exp
+    (23) address_exp -> address_exp SEMICOLON . domain_exp
+    (26) ipv4_exp -> . ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp
+    (24) domain_exp -> . domain_block_exp
+    (25) domain_exp -> . domain_exp COMMA domain_block_exp
+    (30) ipv4_number_block_exp -> . number_block_exp
+    (31) ipv4_number_block_exp -> . NOT number_block_exp
+    (32) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
+    (37) domain_block_exp -> . sn_exp DOT sn_exp
+    (38) domain_block_exp -> . ipv4_number_block_exp DOT sn_exp
+    (39) domain_block_exp -> . domain_block_exp DOT sn_exp
+    (40) domain_block_exp -> . domain_block_exp DOT NUMBER
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (33) sn_exp -> . WORD
+    (34) sn_exp -> . NUMBER WORD
+    (35) sn_exp -> . sn_exp WORD
+    (36) sn_exp -> . sn_exp NUMBER
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+
+    NOT             shift and go to state 28
     WORD            shift and go to state 22
     NUMBER          shift and go to state 20
 
-    ipv4_exp                       shift and go to state 47
-    domain_exp                     shift and go to state 48
+    ipv4_exp                       shift and go to state 48
+    domain_exp                     shift and go to state 49
     ipv4_number_block_exp          shift and go to state 16
     domain_block_exp               shift and go to state 17
     number_block_exp               shift and go to state 18
     sn_exp                         shift and go to state 19
     number_exp                     shift and go to state 21
 
-state 34
-
-    (24) domain_exp -> domain_exp COMMA . domain_block_exp
-    (36) domain_block_exp -> . sn_exp DOT sn_exp
-    (37) domain_block_exp -> . ipv4_number_block_exp DOT sn_exp
-    (38) domain_block_exp -> . domain_block_exp DOT sn_exp
-    (39) domain_block_exp -> . domain_block_exp DOT NUMBER
-    (32) sn_exp -> . WORD
-    (33) sn_exp -> . NUMBER WORD
-    (34) sn_exp -> . sn_exp WORD
-    (35) sn_exp -> . sn_exp NUMBER
-    (29) ipv4_number_block_exp -> . number_block_exp
-    (30) ipv4_number_block_exp -> . NOT number_block_exp
-    (31) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
-
-    WORD            shift and go to state 22
-    NUMBER          shift and go to state 20
-    NOT             shift and go to state 27
-
-    domain_block_exp               shift and go to state 49
-    sn_exp                         shift and go to state 19
-    ipv4_number_block_exp          shift and go to state 50
-    number_block_exp               shift and go to state 18
-    number_exp                     shift and go to state 21
-
 state 35
 
-    (25) ipv4_exp -> ipv4_number_block_exp DOT . ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp
-    (37) domain_block_exp -> ipv4_number_block_exp DOT . sn_exp
-    (29) ipv4_number_block_exp -> . number_block_exp
-    (30) ipv4_number_block_exp -> . NOT number_block_exp
-    (31) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
-    (32) sn_exp -> . WORD
-    (33) sn_exp -> . NUMBER WORD
-    (34) sn_exp -> . sn_exp WORD
-    (35) sn_exp -> . sn_exp NUMBER
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (25) domain_exp -> domain_exp COMMA . domain_block_exp
+    (37) domain_block_exp -> . sn_exp DOT sn_exp
+    (38) domain_block_exp -> . ipv4_number_block_exp DOT sn_exp
+    (39) domain_block_exp -> . domain_block_exp DOT sn_exp
+    (40) domain_block_exp -> . domain_block_exp DOT NUMBER
+    (33) sn_exp -> . WORD
+    (34) sn_exp -> . NUMBER WORD
+    (35) sn_exp -> . sn_exp WORD
+    (36) sn_exp -> . sn_exp NUMBER
+    (30) ipv4_number_block_exp -> . number_block_exp
+    (31) ipv4_number_block_exp -> . NOT number_block_exp
+    (32) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    NOT             shift and go to state 27
     WORD            shift and go to state 22
     NUMBER          shift and go to state 20
+    NOT             shift and go to state 28
 
+    domain_block_exp               shift and go to state 50
+    sn_exp                         shift and go to state 19
     ipv4_number_block_exp          shift and go to state 51
-    sn_exp                         shift and go to state 52
     number_block_exp               shift and go to state 18
     number_exp                     shift and go to state 21
 
 state 36
 
-    (38) domain_block_exp -> domain_block_exp DOT . sn_exp
-    (39) domain_block_exp -> domain_block_exp DOT . NUMBER
-    (32) sn_exp -> . WORD
-    (33) sn_exp -> . NUMBER WORD
-    (34) sn_exp -> . sn_exp WORD
-    (35) sn_exp -> . sn_exp NUMBER
+    (26) ipv4_exp -> ipv4_number_block_exp DOT . ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp
+    (38) domain_block_exp -> ipv4_number_block_exp DOT . sn_exp
+    (30) ipv4_number_block_exp -> . number_block_exp
+    (31) ipv4_number_block_exp -> . NOT number_block_exp
+    (32) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
+    (33) sn_exp -> . WORD
+    (34) sn_exp -> . NUMBER WORD
+    (35) sn_exp -> . sn_exp WORD
+    (36) sn_exp -> . sn_exp NUMBER
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    NUMBER          shift and go to state 54
+    NOT             shift and go to state 28
     WORD            shift and go to state 22
+    NUMBER          shift and go to state 20
 
+    ipv4_number_block_exp          shift and go to state 52
     sn_exp                         shift and go to state 53
+    number_block_exp               shift and go to state 18
+    number_exp                     shift and go to state 21
 
 state 37
 
-    (31) ipv4_number_block_exp -> number_block_exp NOT . number_block_exp
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (39) domain_block_exp -> domain_block_exp DOT . sn_exp
+    (40) domain_block_exp -> domain_block_exp DOT . NUMBER
+    (33) sn_exp -> . WORD
+    (34) sn_exp -> . NUMBER WORD
+    (35) sn_exp -> . sn_exp WORD
+    (36) sn_exp -> . sn_exp NUMBER
 
-    NUMBER          shift and go to state 32
+    NUMBER          shift and go to state 55
+    WORD            shift and go to state 22
 
-    number_block_exp               shift and go to state 55
-    number_exp                     shift and go to state 21
+    sn_exp                         shift and go to state 54
 
 state 38
 
-    (41) number_block_exp -> number_block_exp COMMA . number_exp
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (32) ipv4_number_block_exp -> number_block_exp NOT . number_block_exp
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    NUMBER          shift and go to state 32
+    NUMBER          shift and go to state 33
 
-    number_exp                     shift and go to state 56
+    number_block_exp               shift and go to state 56
+    number_exp                     shift and go to state 21
 
 state 39
 
-    (36) domain_block_exp -> sn_exp DOT . sn_exp
-    (32) sn_exp -> . WORD
-    (33) sn_exp -> . NUMBER WORD
-    (34) sn_exp -> . sn_exp WORD
-    (35) sn_exp -> . sn_exp NUMBER
+    (42) number_block_exp -> number_block_exp COMMA . number_exp
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    WORD            shift and go to state 22
-    NUMBER          shift and go to state 58
+    NUMBER          shift and go to state 33
 
-    sn_exp                         shift and go to state 57
+    number_exp                     shift and go to state 57
 
 state 40
 
-    (34) sn_exp -> sn_exp WORD .
+    (37) domain_block_exp -> sn_exp DOT . sn_exp
+    (33) sn_exp -> . WORD
+    (34) sn_exp -> . NUMBER WORD
+    (35) sn_exp -> . sn_exp WORD
+    (36) sn_exp -> . sn_exp NUMBER
 
-    DOT             reduce using rule 34 (sn_exp -> sn_exp WORD .)
-    WORD            reduce using rule 34 (sn_exp -> sn_exp WORD .)
-    NUMBER          reduce using rule 34 (sn_exp -> sn_exp WORD .)
-    COMMA           reduce using rule 34 (sn_exp -> sn_exp WORD .)
-    SEMICOLON       reduce using rule 34 (sn_exp -> sn_exp WORD .)
-    NULL            reduce using rule 34 (sn_exp -> sn_exp WORD .)
-    $end            reduce using rule 34 (sn_exp -> sn_exp WORD .)
-    EQ              reduce using rule 34 (sn_exp -> sn_exp WORD .)
+    WORD            shift and go to state 22
+    NUMBER          shift and go to state 59
 
+    sn_exp                         shift and go to state 58
 
 state 41
 
-    (35) sn_exp -> sn_exp NUMBER .
+    (35) sn_exp -> sn_exp WORD .
 
-    DOT             reduce using rule 35 (sn_exp -> sn_exp NUMBER .)
-    WORD            reduce using rule 35 (sn_exp -> sn_exp NUMBER .)
-    NUMBER          reduce using rule 35 (sn_exp -> sn_exp NUMBER .)
-    COMMA           reduce using rule 35 (sn_exp -> sn_exp NUMBER .)
-    SEMICOLON       reduce using rule 35 (sn_exp -> sn_exp NUMBER .)
-    NULL            reduce using rule 35 (sn_exp -> sn_exp NUMBER .)
-    $end            reduce using rule 35 (sn_exp -> sn_exp NUMBER .)
-    EQ              reduce using rule 35 (sn_exp -> sn_exp NUMBER .)
+    DOT             reduce using rule 35 (sn_exp -> sn_exp WORD .)
+    WORD            reduce using rule 35 (sn_exp -> sn_exp WORD .)
+    NUMBER          reduce using rule 35 (sn_exp -> sn_exp WORD .)
+    COMMA           reduce using rule 35 (sn_exp -> sn_exp WORD .)
+    SEMICOLON       reduce using rule 35 (sn_exp -> sn_exp WORD .)
+    NULL            reduce using rule 35 (sn_exp -> sn_exp WORD .)
+    $end            reduce using rule 35 (sn_exp -> sn_exp WORD .)
+    EQ              reduce using rule 35 (sn_exp -> sn_exp WORD .)
 
 
 state 42
 
-    (33) sn_exp -> NUMBER WORD .
+    (36) sn_exp -> sn_exp NUMBER .
 
-    DOT             reduce using rule 33 (sn_exp -> NUMBER WORD .)
-    WORD            reduce using rule 33 (sn_exp -> NUMBER WORD .)
-    NUMBER          reduce using rule 33 (sn_exp -> NUMBER WORD .)
-    COMMA           reduce using rule 33 (sn_exp -> NUMBER WORD .)
-    SEMICOLON       reduce using rule 33 (sn_exp -> NUMBER WORD .)
-    NULL            reduce using rule 33 (sn_exp -> NUMBER WORD .)
-    $end            reduce using rule 33 (sn_exp -> NUMBER WORD .)
-    EQ              reduce using rule 33 (sn_exp -> NUMBER WORD .)
+    DOT             reduce using rule 36 (sn_exp -> sn_exp NUMBER .)
+    WORD            reduce using rule 36 (sn_exp -> sn_exp NUMBER .)
+    NUMBER          reduce using rule 36 (sn_exp -> sn_exp NUMBER .)
+    COMMA           reduce using rule 36 (sn_exp -> sn_exp NUMBER .)
+    SEMICOLON       reduce using rule 36 (sn_exp -> sn_exp NUMBER .)
+    NULL            reduce using rule 36 (sn_exp -> sn_exp NUMBER .)
+    $end            reduce using rule 36 (sn_exp -> sn_exp NUMBER .)
+    EQ              reduce using rule 36 (sn_exp -> sn_exp NUMBER .)
 
 
 state 43
 
-    (43) number_exp -> NUMBER RANGE . NUMBER
-    (44) number_exp -> NUMBER RANGE . NUMBER MOD NUMBER
+    (34) sn_exp -> NUMBER WORD .
 
-    NUMBER          shift and go to state 59
+    DOT             reduce using rule 34 (sn_exp -> NUMBER WORD .)
+    WORD            reduce using rule 34 (sn_exp -> NUMBER WORD .)
+    NUMBER          reduce using rule 34 (sn_exp -> NUMBER WORD .)
+    COMMA           reduce using rule 34 (sn_exp -> NUMBER WORD .)
+    SEMICOLON       reduce using rule 34 (sn_exp -> NUMBER WORD .)
+    NULL            reduce using rule 34 (sn_exp -> NUMBER WORD .)
+    $end            reduce using rule 34 (sn_exp -> NUMBER WORD .)
+    EQ              reduce using rule 34 (sn_exp -> NUMBER WORD .)
 
 
 state 44
 
-    (15) at_param_exp -> INNER AT address_exp .
-    (17) at_param_exp -> INNER AT address_exp . EQ sn_exp
-    (18) at_param_exp -> INNER AT address_exp . EQ NUMBER
-    (21) address_exp -> address_exp . SEMICOLON ipv4_exp
-    (22) address_exp -> address_exp . SEMICOLON domain_exp
+    (44) number_exp -> NUMBER RANGE . NUMBER
+    (45) number_exp -> NUMBER RANGE . NUMBER MOD NUMBER
 
-    NULL            reduce using rule 15 (at_param_exp -> INNER AT address_exp .)
-    $end            reduce using rule 15 (at_param_exp -> INNER AT address_exp .)
-    EQ              shift and go to state 60
-    SEMICOLON       shift and go to state 33
+    NUMBER          shift and go to state 60
 
 
 state 45
 
-    (3) init_exp -> PROTOCOL NULL address_exp NULL . param_exp
-    (4) init_exp -> PROTOCOL NULL address_exp NULL . port_number_block_exp
-    (5) init_exp -> PROTOCOL NULL address_exp NULL . port_number_block_exp NULL param_exp
-    (45) param_exp -> . INNER EQ sn_exp
-    (46) param_exp -> . INNER EQ address_exp
-    (47) param_exp -> . INNER EQ NULL
-    (48) param_exp -> . INNER EQ port_number_block_exp
-    (49) param_exp -> . INNER EQ sn_exp NULL param_exp
-    (50) param_exp -> . INNER EQ address_exp NULL param_exp
-    (51) param_exp -> . INNER EQ port_number_block_exp NULL param_exp
-    (26) port_number_block_exp -> . number_block_exp
-    (27) port_number_block_exp -> . NOT number_block_exp
-    (28) port_number_block_exp -> . number_block_exp NOT number_block_exp
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (16) at_param_exp -> INNER AT address_exp .
+    (18) at_param_exp -> INNER AT address_exp . EQ sn_exp
+    (19) at_param_exp -> INNER AT address_exp . EQ NUMBER
+    (22) address_exp -> address_exp . SEMICOLON ipv4_exp
+    (23) address_exp -> address_exp . SEMICOLON domain_exp
 
-    INNER           shift and go to state 63
-    NOT             shift and go to state 65
-    NUMBER          shift and go to state 32
+    NULL            reduce using rule 16 (at_param_exp -> INNER AT address_exp .)
+    $end            reduce using rule 16 (at_param_exp -> INNER AT address_exp .)
+    EQ              shift and go to state 61
+    SEMICOLON       shift and go to state 34
 
-    param_exp                      shift and go to state 61
-    port_number_block_exp          shift and go to state 62
-    number_block_exp               shift and go to state 64
-    number_exp                     shift and go to state 21
 
 state 46
 
-    (14) at_protocol_exp -> at_protocol_exp COMMA NOT PROTOCOL .
+    (4) init_exp -> PROTOCOL NULL address_exp NULL . param_exp
+    (5) init_exp -> PROTOCOL NULL address_exp NULL . port_number_block_exp
+    (6) init_exp -> PROTOCOL NULL address_exp NULL . port_number_block_exp NULL param_exp
+    (46) param_exp -> . INNER EQ sn_exp
+    (47) param_exp -> . INNER EQ address_exp
+    (48) param_exp -> . INNER EQ NULL
+    (49) param_exp -> . INNER EQ port_number_block_exp
+    (50) param_exp -> . INNER EQ sn_exp NULL param_exp
+    (51) param_exp -> . INNER EQ address_exp NULL param_exp
+    (52) param_exp -> . INNER EQ port_number_block_exp NULL param_exp
+    (27) port_number_block_exp -> . number_block_exp
+    (28) port_number_block_exp -> . NOT number_block_exp
+    (29) port_number_block_exp -> . number_block_exp NOT number_block_exp
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    COMMA           reduce using rule 14 (at_protocol_exp -> at_protocol_exp COMMA NOT PROTOCOL .)
-    NULL            reduce using rule 14 (at_protocol_exp -> at_protocol_exp COMMA NOT PROTOCOL .)
-    $end            reduce using rule 14 (at_protocol_exp -> at_protocol_exp COMMA NOT PROTOCOL .)
+    INNER           shift and go to state 64
+    NOT             shift and go to state 66
+    NUMBER          shift and go to state 33
 
+    param_exp                      shift and go to state 62
+    port_number_block_exp          shift and go to state 63
+    number_block_exp               shift and go to state 65
+    number_exp                     shift and go to state 21
 
 state 47
 
-    (21) address_exp -> address_exp SEMICOLON ipv4_exp .
+    (15) at_protocol_exp -> at_protocol_exp COMMA NOT PROTOCOL .
 
-    SEMICOLON       reduce using rule 21 (address_exp -> address_exp SEMICOLON ipv4_exp .)
-    NULL            reduce using rule 21 (address_exp -> address_exp SEMICOLON ipv4_exp .)
-    $end            reduce using rule 21 (address_exp -> address_exp SEMICOLON ipv4_exp .)
-    EQ              reduce using rule 21 (address_exp -> address_exp SEMICOLON ipv4_exp .)
+    COMMA           reduce using rule 15 (at_protocol_exp -> at_protocol_exp COMMA NOT PROTOCOL .)
+    NULL            reduce using rule 15 (at_protocol_exp -> at_protocol_exp COMMA NOT PROTOCOL .)
+    $end            reduce using rule 15 (at_protocol_exp -> at_protocol_exp COMMA NOT PROTOCOL .)
 
 
 state 48
 
-    (22) address_exp -> address_exp SEMICOLON domain_exp .
-    (24) domain_exp -> domain_exp . COMMA domain_block_exp
+    (22) address_exp -> address_exp SEMICOLON ipv4_exp .
 
-    SEMICOLON       reduce using rule 22 (address_exp -> address_exp SEMICOLON domain_exp .)
-    NULL            reduce using rule 22 (address_exp -> address_exp SEMICOLON domain_exp .)
-    $end            reduce using rule 22 (address_exp -> address_exp SEMICOLON domain_exp .)
-    EQ              reduce using rule 22 (address_exp -> address_exp SEMICOLON domain_exp .)
-    COMMA           shift and go to state 34
+    SEMICOLON       reduce using rule 22 (address_exp -> address_exp SEMICOLON ipv4_exp .)
+    NULL            reduce using rule 22 (address_exp -> address_exp SEMICOLON ipv4_exp .)
+    $end            reduce using rule 22 (address_exp -> address_exp SEMICOLON ipv4_exp .)
+    EQ              reduce using rule 22 (address_exp -> address_exp SEMICOLON ipv4_exp .)
 
 
 state 49
 
-    (24) domain_exp -> domain_exp COMMA domain_block_exp .
-    (38) domain_block_exp -> domain_block_exp . DOT sn_exp
-    (39) domain_block_exp -> domain_block_exp . DOT NUMBER
+    (23) address_exp -> address_exp SEMICOLON domain_exp .
+    (25) domain_exp -> domain_exp . COMMA domain_block_exp
 
-    COMMA           reduce using rule 24 (domain_exp -> domain_exp COMMA domain_block_exp .)
-    SEMICOLON       reduce using rule 24 (domain_exp -> domain_exp COMMA domain_block_exp .)
-    NULL            reduce using rule 24 (domain_exp -> domain_exp COMMA domain_block_exp .)
-    $end            reduce using rule 24 (domain_exp -> domain_exp COMMA domain_block_exp .)
-    EQ              reduce using rule 24 (domain_exp -> domain_exp COMMA domain_block_exp .)
-    DOT             shift and go to state 36
+    SEMICOLON       reduce using rule 23 (address_exp -> address_exp SEMICOLON domain_exp .)
+    NULL            reduce using rule 23 (address_exp -> address_exp SEMICOLON domain_exp .)
+    $end            reduce using rule 23 (address_exp -> address_exp SEMICOLON domain_exp .)
+    EQ              reduce using rule 23 (address_exp -> address_exp SEMICOLON domain_exp .)
+    COMMA           shift and go to state 35
 
 
 state 50
 
-    (37) domain_block_exp -> ipv4_number_block_exp . DOT sn_exp
+    (25) domain_exp -> domain_exp COMMA domain_block_exp .
+    (39) domain_block_exp -> domain_block_exp . DOT sn_exp
+    (40) domain_block_exp -> domain_block_exp . DOT NUMBER
 
-    DOT             shift and go to state 66
+    COMMA           reduce using rule 25 (domain_exp -> domain_exp COMMA domain_block_exp .)
+    SEMICOLON       reduce using rule 25 (domain_exp -> domain_exp COMMA domain_block_exp .)
+    NULL            reduce using rule 25 (domain_exp -> domain_exp COMMA domain_block_exp .)
+    $end            reduce using rule 25 (domain_exp -> domain_exp COMMA domain_block_exp .)
+    EQ              reduce using rule 25 (domain_exp -> domain_exp COMMA domain_block_exp .)
+    DOT             shift and go to state 37
 
 
 state 51
 
-    (25) ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp . DOT ipv4_number_block_exp DOT ipv4_number_block_exp
+    (38) domain_block_exp -> ipv4_number_block_exp . DOT sn_exp
 
     DOT             shift and go to state 67
 
 
 state 52
 
-    (37) domain_block_exp -> ipv4_number_block_exp DOT sn_exp .
-    (34) sn_exp -> sn_exp . WORD
-    (35) sn_exp -> sn_exp . NUMBER
+    (26) ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp . DOT ipv4_number_block_exp DOT ipv4_number_block_exp
 
-    DOT             reduce using rule 37 (domain_block_exp -> ipv4_number_block_exp DOT sn_exp .)
-    COMMA           reduce using rule 37 (domain_block_exp -> ipv4_number_block_exp DOT sn_exp .)
-    SEMICOLON       reduce using rule 37 (domain_block_exp -> ipv4_number_block_exp DOT sn_exp .)
-    NULL            reduce using rule 37 (domain_block_exp -> ipv4_number_block_exp DOT sn_exp .)
-    $end            reduce using rule 37 (domain_block_exp -> ipv4_number_block_exp DOT sn_exp .)
-    EQ              reduce using rule 37 (domain_block_exp -> ipv4_number_block_exp DOT sn_exp .)
-    WORD            shift and go to state 40
-    NUMBER          shift and go to state 41
+    DOT             shift and go to state 68
 
 
 state 53
 
-    (38) domain_block_exp -> domain_block_exp DOT sn_exp .
-    (34) sn_exp -> sn_exp . WORD
-    (35) sn_exp -> sn_exp . NUMBER
+    (38) domain_block_exp -> ipv4_number_block_exp DOT sn_exp .
+    (35) sn_exp -> sn_exp . WORD
+    (36) sn_exp -> sn_exp . NUMBER
 
-    DOT             reduce using rule 38 (domain_block_exp -> domain_block_exp DOT sn_exp .)
-    COMMA           reduce using rule 38 (domain_block_exp -> domain_block_exp DOT sn_exp .)
-    SEMICOLON       reduce using rule 38 (domain_block_exp -> domain_block_exp DOT sn_exp .)
-    NULL            reduce using rule 38 (domain_block_exp -> domain_block_exp DOT sn_exp .)
-    $end            reduce using rule 38 (domain_block_exp -> domain_block_exp DOT sn_exp .)
-    EQ              reduce using rule 38 (domain_block_exp -> domain_block_exp DOT sn_exp .)
-    WORD            shift and go to state 40
-    NUMBER          shift and go to state 41
+    DOT             reduce using rule 38 (domain_block_exp -> ipv4_number_block_exp DOT sn_exp .)
+    COMMA           reduce using rule 38 (domain_block_exp -> ipv4_number_block_exp DOT sn_exp .)
+    SEMICOLON       reduce using rule 38 (domain_block_exp -> ipv4_number_block_exp DOT sn_exp .)
+    NULL            reduce using rule 38 (domain_block_exp -> ipv4_number_block_exp DOT sn_exp .)
+    $end            reduce using rule 38 (domain_block_exp -> ipv4_number_block_exp DOT sn_exp .)
+    EQ              reduce using rule 38 (domain_block_exp -> ipv4_number_block_exp DOT sn_exp .)
+    WORD            shift and go to state 41
+    NUMBER          shift and go to state 42
 
 
 state 54
 
-    (39) domain_block_exp -> domain_block_exp DOT NUMBER .
-    (33) sn_exp -> NUMBER . WORD
+    (39) domain_block_exp -> domain_block_exp DOT sn_exp .
+    (35) sn_exp -> sn_exp . WORD
+    (36) sn_exp -> sn_exp . NUMBER
 
-    DOT             reduce using rule 39 (domain_block_exp -> domain_block_exp DOT NUMBER .)
-    COMMA           reduce using rule 39 (domain_block_exp -> domain_block_exp DOT NUMBER .)
-    SEMICOLON       reduce using rule 39 (domain_block_exp -> domain_block_exp DOT NUMBER .)
-    NULL            reduce using rule 39 (domain_block_exp -> domain_block_exp DOT NUMBER .)
-    $end            reduce using rule 39 (domain_block_exp -> domain_block_exp DOT NUMBER .)
-    EQ              reduce using rule 39 (domain_block_exp -> domain_block_exp DOT NUMBER .)
-    WORD            shift and go to state 42
+    DOT             reduce using rule 39 (domain_block_exp -> domain_block_exp DOT sn_exp .)
+    COMMA           reduce using rule 39 (domain_block_exp -> domain_block_exp DOT sn_exp .)
+    SEMICOLON       reduce using rule 39 (domain_block_exp -> domain_block_exp DOT sn_exp .)
+    NULL            reduce using rule 39 (domain_block_exp -> domain_block_exp DOT sn_exp .)
+    $end            reduce using rule 39 (domain_block_exp -> domain_block_exp DOT sn_exp .)
+    EQ              reduce using rule 39 (domain_block_exp -> domain_block_exp DOT sn_exp .)
+    WORD            shift and go to state 41
+    NUMBER          shift and go to state 42
 
 
 state 55
 
-    (31) ipv4_number_block_exp -> number_block_exp NOT number_block_exp .
-    (41) number_block_exp -> number_block_exp . COMMA number_exp
+    (40) domain_block_exp -> domain_block_exp DOT NUMBER .
+    (34) sn_exp -> NUMBER . WORD
 
-    DOT             reduce using rule 31 (ipv4_number_block_exp -> number_block_exp NOT number_block_exp .)
-    SEMICOLON       reduce using rule 31 (ipv4_number_block_exp -> number_block_exp NOT number_block_exp .)
-    NULL            reduce using rule 31 (ipv4_number_block_exp -> number_block_exp NOT number_block_exp .)
-    $end            reduce using rule 31 (ipv4_number_block_exp -> number_block_exp NOT number_block_exp .)
-    EQ              reduce using rule 31 (ipv4_number_block_exp -> number_block_exp NOT number_block_exp .)
-    COMMA           shift and go to state 38
+    DOT             reduce using rule 40 (domain_block_exp -> domain_block_exp DOT NUMBER .)
+    COMMA           reduce using rule 40 (domain_block_exp -> domain_block_exp DOT NUMBER .)
+    SEMICOLON       reduce using rule 40 (domain_block_exp -> domain_block_exp DOT NUMBER .)
+    NULL            reduce using rule 40 (domain_block_exp -> domain_block_exp DOT NUMBER .)
+    $end            reduce using rule 40 (domain_block_exp -> domain_block_exp DOT NUMBER .)
+    EQ              reduce using rule 40 (domain_block_exp -> domain_block_exp DOT NUMBER .)
+    WORD            shift and go to state 43
 
 
 state 56
 
-    (41) number_block_exp -> number_block_exp COMMA number_exp .
+    (32) ipv4_number_block_exp -> number_block_exp NOT number_block_exp .
+    (42) number_block_exp -> number_block_exp . COMMA number_exp
 
-    NOT             reduce using rule 41 (number_block_exp -> number_block_exp COMMA number_exp .)
-    COMMA           reduce using rule 41 (number_block_exp -> number_block_exp COMMA number_exp .)
-    DOT             reduce using rule 41 (number_block_exp -> number_block_exp COMMA number_exp .)
-    SEMICOLON       reduce using rule 41 (number_block_exp -> number_block_exp COMMA number_exp .)
-    NULL            reduce using rule 41 (number_block_exp -> number_block_exp COMMA number_exp .)
-    $end            reduce using rule 41 (number_block_exp -> number_block_exp COMMA number_exp .)
-    EQ              reduce using rule 41 (number_block_exp -> number_block_exp COMMA number_exp .)
+    DOT             reduce using rule 32 (ipv4_number_block_exp -> number_block_exp NOT number_block_exp .)
+    SEMICOLON       reduce using rule 32 (ipv4_number_block_exp -> number_block_exp NOT number_block_exp .)
+    NULL            reduce using rule 32 (ipv4_number_block_exp -> number_block_exp NOT number_block_exp .)
+    $end            reduce using rule 32 (ipv4_number_block_exp -> number_block_exp NOT number_block_exp .)
+    EQ              reduce using rule 32 (ipv4_number_block_exp -> number_block_exp NOT number_block_exp .)
+    COMMA           shift and go to state 39
 
 
 state 57
 
-    (36) domain_block_exp -> sn_exp DOT sn_exp .
-    (34) sn_exp -> sn_exp . WORD
-    (35) sn_exp -> sn_exp . NUMBER
+    (42) number_block_exp -> number_block_exp COMMA number_exp .
 
-    DOT             reduce using rule 36 (domain_block_exp -> sn_exp DOT sn_exp .)
-    COMMA           reduce using rule 36 (domain_block_exp -> sn_exp DOT sn_exp .)
-    SEMICOLON       reduce using rule 36 (domain_block_exp -> sn_exp DOT sn_exp .)
-    NULL            reduce using rule 36 (domain_block_exp -> sn_exp DOT sn_exp .)
-    $end            reduce using rule 36 (domain_block_exp -> sn_exp DOT sn_exp .)
-    EQ              reduce using rule 36 (domain_block_exp -> sn_exp DOT sn_exp .)
-    WORD            shift and go to state 40
-    NUMBER          shift and go to state 41
+    NOT             reduce using rule 42 (number_block_exp -> number_block_exp COMMA number_exp .)
+    COMMA           reduce using rule 42 (number_block_exp -> number_block_exp COMMA number_exp .)
+    DOT             reduce using rule 42 (number_block_exp -> number_block_exp COMMA number_exp .)
+    SEMICOLON       reduce using rule 42 (number_block_exp -> number_block_exp COMMA number_exp .)
+    NULL            reduce using rule 42 (number_block_exp -> number_block_exp COMMA number_exp .)
+    $end            reduce using rule 42 (number_block_exp -> number_block_exp COMMA number_exp .)
+    EQ              reduce using rule 42 (number_block_exp -> number_block_exp COMMA number_exp .)
 
 
 state 58
 
-    (33) sn_exp -> NUMBER . WORD
+    (37) domain_block_exp -> sn_exp DOT sn_exp .
+    (35) sn_exp -> sn_exp . WORD
+    (36) sn_exp -> sn_exp . NUMBER
 
-    WORD            shift and go to state 42
+    DOT             reduce using rule 37 (domain_block_exp -> sn_exp DOT sn_exp .)
+    COMMA           reduce using rule 37 (domain_block_exp -> sn_exp DOT sn_exp .)
+    SEMICOLON       reduce using rule 37 (domain_block_exp -> sn_exp DOT sn_exp .)
+    NULL            reduce using rule 37 (domain_block_exp -> sn_exp DOT sn_exp .)
+    $end            reduce using rule 37 (domain_block_exp -> sn_exp DOT sn_exp .)
+    EQ              reduce using rule 37 (domain_block_exp -> sn_exp DOT sn_exp .)
+    WORD            shift and go to state 41
+    NUMBER          shift and go to state 42
 
 
 state 59
 
-    (43) number_exp -> NUMBER RANGE NUMBER .
-    (44) number_exp -> NUMBER RANGE NUMBER . MOD NUMBER
+    (34) sn_exp -> NUMBER . WORD
 
-    NOT             reduce using rule 43 (number_exp -> NUMBER RANGE NUMBER .)
-    COMMA           reduce using rule 43 (number_exp -> NUMBER RANGE NUMBER .)
-    DOT             reduce using rule 43 (number_exp -> NUMBER RANGE NUMBER .)
-    SEMICOLON       reduce using rule 43 (number_exp -> NUMBER RANGE NUMBER .)
-    NULL            reduce using rule 43 (number_exp -> NUMBER RANGE NUMBER .)
-    $end            reduce using rule 43 (number_exp -> NUMBER RANGE NUMBER .)
-    EQ              reduce using rule 43 (number_exp -> NUMBER RANGE NUMBER .)
-    MOD             shift and go to state 68
+    WORD            shift and go to state 43
 
 
 state 60
 
-    (17) at_param_exp -> INNER AT address_exp EQ . sn_exp
-    (18) at_param_exp -> INNER AT address_exp EQ . NUMBER
-    (32) sn_exp -> . WORD
-    (33) sn_exp -> . NUMBER WORD
-    (34) sn_exp -> . sn_exp WORD
-    (35) sn_exp -> . sn_exp NUMBER
+    (44) number_exp -> NUMBER RANGE NUMBER .
+    (45) number_exp -> NUMBER RANGE NUMBER . MOD NUMBER
 
-    NUMBER          shift and go to state 70
-    WORD            shift and go to state 22
+    NOT             reduce using rule 44 (number_exp -> NUMBER RANGE NUMBER .)
+    COMMA           reduce using rule 44 (number_exp -> NUMBER RANGE NUMBER .)
+    DOT             reduce using rule 44 (number_exp -> NUMBER RANGE NUMBER .)
+    SEMICOLON       reduce using rule 44 (number_exp -> NUMBER RANGE NUMBER .)
+    NULL            reduce using rule 44 (number_exp -> NUMBER RANGE NUMBER .)
+    $end            reduce using rule 44 (number_exp -> NUMBER RANGE NUMBER .)
+    EQ              reduce using rule 44 (number_exp -> NUMBER RANGE NUMBER .)
+    MOD             shift and go to state 69
 
-    sn_exp                         shift and go to state 69
 
 state 61
 
-    (3) init_exp -> PROTOCOL NULL address_exp NULL param_exp .
+    (18) at_param_exp -> INNER AT address_exp EQ . sn_exp
+    (19) at_param_exp -> INNER AT address_exp EQ . NUMBER
+    (33) sn_exp -> . WORD
+    (34) sn_exp -> . NUMBER WORD
+    (35) sn_exp -> . sn_exp WORD
+    (36) sn_exp -> . sn_exp NUMBER
 
-    $end            reduce using rule 3 (init_exp -> PROTOCOL NULL address_exp NULL param_exp .)
+    NUMBER          shift and go to state 71
+    WORD            shift and go to state 22
 
+    sn_exp                         shift and go to state 70
 
 state 62
 
-    (4) init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp .
-    (5) init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp . NULL param_exp
+    (4) init_exp -> PROTOCOL NULL address_exp NULL param_exp .
 
-    $end            reduce using rule 4 (init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp .)
-    NULL            shift and go to state 71
+    $end            reduce using rule 4 (init_exp -> PROTOCOL NULL address_exp NULL param_exp .)
 
 
 state 63
 
-    (45) param_exp -> INNER . EQ sn_exp
-    (46) param_exp -> INNER . EQ address_exp
-    (47) param_exp -> INNER . EQ NULL
-    (48) param_exp -> INNER . EQ port_number_block_exp
-    (49) param_exp -> INNER . EQ sn_exp NULL param_exp
-    (50) param_exp -> INNER . EQ address_exp NULL param_exp
-    (51) param_exp -> INNER . EQ port_number_block_exp NULL param_exp
+    (5) init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp .
+    (6) init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp . NULL param_exp
 
-    EQ              shift and go to state 72
+    $end            reduce using rule 5 (init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp .)
+    NULL            shift and go to state 72
 
 
 state 64
 
-    (26) port_number_block_exp -> number_block_exp .
-    (28) port_number_block_exp -> number_block_exp . NOT number_block_exp
-    (41) number_block_exp -> number_block_exp . COMMA number_exp
+    (46) param_exp -> INNER . EQ sn_exp
+    (47) param_exp -> INNER . EQ address_exp
+    (48) param_exp -> INNER . EQ NULL
+    (49) param_exp -> INNER . EQ port_number_block_exp
+    (50) param_exp -> INNER . EQ sn_exp NULL param_exp
+    (51) param_exp -> INNER . EQ address_exp NULL param_exp
+    (52) param_exp -> INNER . EQ port_number_block_exp NULL param_exp
 
-    NULL            reduce using rule 26 (port_number_block_exp -> number_block_exp .)
-    $end            reduce using rule 26 (port_number_block_exp -> number_block_exp .)
-    NOT             shift and go to state 73
-    COMMA           shift and go to state 38
+    EQ              shift and go to state 73
 
 
 state 65
 
-    (27) port_number_block_exp -> NOT . number_block_exp
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (27) port_number_block_exp -> number_block_exp .
+    (29) port_number_block_exp -> number_block_exp . NOT number_block_exp
+    (42) number_block_exp -> number_block_exp . COMMA number_exp
 
-    NUMBER          shift and go to state 32
+    NULL            reduce using rule 27 (port_number_block_exp -> number_block_exp .)
+    $end            reduce using rule 27 (port_number_block_exp -> number_block_exp .)
+    NOT             shift and go to state 74
+    COMMA           shift and go to state 39
 
-    number_block_exp               shift and go to state 74
-    number_exp                     shift and go to state 21
 
 state 66
 
-    (37) domain_block_exp -> ipv4_number_block_exp DOT . sn_exp
-    (32) sn_exp -> . WORD
-    (33) sn_exp -> . NUMBER WORD
-    (34) sn_exp -> . sn_exp WORD
-    (35) sn_exp -> . sn_exp NUMBER
+    (28) port_number_block_exp -> NOT . number_block_exp
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    WORD            shift and go to state 22
-    NUMBER          shift and go to state 58
+    NUMBER          shift and go to state 33
 
-    sn_exp                         shift and go to state 52
+    number_block_exp               shift and go to state 75
+    number_exp                     shift and go to state 21
 
 state 67
 
-    (25) ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT . ipv4_number_block_exp DOT ipv4_number_block_exp
-    (29) ipv4_number_block_exp -> . number_block_exp
-    (30) ipv4_number_block_exp -> . NOT number_block_exp
-    (31) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (38) domain_block_exp -> ipv4_number_block_exp DOT . sn_exp
+    (33) sn_exp -> . WORD
+    (34) sn_exp -> . NUMBER WORD
+    (35) sn_exp -> . sn_exp WORD
+    (36) sn_exp -> . sn_exp NUMBER
 
-    NOT             shift and go to state 27
-    NUMBER          shift and go to state 32
+    WORD            shift and go to state 22
+    NUMBER          shift and go to state 59
 
-    ipv4_number_block_exp          shift and go to state 75
-    number_block_exp               shift and go to state 18
-    number_exp                     shift and go to state 21
+    sn_exp                         shift and go to state 53
 
 state 68
 
-    (44) number_exp -> NUMBER RANGE NUMBER MOD . NUMBER
+    (26) ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT . ipv4_number_block_exp DOT ipv4_number_block_exp
+    (30) ipv4_number_block_exp -> . number_block_exp
+    (31) ipv4_number_block_exp -> . NOT number_block_exp
+    (32) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    NUMBER          shift and go to state 76
+    NOT             shift and go to state 28
+    NUMBER          shift and go to state 33
 
+    ipv4_number_block_exp          shift and go to state 76
+    number_block_exp               shift and go to state 18
+    number_exp                     shift and go to state 21
 
 state 69
 
-    (17) at_param_exp -> INNER AT address_exp EQ sn_exp .
-    (34) sn_exp -> sn_exp . WORD
-    (35) sn_exp -> sn_exp . NUMBER
+    (45) number_exp -> NUMBER RANGE NUMBER MOD . NUMBER
 
-    NULL            reduce using rule 17 (at_param_exp -> INNER AT address_exp EQ sn_exp .)
-    $end            reduce using rule 17 (at_param_exp -> INNER AT address_exp EQ sn_exp .)
-    WORD            shift and go to state 40
-    NUMBER          shift and go to state 41
+    NUMBER          shift and go to state 77
 
 
 state 70
 
-    (18) at_param_exp -> INNER AT address_exp EQ NUMBER .
-    (33) sn_exp -> NUMBER . WORD
+    (18) at_param_exp -> INNER AT address_exp EQ sn_exp .
+    (35) sn_exp -> sn_exp . WORD
+    (36) sn_exp -> sn_exp . NUMBER
 
-    NULL            reduce using rule 18 (at_param_exp -> INNER AT address_exp EQ NUMBER .)
-    $end            reduce using rule 18 (at_param_exp -> INNER AT address_exp EQ NUMBER .)
-    WORD            shift and go to state 42
+    NULL            reduce using rule 18 (at_param_exp -> INNER AT address_exp EQ sn_exp .)
+    $end            reduce using rule 18 (at_param_exp -> INNER AT address_exp EQ sn_exp .)
+    WORD            shift and go to state 41
+    NUMBER          shift and go to state 42
 
 
 state 71
 
-    (5) init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp NULL . param_exp
-    (45) param_exp -> . INNER EQ sn_exp
-    (46) param_exp -> . INNER EQ address_exp
-    (47) param_exp -> . INNER EQ NULL
-    (48) param_exp -> . INNER EQ port_number_block_exp
-    (49) param_exp -> . INNER EQ sn_exp NULL param_exp
-    (50) param_exp -> . INNER EQ address_exp NULL param_exp
-    (51) param_exp -> . INNER EQ port_number_block_exp NULL param_exp
+    (19) at_param_exp -> INNER AT address_exp EQ NUMBER .
+    (34) sn_exp -> NUMBER . WORD
 
-    INNER           shift and go to state 63
+    NULL            reduce using rule 19 (at_param_exp -> INNER AT address_exp EQ NUMBER .)
+    $end            reduce using rule 19 (at_param_exp -> INNER AT address_exp EQ NUMBER .)
+    WORD            shift and go to state 43
 
-    param_exp                      shift and go to state 77
 
 state 72
 
-    (45) param_exp -> INNER EQ . sn_exp
-    (46) param_exp -> INNER EQ . address_exp
-    (47) param_exp -> INNER EQ . NULL
-    (48) param_exp -> INNER EQ . port_number_block_exp
-    (49) param_exp -> INNER EQ . sn_exp NULL param_exp
-    (50) param_exp -> INNER EQ . address_exp NULL param_exp
-    (51) param_exp -> INNER EQ . port_number_block_exp NULL param_exp
-    (32) sn_exp -> . WORD
-    (33) sn_exp -> . NUMBER WORD
-    (34) sn_exp -> . sn_exp WORD
-    (35) sn_exp -> . sn_exp NUMBER
-    (19) address_exp -> . ipv4_exp
-    (20) address_exp -> . domain_exp
-    (21) address_exp -> . address_exp SEMICOLON ipv4_exp
-    (22) address_exp -> . address_exp SEMICOLON domain_exp
-    (26) port_number_block_exp -> . number_block_exp
-    (27) port_number_block_exp -> . NOT number_block_exp
-    (28) port_number_block_exp -> . number_block_exp NOT number_block_exp
-    (25) ipv4_exp -> . ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp
-    (23) domain_exp -> . domain_block_exp
-    (24) domain_exp -> . domain_exp COMMA domain_block_exp
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (29) ipv4_number_block_exp -> . number_block_exp
-    (30) ipv4_number_block_exp -> . NOT number_block_exp
-    (31) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
-    (36) domain_block_exp -> . sn_exp DOT sn_exp
-    (37) domain_block_exp -> . ipv4_number_block_exp DOT sn_exp
-    (38) domain_block_exp -> . domain_block_exp DOT sn_exp
-    (39) domain_block_exp -> . domain_block_exp DOT NUMBER
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (6) init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp NULL . param_exp
+    (46) param_exp -> . INNER EQ sn_exp
+    (47) param_exp -> . INNER EQ address_exp
+    (48) param_exp -> . INNER EQ NULL
+    (49) param_exp -> . INNER EQ port_number_block_exp
+    (50) param_exp -> . INNER EQ sn_exp NULL param_exp
+    (51) param_exp -> . INNER EQ address_exp NULL param_exp
+    (52) param_exp -> . INNER EQ port_number_block_exp NULL param_exp
 
-    NULL            shift and go to state 80
+    INNER           shift and go to state 64
+
+    param_exp                      shift and go to state 78
+
+state 73
+
+    (46) param_exp -> INNER EQ . sn_exp
+    (47) param_exp -> INNER EQ . address_exp
+    (48) param_exp -> INNER EQ . NULL
+    (49) param_exp -> INNER EQ . port_number_block_exp
+    (50) param_exp -> INNER EQ . sn_exp NULL param_exp
+    (51) param_exp -> INNER EQ . address_exp NULL param_exp
+    (52) param_exp -> INNER EQ . port_number_block_exp NULL param_exp
+    (33) sn_exp -> . WORD
+    (34) sn_exp -> . NUMBER WORD
+    (35) sn_exp -> . sn_exp WORD
+    (36) sn_exp -> . sn_exp NUMBER
+    (20) address_exp -> . ipv4_exp
+    (21) address_exp -> . domain_exp
+    (22) address_exp -> . address_exp SEMICOLON ipv4_exp
+    (23) address_exp -> . address_exp SEMICOLON domain_exp
+    (27) port_number_block_exp -> . number_block_exp
+    (28) port_number_block_exp -> . NOT number_block_exp
+    (29) port_number_block_exp -> . number_block_exp NOT number_block_exp
+    (26) ipv4_exp -> . ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp
+    (24) domain_exp -> . domain_block_exp
+    (25) domain_exp -> . domain_exp COMMA domain_block_exp
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (30) ipv4_number_block_exp -> . number_block_exp
+    (31) ipv4_number_block_exp -> . NOT number_block_exp
+    (32) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
+    (37) domain_block_exp -> . sn_exp DOT sn_exp
+    (38) domain_block_exp -> . ipv4_number_block_exp DOT sn_exp
+    (39) domain_block_exp -> . domain_block_exp DOT sn_exp
+    (40) domain_block_exp -> . domain_block_exp DOT NUMBER
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+
+    NULL            shift and go to state 81
     WORD            shift and go to state 22
     NUMBER          shift and go to state 20
-    NOT             shift and go to state 83
+    NOT             shift and go to state 84
 
-    sn_exp                         shift and go to state 78
-    address_exp                    shift and go to state 79
-    port_number_block_exp          shift and go to state 81
+    sn_exp                         shift and go to state 79
+    address_exp                    shift and go to state 80
+    port_number_block_exp          shift and go to state 82
     ipv4_exp                       shift and go to state 14
     domain_exp                     shift and go to state 15
-    number_block_exp               shift and go to state 82
+    number_block_exp               shift and go to state 83
     ipv4_number_block_exp          shift and go to state 16
     domain_block_exp               shift and go to state 17
     number_exp                     shift and go to state 21
 
-state 73
-
-    (28) port_number_block_exp -> number_block_exp NOT . number_block_exp
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
-
-    NUMBER          shift and go to state 32
-
-    number_block_exp               shift and go to state 84
-    number_exp                     shift and go to state 21
-
 state 74
 
-    (27) port_number_block_exp -> NOT number_block_exp .
-    (41) number_block_exp -> number_block_exp . COMMA number_exp
+    (29) port_number_block_exp -> number_block_exp NOT . number_block_exp
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    NULL            reduce using rule 27 (port_number_block_exp -> NOT number_block_exp .)
-    $end            reduce using rule 27 (port_number_block_exp -> NOT number_block_exp .)
-    COMMA           shift and go to state 38
+    NUMBER          shift and go to state 33
 
+    number_block_exp               shift and go to state 85
+    number_exp                     shift and go to state 21
 
 state 75
 
-    (25) ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp . DOT ipv4_number_block_exp
+    (28) port_number_block_exp -> NOT number_block_exp .
+    (42) number_block_exp -> number_block_exp . COMMA number_exp
 
-    DOT             shift and go to state 85
+    NULL            reduce using rule 28 (port_number_block_exp -> NOT number_block_exp .)
+    $end            reduce using rule 28 (port_number_block_exp -> NOT number_block_exp .)
+    COMMA           shift and go to state 39
 
 
 state 76
 
-    (44) number_exp -> NUMBER RANGE NUMBER MOD NUMBER .
+    (26) ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp . DOT ipv4_number_block_exp
 
-    NOT             reduce using rule 44 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
-    COMMA           reduce using rule 44 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
-    DOT             reduce using rule 44 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
-    SEMICOLON       reduce using rule 44 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
-    NULL            reduce using rule 44 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
-    $end            reduce using rule 44 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
-    EQ              reduce using rule 44 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
+    DOT             shift and go to state 86
 
 
 state 77
 
-    (5) init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp NULL param_exp .
+    (45) number_exp -> NUMBER RANGE NUMBER MOD NUMBER .
 
-    $end            reduce using rule 5 (init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp NULL param_exp .)
+    NOT             reduce using rule 45 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
+    COMMA           reduce using rule 45 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
+    DOT             reduce using rule 45 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
+    SEMICOLON       reduce using rule 45 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
+    NULL            reduce using rule 45 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
+    $end            reduce using rule 45 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
+    EQ              reduce using rule 45 (number_exp -> NUMBER RANGE NUMBER MOD NUMBER .)
 
 
 state 78
 
-    (45) param_exp -> INNER EQ sn_exp .
-    (49) param_exp -> INNER EQ sn_exp . NULL param_exp
-    (34) sn_exp -> sn_exp . WORD
-    (35) sn_exp -> sn_exp . NUMBER
-    (36) domain_block_exp -> sn_exp . DOT sn_exp
+    (6) init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp NULL param_exp .
 
-    $end            reduce using rule 45 (param_exp -> INNER EQ sn_exp .)
-    NULL            shift and go to state 86
-    WORD            shift and go to state 40
-    NUMBER          shift and go to state 41
-    DOT             shift and go to state 39
+    $end            reduce using rule 6 (init_exp -> PROTOCOL NULL address_exp NULL port_number_block_exp NULL param_exp .)
 
 
 state 79
 
-    (46) param_exp -> INNER EQ address_exp .
-    (50) param_exp -> INNER EQ address_exp . NULL param_exp
-    (21) address_exp -> address_exp . SEMICOLON ipv4_exp
-    (22) address_exp -> address_exp . SEMICOLON domain_exp
+    (46) param_exp -> INNER EQ sn_exp .
+    (50) param_exp -> INNER EQ sn_exp . NULL param_exp
+    (35) sn_exp -> sn_exp . WORD
+    (36) sn_exp -> sn_exp . NUMBER
+    (37) domain_block_exp -> sn_exp . DOT sn_exp
 
-    $end            reduce using rule 46 (param_exp -> INNER EQ address_exp .)
+    $end            reduce using rule 46 (param_exp -> INNER EQ sn_exp .)
     NULL            shift and go to state 87
-    SEMICOLON       shift and go to state 33
+    WORD            shift and go to state 41
+    NUMBER          shift and go to state 42
+    DOT             shift and go to state 40
 
 
 state 80
 
-    (47) param_exp -> INNER EQ NULL .
+    (47) param_exp -> INNER EQ address_exp .
+    (51) param_exp -> INNER EQ address_exp . NULL param_exp
+    (22) address_exp -> address_exp . SEMICOLON ipv4_exp
+    (23) address_exp -> address_exp . SEMICOLON domain_exp
 
-    $end            reduce using rule 47 (param_exp -> INNER EQ NULL .)
+    $end            reduce using rule 47 (param_exp -> INNER EQ address_exp .)
+    NULL            shift and go to state 88
+    SEMICOLON       shift and go to state 34
 
 
 state 81
 
-    (48) param_exp -> INNER EQ port_number_block_exp .
-    (51) param_exp -> INNER EQ port_number_block_exp . NULL param_exp
+    (48) param_exp -> INNER EQ NULL .
 
-    $end            reduce using rule 48 (param_exp -> INNER EQ port_number_block_exp .)
-    NULL            shift and go to state 88
+    $end            reduce using rule 48 (param_exp -> INNER EQ NULL .)
 
 
 state 82
 
-    (26) port_number_block_exp -> number_block_exp .
-    (28) port_number_block_exp -> number_block_exp . NOT number_block_exp
-    (41) number_block_exp -> number_block_exp . COMMA number_exp
-    (29) ipv4_number_block_exp -> number_block_exp .
-    (31) ipv4_number_block_exp -> number_block_exp . NOT number_block_exp
+    (49) param_exp -> INNER EQ port_number_block_exp .
+    (52) param_exp -> INNER EQ port_number_block_exp . NULL param_exp
 
-    NULL            reduce using rule 26 (port_number_block_exp -> number_block_exp .)
-    $end            reduce using rule 26 (port_number_block_exp -> number_block_exp .)
-    NOT             shift and go to state 89
-    COMMA           shift and go to state 38
-    DOT             reduce using rule 29 (ipv4_number_block_exp -> number_block_exp .)
+    $end            reduce using rule 49 (param_exp -> INNER EQ port_number_block_exp .)
+    NULL            shift and go to state 89
 
 
 state 83
 
-    (27) port_number_block_exp -> NOT . number_block_exp
-    (30) ipv4_number_block_exp -> NOT . number_block_exp
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (27) port_number_block_exp -> number_block_exp .
+    (29) port_number_block_exp -> number_block_exp . NOT number_block_exp
+    (42) number_block_exp -> number_block_exp . COMMA number_exp
+    (30) ipv4_number_block_exp -> number_block_exp .
+    (32) ipv4_number_block_exp -> number_block_exp . NOT number_block_exp
 
-    NUMBER          shift and go to state 32
+    NULL            reduce using rule 27 (port_number_block_exp -> number_block_exp .)
+    $end            reduce using rule 27 (port_number_block_exp -> number_block_exp .)
+    NOT             shift and go to state 90
+    COMMA           shift and go to state 39
+    DOT             reduce using rule 30 (ipv4_number_block_exp -> number_block_exp .)
 
-    number_block_exp               shift and go to state 90
-    number_exp                     shift and go to state 21
 
 state 84
 
-    (28) port_number_block_exp -> number_block_exp NOT number_block_exp .
-    (41) number_block_exp -> number_block_exp . COMMA number_exp
+    (28) port_number_block_exp -> NOT . number_block_exp
+    (31) ipv4_number_block_exp -> NOT . number_block_exp
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    NULL            reduce using rule 28 (port_number_block_exp -> number_block_exp NOT number_block_exp .)
-    $end            reduce using rule 28 (port_number_block_exp -> number_block_exp NOT number_block_exp .)
-    COMMA           shift and go to state 38
+    NUMBER          shift and go to state 33
 
+    number_block_exp               shift and go to state 91
+    number_exp                     shift and go to state 21
 
 state 85
 
-    (25) ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT . ipv4_number_block_exp
-    (29) ipv4_number_block_exp -> . number_block_exp
-    (30) ipv4_number_block_exp -> . NOT number_block_exp
-    (31) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (29) port_number_block_exp -> number_block_exp NOT number_block_exp .
+    (42) number_block_exp -> number_block_exp . COMMA number_exp
 
-    NOT             shift and go to state 27
-    NUMBER          shift and go to state 32
+    NULL            reduce using rule 29 (port_number_block_exp -> number_block_exp NOT number_block_exp .)
+    $end            reduce using rule 29 (port_number_block_exp -> number_block_exp NOT number_block_exp .)
+    COMMA           shift and go to state 39
 
-    ipv4_number_block_exp          shift and go to state 91
-    number_block_exp               shift and go to state 18
-    number_exp                     shift and go to state 21
 
 state 86
 
-    (49) param_exp -> INNER EQ sn_exp NULL . param_exp
-    (45) param_exp -> . INNER EQ sn_exp
-    (46) param_exp -> . INNER EQ address_exp
-    (47) param_exp -> . INNER EQ NULL
-    (48) param_exp -> . INNER EQ port_number_block_exp
-    (49) param_exp -> . INNER EQ sn_exp NULL param_exp
-    (50) param_exp -> . INNER EQ address_exp NULL param_exp
-    (51) param_exp -> . INNER EQ port_number_block_exp NULL param_exp
+    (26) ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT . ipv4_number_block_exp
+    (30) ipv4_number_block_exp -> . number_block_exp
+    (31) ipv4_number_block_exp -> . NOT number_block_exp
+    (32) ipv4_number_block_exp -> . number_block_exp NOT number_block_exp
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    INNER           shift and go to state 63
+    NOT             shift and go to state 28
+    NUMBER          shift and go to state 33
 
-    param_exp                      shift and go to state 92
+    ipv4_number_block_exp          shift and go to state 92
+    number_block_exp               shift and go to state 18
+    number_exp                     shift and go to state 21
 
 state 87
 
-    (50) param_exp -> INNER EQ address_exp NULL . param_exp
-    (45) param_exp -> . INNER EQ sn_exp
-    (46) param_exp -> . INNER EQ address_exp
-    (47) param_exp -> . INNER EQ NULL
-    (48) param_exp -> . INNER EQ port_number_block_exp
-    (49) param_exp -> . INNER EQ sn_exp NULL param_exp
-    (50) param_exp -> . INNER EQ address_exp NULL param_exp
-    (51) param_exp -> . INNER EQ port_number_block_exp NULL param_exp
+    (50) param_exp -> INNER EQ sn_exp NULL . param_exp
+    (46) param_exp -> . INNER EQ sn_exp
+    (47) param_exp -> . INNER EQ address_exp
+    (48) param_exp -> . INNER EQ NULL
+    (49) param_exp -> . INNER EQ port_number_block_exp
+    (50) param_exp -> . INNER EQ sn_exp NULL param_exp
+    (51) param_exp -> . INNER EQ address_exp NULL param_exp
+    (52) param_exp -> . INNER EQ port_number_block_exp NULL param_exp
 
-    INNER           shift and go to state 63
+    INNER           shift and go to state 64
 
     param_exp                      shift and go to state 93
 
 state 88
 
-    (51) param_exp -> INNER EQ port_number_block_exp NULL . param_exp
-    (45) param_exp -> . INNER EQ sn_exp
-    (46) param_exp -> . INNER EQ address_exp
-    (47) param_exp -> . INNER EQ NULL
-    (48) param_exp -> . INNER EQ port_number_block_exp
-    (49) param_exp -> . INNER EQ sn_exp NULL param_exp
-    (50) param_exp -> . INNER EQ address_exp NULL param_exp
-    (51) param_exp -> . INNER EQ port_number_block_exp NULL param_exp
+    (51) param_exp -> INNER EQ address_exp NULL . param_exp
+    (46) param_exp -> . INNER EQ sn_exp
+    (47) param_exp -> . INNER EQ address_exp
+    (48) param_exp -> . INNER EQ NULL
+    (49) param_exp -> . INNER EQ port_number_block_exp
+    (50) param_exp -> . INNER EQ sn_exp NULL param_exp
+    (51) param_exp -> . INNER EQ address_exp NULL param_exp
+    (52) param_exp -> . INNER EQ port_number_block_exp NULL param_exp
 
-    INNER           shift and go to state 63
+    INNER           shift and go to state 64
 
     param_exp                      shift and go to state 94
 
 state 89
 
-    (28) port_number_block_exp -> number_block_exp NOT . number_block_exp
-    (31) ipv4_number_block_exp -> number_block_exp NOT . number_block_exp
-    (40) number_block_exp -> . number_exp
-    (41) number_block_exp -> . number_block_exp COMMA number_exp
-    (42) number_exp -> . NUMBER
-    (43) number_exp -> . NUMBER RANGE NUMBER
-    (44) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
+    (52) param_exp -> INNER EQ port_number_block_exp NULL . param_exp
+    (46) param_exp -> . INNER EQ sn_exp
+    (47) param_exp -> . INNER EQ address_exp
+    (48) param_exp -> . INNER EQ NULL
+    (49) param_exp -> . INNER EQ port_number_block_exp
+    (50) param_exp -> . INNER EQ sn_exp NULL param_exp
+    (51) param_exp -> . INNER EQ address_exp NULL param_exp
+    (52) param_exp -> . INNER EQ port_number_block_exp NULL param_exp
 
-    NUMBER          shift and go to state 32
+    INNER           shift and go to state 64
 
-    number_block_exp               shift and go to state 95
-    number_exp                     shift and go to state 21
+    param_exp                      shift and go to state 95
 
 state 90
 
-    (27) port_number_block_exp -> NOT number_block_exp .
-    (30) ipv4_number_block_exp -> NOT number_block_exp .
-    (41) number_block_exp -> number_block_exp . COMMA number_exp
+    (29) port_number_block_exp -> number_block_exp NOT . number_block_exp
+    (32) ipv4_number_block_exp -> number_block_exp NOT . number_block_exp
+    (41) number_block_exp -> . number_exp
+    (42) number_block_exp -> . number_block_exp COMMA number_exp
+    (43) number_exp -> . NUMBER
+    (44) number_exp -> . NUMBER RANGE NUMBER
+    (45) number_exp -> . NUMBER RANGE NUMBER MOD NUMBER
 
-    NULL            reduce using rule 27 (port_number_block_exp -> NOT number_block_exp .)
-    $end            reduce using rule 27 (port_number_block_exp -> NOT number_block_exp .)
-    DOT             reduce using rule 30 (ipv4_number_block_exp -> NOT number_block_exp .)
-    COMMA           shift and go to state 38
+    NUMBER          shift and go to state 33
 
+    number_block_exp               shift and go to state 96
+    number_exp                     shift and go to state 21
 
 state 91
 
-    (25) ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp .
+    (28) port_number_block_exp -> NOT number_block_exp .
+    (31) ipv4_number_block_exp -> NOT number_block_exp .
+    (42) number_block_exp -> number_block_exp . COMMA number_exp
 
-    SEMICOLON       reduce using rule 25 (ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp .)
-    NULL            reduce using rule 25 (ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp .)
-    $end            reduce using rule 25 (ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp .)
-    EQ              reduce using rule 25 (ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp .)
+    NULL            reduce using rule 28 (port_number_block_exp -> NOT number_block_exp .)
+    $end            reduce using rule 28 (port_number_block_exp -> NOT number_block_exp .)
+    DOT             reduce using rule 31 (ipv4_number_block_exp -> NOT number_block_exp .)
+    COMMA           shift and go to state 39
 
 
 state 92
 
-    (49) param_exp -> INNER EQ sn_exp NULL param_exp .
+    (26) ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp .
 
-    $end            reduce using rule 49 (param_exp -> INNER EQ sn_exp NULL param_exp .)
+    SEMICOLON       reduce using rule 26 (ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp .)
+    NULL            reduce using rule 26 (ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp .)
+    $end            reduce using rule 26 (ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp .)
+    EQ              reduce using rule 26 (ipv4_exp -> ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp DOT ipv4_number_block_exp .)
 
 
 state 93
 
-    (50) param_exp -> INNER EQ address_exp NULL param_exp .
+    (50) param_exp -> INNER EQ sn_exp NULL param_exp .
 
-    $end            reduce using rule 50 (param_exp -> INNER EQ address_exp NULL param_exp .)
+    $end            reduce using rule 50 (param_exp -> INNER EQ sn_exp NULL param_exp .)
 
 
 state 94
 
-    (51) param_exp -> INNER EQ port_number_block_exp NULL param_exp .
+    (51) param_exp -> INNER EQ address_exp NULL param_exp .
 
-    $end            reduce using rule 51 (param_exp -> INNER EQ port_number_block_exp NULL param_exp .)
+    $end            reduce using rule 51 (param_exp -> INNER EQ address_exp NULL param_exp .)
 
 
 state 95
 
-    (28) port_number_block_exp -> number_block_exp NOT number_block_exp .
-    (31) ipv4_number_block_exp -> number_block_exp NOT number_block_exp .
-    (41) number_block_exp -> number_block_exp . COMMA number_exp
+    (52) param_exp -> INNER EQ port_number_block_exp NULL param_exp .
 
-    NULL            reduce using rule 28 (port_number_block_exp -> number_block_exp NOT number_block_exp .)
-    $end            reduce using rule 28 (port_number_block_exp -> number_block_exp NOT number_block_exp .)
-    DOT             reduce using rule 31 (ipv4_number_block_exp -> number_block_exp NOT number_block_exp .)
-    COMMA           shift and go to state 38
+    $end            reduce using rule 52 (param_exp -> INNER EQ port_number_block_exp NULL param_exp .)
+
+
+state 96
+
+    (29) port_number_block_exp -> number_block_exp NOT number_block_exp .
+    (32) ipv4_number_block_exp -> number_block_exp NOT number_block_exp .
+    (42) number_block_exp -> number_block_exp . COMMA number_exp
+
+    NULL            reduce using rule 29 (port_number_block_exp -> number_block_exp NOT number_block_exp .)
+    $end            reduce using rule 29 (port_number_block_exp -> number_block_exp NOT number_block_exp .)
+    DOT             reduce using rule 32 (ipv4_number_block_exp -> number_block_exp NOT number_block_exp .)
+    COMMA           shift and go to state 39
 

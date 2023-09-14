@@ -4,7 +4,10 @@ from itertools import product
 from socket import gethostbyname
 from handler.protocol import Protocol_Excute
 from global_var import Global_Var 
-from tools import inner_param
+from tools import inner_param,extend_param
+from tools import  (
+    init_exp__four__dict
+)
 
 
 var=Global_Var()
@@ -87,6 +90,7 @@ def t_error(t):
 def p_init_exp(p):
     '''
         init_exp : at_exp
+                 | PROTOCOL NULL at_exp
                  | PROTOCOL NULL address_exp 
                  | PROTOCOL NULL address_exp NULL param_exp
                  | PROTOCOL NULL address_exp NULL port_number_block_exp
@@ -94,16 +98,25 @@ def p_init_exp(p):
     ''' 
     # 
     if len(p)==2:
-        print(p[1])
-        # if isinstance(p[0],str):at_obj(p[1].strip('@'),True,False)
-        # if isinstance(p[0],dict):
-        #     for ip_kv_dict in p[0]:
-        #         var.param=ip_kv_dict
+        if  p[1]['protocol_get']:
+            inner_param(p[1]['protocol_get'],True,False)
+        if p[1]['param_get']:
+            for set_dic in p[1]['param_get']:
+                extend_param(set_dic,True,False)
+        if p[1]['param_set']:
+            for value in p[1]['param_set']:
+                var.extend_param=value
+        #这里return 防止只进行get set 操作时进行执行
         return
     p[0]={}
     if len(p)==4:
         p[0]['protocol']=p[1]
-        p[0]['address']=p[3]
+        #判断 PROTOCOL NULL at_exp | PROTOCOL NULL address_exp 这两种句型
+        if isinstance(p[3],dict):
+            p[0]['address']=init_exp__four__dict(p[1],p[3]['protocol_get'])
+        else:
+            #list
+            p[0]['address']=p[3]
     if len(p)==6:
         if isinstance(p[5],list):
             p[0]['protocol']=p[1]
@@ -135,16 +148,14 @@ def p_at_exp(p):
                | at_exp NULL at_protocol_exp
                | at_exp NULL at_param_exp
     '''
-
-
     if len(p)==2:
         p[0]={
-            'protocol_set_get':[],
+            'protocol_get':[],
             'param_get':[],
             'param_set':[]
         }
         if isinstance(p[1],str):
-            p[0]['protocol_set_get']=p[1].strip('@').split(',')
+            p[0]['protocol_get']=p[1].strip('@').split(',')
         if isinstance(p[1],dict):
             p[0]['param_get']=[p[1]]
         if isinstance(p[1],list):
@@ -152,14 +163,12 @@ def p_at_exp(p):
     if len(p)==4:
         p[0]=p[1]
         if isinstance(p[3],str):
-            p[0]['protocol_set_get']+=p[3].strip('@').split(',')
+            p[0]['protocol_get']+=p[3].strip('@').split(',')
         if isinstance(p[3],dict):
             p[0]['param_get']+=[p[3]]
         if isinstance(p[3],list):
             p[0]['param_set']+=p[3]
-    print(p[0])
-        
-
+   
 
 def p_at_protocol_exp(p):
     '''

@@ -9,8 +9,20 @@ import time
 
 var=Global_Var()
 
+'''
+'''
+class Tools_Error(ValueError):
+    def __init__(self,error) -> None:
+        super().__init__(self)
+        self.error=error
+    def __str__(self) -> str:
+        return self.error
+
+
+'''
+上下文参数相关函数
+'''
 def inner_param(p,show,result):
-    p=p.strip('@')
     inner_p={
         'ping':var.ping_open,
         '!ping':var.ping_close,
@@ -26,18 +38,17 @@ def inner_param(p,show,result):
                 print(f'{key}=>{value}')
         else:
             for key,value in inner_p.items():
-                if key in p.split(','):
+                if key in p:
                     print(f"{key}=>{value}")
     if result:
         result_dict={}
         for key,value in inner_p.items():
-            if key in p.split(','):
+            if key in p:
                 result_dict[key]=value
         return result_dict
 
 def extend_param(p,show,result):
     extend_p=var.extend_param
-
     if show:
         if 'key' not in p :
             for key,value in extend_p.items():
@@ -56,19 +67,26 @@ def extend_param(p,show,result):
         if 'key' not in p :
             for key,value in extend_p.items():
                 if key in p['ip']:
-                    var.temp_param={
+                    var.temp_ip_about_param={
                         'ip':key,
                         'param':value
                     }
         else:
             for key,value in extend_p.items():
+                print(key,value,p)
                 if key in p['ip']:
-                    var.temp_param={
-                        'ip':key,
-                        'param':value
-                    }
-
-
+                    param_dic={}
+                    for k,v in value.items():
+                        if k in p['key']:
+                            param_dic[k]=value[k]
+                var.temp_ip_about_param={
+                    'ip':key,
+                    'param':param_dic
+                }
+        print(f'tools.py:第83行{var.temp_ip_about_param}')
+'''
+以下是protocol.py文件依赖函数
+'''
 
 def tcp_port_check(target,timeout):
 
@@ -102,13 +120,13 @@ def tcp_port_scan(targets,timeout=1):
     dic['close']=close_str
     return dic
 
+#
 def ping_scan(address,timeout,retry,sort):
         
         result={
         'open':'',
         'close':''
         }
-
         mp=multi_ping(address,timeout,retry)
         open=[]
         close=[]
@@ -142,6 +160,7 @@ def ping_scan(address,timeout,retry,sort):
         print(var.ping_open)
         return result
 
+#
 def connect_ssh_shell(connect):
     try:
         #添加ssh记录
@@ -155,15 +174,40 @@ def connect_ssh_shell(connect):
         #添加ssh记录
         var.ssh_close=connect
         print(e)
-         
-    
 
+ #        
 def send_ssh_command(shell,cmd):
-            shell.send(cmd)
-            time.sleep(0.1)
-            output=shell.recv(65535).decode()
-            return output
+    if not shell:
+        #获取shell对象失败会到init状态
+        var.next_state='init'
+        raise Tools_Error('shell get fault...')
+    shell.send(cmd)
+    time.sleep(0.1)
+    output=shell.recv(65535).decode()
+    return output
 
+'''
+以下是lexyacc文件夹下文件依赖的参数处理函数
+以下为可能的函数名称
+    1.状态名称__P长度__参与判断的参数类型
+    2.状态名称__P长度
+    3.状态名称__参与判断的参数类型
+'''
+
+def init_exp__four__dict(ori_protocol,at_protocol):
+    if ori_protocol=='ping':
+        if len(at_protocol)==1 :
+            _at_protocol=at_protocol[0]
+            if _at_protocol=='ping':
+                address=inner_param(at_protocol,False,True)['ping']
+                print(address)
+            if _at_protocol=='tcping':
+                address=[p[0] for p in inner_param(at_protocol,False,True)['tcping']]
+            if _at_protocol=='ssh':
+                address=[p[0] for p in inner_param(at_protocol,False,True)['ssh']]
+            return address
+        else:
+            pass
 
 if __name__ =='__main__':
     tcp_port_scan([['192.168.2.254','443']])

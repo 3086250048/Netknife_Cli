@@ -5,9 +5,7 @@ from tools import (
     send_ssh_command
 )
 from itertools import product
-import paramiko
 from concurrent.futures import ThreadPoolExecutor
-import time
 from global_var import Global_Var
 
 class Param_Error(ValueError):
@@ -209,7 +207,10 @@ class Protocol_Excute:
         with ThreadPoolExecutor(max_workers=len(self.ssh_shells)) as executor:
             futures = [executor.submit(send_ssh_command,shell,self.excute_ssh_cmd_P) for shell in self.ssh_shells]
             for future in futures:
-                print(future.result())
+                try:
+                    print(future.result())
+                except Exception as e:
+                    print(e)
 
     def scp(self):
         pass
