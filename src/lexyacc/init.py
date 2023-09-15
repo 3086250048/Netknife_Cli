@@ -16,6 +16,12 @@ from tools import  (
 
 
 var=Global_Var()
+handler=Protocol_Excute()
+MAP={
+    'ssh':handler.get_ssh_shell,
+    'ping':handler.ping,
+    'tcping':handler.tcping,
+}
 
 PARAM_TABLE={
     'raw_number_to_domain_block_exp':None
@@ -118,18 +124,11 @@ def p_init_exp(p):
         p[0]['protocol']=p[1]
         #判断 PROTOCOL NULL at_exp | PROTOCOL NULL address_exp 这两种句型
         if isinstance(p[3],dict):
-            print(p[3])
-            if p[1]=='ping':
-                p[0]['address']=init_exp__four__dict(p[3]['protocol_about'])['ip']
-            if p[1]=='tcping':
-                result=init_exp__four__dict(p[3]['protocol_aboout'],True,True)
-                p[0]['address']=result['ip']
-                p[0]['ip_port']=result['ip_port']
-            if p[1]=='ssh':
-                result=init_exp__four__dict(p[3]['protocol_aboout'],True,True,True)
-                p[0]['address']=result['ip']
-                p[0]['ip_port']=result['ip_port']
-                p[0]['ip_port_user_pwd']=result['ip_port_user_pwd']
+            print(f'init.py第127行{p[3]}')
+            result=init_exp__four__dict(p[3]['protocol_about'])
+            MAP[p[1]](result)
+            #@语法时单独调用函数处理，return防止继续执行导致p[0]在关键key未被赋值的情况下传递
+            return
         else:
             #list
             p[0]['address']=p[3]
@@ -147,14 +146,7 @@ def p_init_exp(p):
             p[0]['address']=p[3]
             p[0]['port']=p[5]
             p[0]['param']=p[7]
-
-    handler=Protocol_Excute()
-    MAP={
-        'ssh':handler.get_ssh_shell,
-        'ping':handler.ping,
-        'tcping':handler.tcping,
-    }
-
+    # 没有@语法时正常执行
     MAP[p[1]](p[0])
 
 def p_at_exp(p):

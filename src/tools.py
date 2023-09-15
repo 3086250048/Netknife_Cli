@@ -201,30 +201,22 @@ def send_ssh_command(shell,cmd):
     3.状态名称__参与判断的参数类型
 '''
 
-def init_exp__four__dict(at_protocol,ip=True,ip_port=False,ip_user_pwd=False):
+def init_exp__four__dict(at_protocol):
     result={
         'ip':[],
         'ip_port':[],
         'ip_port_user_pwd':[]
     }
-    print(f'tools.py文件第214行{at_protocol}')
+    # print(f'tools.py文件第214行{at_protocol}')
     for _at_protocol in at_protocol:
         print(_at_protocol)
         if _at_protocol=='ping' or _at_protocol=='!ping':
             result['ip']+=inner_param_get(at_protocol)[_at_protocol]
         if _at_protocol=='tcping' or  _at_protocol=='!tcping':
-            if ip:
-                result['ip']+=[p[0] for p in inner_param_get(at_protocol)[_at_protocol]]
-            if ip_port:
-                result['ip_port']+=[p for p in inner_param_get(at_protocol)[_at_protocol]]
+            result['ip_port']+=[p for p in inner_param_get(at_protocol)[_at_protocol]]
         if _at_protocol=='ssh' or _at_protocol=='!ssh':
-            if ip:
-                result['ip']+=[p[0] for p in inner_param_get(at_protocol)[_at_protocol]]
-            if ip_port:
-                result['ip_port']+=[p[0:2] for p in inner_param_get(at_protocol)[_at_protocol]]
-            if ip_user_pwd:
-                result['ip_port_user_pwd']+=[p for p in inner_param_get(at_protocol)[_at_protocol] ]
-        print(f'tools.py第226行:{result}')
+            result['ip_port_user_pwd']+=[p for p in inner_param_get(at_protocol)[_at_protocol] ]
+        # print(f'tools.py第226行:{result}')
     return result
   
         

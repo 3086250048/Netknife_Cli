@@ -54,9 +54,27 @@ class Param_Produce:
         return self.param
     def ping_P(self):
         '''
-        return : {'address':[address:str],'timeout':float,'retry':int }
+        return:{
+            address:[address:str],
+            timeout:float,
+            retry:int,
+            flag:str,
+            sort:str
+        }
         '''
-    
+        if 'address' not in self.param:
+            address=[ip for ip in self.param['ip']]+\
+            [connect[0] for connect in self.param['ip_port']]+\
+            [shell[0] for shell in self.param['ip_port_user_pwd']]
+            yield{
+                'address':address,
+                'timeout':1.0,
+                'retry':5,
+                'flag':'openclose',
+                'sort':'forward'
+            }
+
+
         if len(self.param['address'])>65535:
             raise Param_Error(
         'cannot send icmp echo request to more \
@@ -90,7 +108,7 @@ than 65535 addresses at the same time.')
                 sort=self.param['param']['sort']
 
             
-        return {
+        yield {
             'address':address,
             'timeout':timeout,
             'retry':retry,
@@ -102,8 +120,43 @@ than 65535 addresses at the same time.')
         '''
         return : {'connect':[('address':str,'port':int),...],'timeout':int,flag:'str'}
         '''
+        print(f'protocol.py第105行{self.param}')
+        #@协议中包含ping时的处理逻辑
+        if 'ip' in self.param:
+            port=[]
+            wait_scan_ip=self.param['ip']
+            print(f'wait_scan_ip=>{wait_scan_ip}')
+            port.append(int(input('port:')))
+            yield {
+            'connect':list(product(wait_scan_ip,port)),
+            'timeout':timeout,
+            'flag':flag
+            }
+        #@协议中包含tcping时的处理逻辑 
+        if 'ip_port' in self.param:
+            yield {
+                    'connect':self.param['ip_port'],
+                    'timeout':timeout,
+                    'flag':flag,    
+                }
+        #@协议中包含ssh时的处理逻辑
+        if 'ip_port_user_pwd' in self.param:
+            ip_port=[shell[0:2] for shell in self.param['ip_port_user_pwd']]
+            yield{
+                'connect':self.param['ip_port'],
+                'timeout':timeout,
+                'flag':flag,    
+            }
+
+
         if 'port' not in self.param:
-          raise Param_Error('the port parameter cannot be missing')
+        #   raise Param_Error('the port parameter cannot be missing')
+            port=[]
+            wait_scan_ip=self.param['address']
+            print(f'wait_scan_ip=>{wait_scan_ip}')
+            port.append(int(input('port:')))
+            self.param['port']=port
+            print(self.param)
         if 'param' not in self.param:
             timeout=1
             flag='openclose'
@@ -119,7 +172,7 @@ than 65535 addresses at the same time.')
 
         port=[i for i in self.param['port']]
         address=self.param['address']
-        return {
+        yield {
                 'connect':list(product(address,port)),
                 'timeout':timeout,
                 'flag':flag
