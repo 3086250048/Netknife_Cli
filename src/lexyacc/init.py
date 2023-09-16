@@ -11,7 +11,7 @@ extend_param_get,
 extend_param_print
 )
 from tools import  (
-    init_exp__four__dict
+    init_exp__at
 )
 
 
@@ -102,6 +102,8 @@ def p_init_exp(p):
     '''
         init_exp : at_exp
                  | PROTOCOL NULL at_exp
+                 | PROTOCOL NULL address_exp NULL at_exp
+                 | PROTOCOL NULL address_exp NULL at_exp NULL param_exp
                  | PROTOCOL NULL address_exp 
                  | PROTOCOL NULL address_exp NULL param_exp
                  | PROTOCOL NULL address_exp NULL port_number_block_exp
@@ -124,8 +126,7 @@ def p_init_exp(p):
         p[0]['protocol']=p[1]
         #判断 PROTOCOL NULL at_exp | PROTOCOL NULL address_exp 这两种句型
         if isinstance(p[3],dict):
-            print(f'init.py第127行{p[3]}')
-            result=init_exp__four__dict(p[3]['protocol_about'])
+            result=init_exp__at(p[3]['protocol_about'])
             MAP[p[1]](result)
             #@语法时单独调用函数处理，return防止继续执行导致p[0]在关键key未被赋值的情况下传递
             return
@@ -134,18 +135,41 @@ def p_init_exp(p):
             p[0]['address']=p[3]
     if len(p)==6:
         if isinstance(p[5],list):
+          
             p[0]['protocol']=p[1]
             p[0]['address']=p[3]
             p[0]['port']=p[5]
-        else:
-            p[0]['protocol']=p[1]
-            p[0]['address']=p[3]
-            p[0]['param']=p[5]
+        if isinstance(p[5],dict):
+           
+            # if :  PROTOCOL NULL address_exp NULL param_exp
+            # else: PROTOCOL NULL address_exp NULL at_exp
+            
+            if 'protocol_about' not in p[5]:
+           
+                p[0]['protocol']=p[1]
+                p[0]['address']=p[3]
+                p[0]['param']=p[5]
+            else:
+           
+                result=init_exp__at(p[5]['protocol_about'])
+                result['address']=p[3]
+                MAP[p[1]](result)
+                return
     if len(p)==8:
-            p[0]['protocol']=p[1]
-            p[0]['address']=p[3]
-            p[0]['port']=p[5]
-            p[0]['param']=p[7]
+            #if: PROTOCOL NULL address_exp NULL port_number_block_exp NULL param_exp
+            #else: PROTOCOL NULL address_exp NULL at_exp NULL param_exp
+            if isinstance(p[5],list):
+                p[0]['protocol']=p[1]
+                p[0]['address']=p[3]
+                p[0]['port']=p[5]
+                p[0]['param']=p[7]
+            else:
+                result=init_exp__at(p[5]['protocol_about'])
+                result['address']=p[3]
+                result['param']=p[7]
+                MAP[p[1]](result)
+                return
+                
     # 没有@语法时正常执行
     MAP[p[1]](p[0])
 

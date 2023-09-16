@@ -70,7 +70,9 @@ def extend_param_print(p):
                 for k,v in value.items():
                     if k in p['key']:
                         print(f'{k}:{v}')
-
+'''
+p :{'ip':['1.1.1.1',...],'key':['user'....]}
+'''
 def extend_param_get(p):
     EXTEND_P=var.extend_param
     if 'key' not in p :
@@ -82,17 +84,15 @@ def extend_param_get(p):
                 }
     else:
         for key,value in EXTEND_P.items():
-            print(key,value,p)
             if key in p['ip']:
                 param_dic={}
                 for k,v in value.items():
                     if k in p['key']:
                         param_dic[k]=value[k]
-            var.temp_ip_about_param={
-                'ip':key,
-                'param':param_dic
-            }
-    print(f'tools.py:第83行{var.temp_ip_about_param}')
+                var.temp_ip_about_param={
+                    'ip':key,
+                    'param':param_dic
+                }
 '''
 以下是protocol.py文件依赖函数
 '''
@@ -122,8 +122,6 @@ def tcp_port_scan(targets,timeout=1):
             else:
                 var.tcping_close=(result[1][0],result[1][1])
                 close_str+=f"tcp:{result[1][0]}:{result[1][1]}:close\n"   
-    #打印测试
-    print(var.tcping_open) 
     dic['open']=open_str.rstrip()
     dic['close']=close_str
     return dic
@@ -151,9 +149,6 @@ def ping_scan(address,timeout,retry,sort):
             _open=sorted(open,key=socket.inet_aton)
             _close=sorted(close,key=socket.inet_aton) 
 
-        #重置ping的历史记录
-        var.ping_open=None
-        var.ping_close=None
 
         for i in _open:
             #添加ping记录
@@ -164,8 +159,7 @@ def ping_scan(address,timeout,retry,sort):
             var.ping_close=i
             result['close']+=f'ip:{i}:close\n'
         result['open']=result['open'].rstrip()
-        #打印测试
-        print(var.ping_open)
+
         return result
 
 def connect_ssh_shell(connect):
@@ -195,28 +189,21 @@ def send_ssh_command(shell,cmd):
 
 '''
 以下是lexyacc文件夹下文件依赖的参数处理函数
-以下为可能的函数名称
-    1.状态名称__P长度__参与判断的参数类型
-    2.状态名称__P长度
-    3.状态名称__参与判断的参数类型
 '''
 
-def init_exp__four__dict(at_protocol):
+def init_exp__at(at_protocol):
     result={
         'ip':[],
         'ip_port':[],
         'ip_port_user_pwd':[]
     }
-    # print(f'tools.py文件第214行{at_protocol}')
     for _at_protocol in at_protocol:
-        print(_at_protocol)
         if _at_protocol=='ping' or _at_protocol=='!ping':
             result['ip']+=inner_param_get(at_protocol)[_at_protocol]
         if _at_protocol=='tcping' or  _at_protocol=='!tcping':
             result['ip_port']+=[p for p in inner_param_get(at_protocol)[_at_protocol]]
         if _at_protocol=='ssh' or _at_protocol=='!ssh':
             result['ip_port_user_pwd']+=[p for p in inner_param_get(at_protocol)[_at_protocol] ]
-        # print(f'tools.py第226行:{result}')
     return result
   
         

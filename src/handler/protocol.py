@@ -2,11 +2,14 @@ from tools import (
     tcp_port_scan,
     ping_scan,
     connect_ssh_shell,
-    send_ssh_command
+    send_ssh_command,
+    extend_param_get
 )
 from itertools import product
 from concurrent.futures import ThreadPoolExecutor
 from global_var import Global_Var
+
+var=Global_Var()
 
 class Param_Error(ValueError):
     def __init__(self,error) -> None:
@@ -62,65 +65,102 @@ class Param_Produce:
             sort:str
         }
         '''
-        if 'address' not in self.param:
+     
+        if 'ip' in self.param or 'ip_port' in self.param\
+            or 'ip_port_user_pwd' in self.param:
             address=[ip for ip in self.param['ip']]+\
             [connect[0] for connect in self.param['ip_port']]+\
             [shell[0] for shell in self.param['ip_port_user_pwd']]
-            yield{
-                'address':address,
-                'timeout':1.0,
-                'retry':5,
-                'flag':'openclose',
-                'sort':'forward'
-            }
+            if len(address)>65535:
+                raise Param_Error(
+                        'cannot send icmp echo request to more \
+                than 65535 addresses at the same time.')
 
-
-        if len(self.param['address'])>65535:
-            raise Param_Error(
-        'cannot send icmp echo request to more \
-than 65535 addresses at the same time.')
-        else:
-            address=self.param['address']
-        if 'param' not in self.param:
-            timeout=1.0
-            retry=5
-            flag='openclose'
-            sort='forward'
-        else:
-            if 'timeout' not in self.param['param']:
-                timeout=1.0
-            else:
-                timeout=self.param['param']['timeout']
-
-            if 'retry' not in self.param['param']:
-                retry=5
-            else:
-                retry=self.param['param']['retry']
-
-            if 'flag' not in self.param['param']:
-                flag='openclose'
-            else:
-                flag=self.param['param']['flag']
-
-            if 'sort' not in self.param['param']:
-                sort='forward' 
-            else:
-                sort=self.param['param']['sort']
-
+            '''extend_param_get函数只是给temp_ip_about_param全局变量赋值，
+             所以要从temp_ip_about_param中取值
+            '''
+            # 重置临时ip相关参数字典
+            var.temp_ip_about_param=None
+            #给temp_ip_about_param赋值
+            extend_param_get({
+                'ip':address,
+                'key':[
+                    'timeout',
+                    'retry',
+                    'flag',
+                    'sort'
+                ]
+            })
+            ping_var=var.temp_ip_about_param
+       
+            #将相同ping参数的IP归类到一个列表中,并提取有参数的IP   
             
-        yield {
-            'address':address,
-            'timeout':timeout,
-            'retry':retry,
-            'flag':flag,
-            'sort':sort
-            }
-    
+            has_param_ip=[]
+            type_list=[[]]
+            #对@protocol中所选中的ip按照参数进行分类
+            if ping_var:   
+                for key,value in ping_var.items():
+                    if not type_list[0]:
+                        type_list[0].append({'ip':key,'param':value})
+                        has_param_ip.append(key)
+                        continue
+                    append=True
+                    for type_p in type_list:
+                        if value == type_p[0]['param']:
+                            append=False
+                            type_p.append({'ip':key,'param':value})
+                            has_param_ip.append(key)
+                    if append:
+                        type_list.append([{'ip':key,'param':value}])
+                        has_param_ip.append(key)
+            #筛选出没有参数的ip(只针对@protocl所得到的ip),使用默认参数执行
+            no_has_param_ip=[ ip for ip in address if ip not in has_param_ip]
+            #没有参数的ip使用默认参数执行
+            if no_has_param_ip:
+                yield{
+                    'address':no_has_param_ip,
+                    'timeout':1.0,
+                    'retry':5,
+                    'flag':'openclose',
+                    'sort':'forward'
+                }
+            #有参数的ip,则按照参数进行分组后的列表进行分别执行
+            if type_list[0]:
+                for type_p in type_list:
+                    p=type_p[0]['param']
+                    ip=[]
+                    for each_dic in type_p:
+                        ip.append(each_dic['ip'])
+                    yield{
+                        'address':ip,
+                        'timeout':p.get('timeout',1.0),
+                        'retry':p.get('retry',5),
+                        'flag':p.get('flag','openclose'),
+                        'sort':p.get('sort','forward')
+                    }
+                
+
+        #判断是否是ping x.x.x.x [@ ...]句型,不是则终止
+        if 'address' in self.param : 
+            if len(self.param['address'])>65535:
+                raise Param_Error(
+            'cannot send icmp echo request to more \
+than 65535 addresses at the same time.')
+            else:
+                if 'param' not in self.param:self.param['param']={}
+                yield {
+                    'address':self.param.get('address'),
+                    'timeout':self.param['param'].get('timeout',1.0),
+                    'retry':self.param['param'].get('retry',5),
+                    'flag':self.param['param'].get('flag','openclose'),
+                    'sort':self.param['param'].get('sort','forward')
+                    }
+                
+
     def tcping_P(self):
         '''
         return : {'connect':[('address':str,'port':int),...],'timeout':int,flag:'str'}
         '''
-        print(f'protocol.py第105行{self.param}')
         #@协议中包含ping时的处理逻辑
         if 'ip' in self.param:
             port=[]
@@ -210,31 +250,38 @@ class Protocol_Excute:
     def tcping(self,param):
         #获取参数
         self.tcping_P=Param_Produce(param).tcping_P() 
-        connect=self.tcping_P['connect']
-        timeout=self.tcping_P['timeout']
-        flag=self.tcping_P['flag']
-        #执行
-        result=tcp_port_scan(connect,timeout)
-        if 'open' in flag:
-            print(result['open'] or 'there are no open ports')
-        if 'close' in flag:
-            print(result['close'] or 'there are no close ports')
+        for tcping_p in self.tcping_P:
+            connect=tcping_p['connect']
+            timeout=tcping_p['timeout']
+            flag=tcping_p['flag']
+            #执行
+            result=tcp_port_scan(connect,timeout)
+            if 'open' in flag:
+                print(result['open'] or 'there are no open ports')
+            if 'close' in flag:
+                print(result['close'] or 'there are no close ports')
   
     def ping(self,param):
+        #重置ping的历史记录
+        var.ping_open=None
+        var.ping_close=None  
+        
         #获取参数
         self.ping_P=Param_Produce(param).ping_P() 
-        address=self.ping_P['address']
-        timeout=self.ping_P['timeout']
-        retry=self.ping_P['retry']
-        flag=self.ping_P['flag']
-        sort=self.ping_P['sort']
         
-        #执行
-        result=ping_scan(address,timeout,retry,sort)
-        if 'open' in flag:
-            print(result['open'] or 'there are no open ip')
-        if 'close' in flag:
-            print(result['close'] or 'there are no close ip')
+        for p in self.ping_P:
+            address=p['address']
+            timeout=p['timeout']
+            retry=p['retry']
+            flag=p['flag']
+            sort=p['sort']
+        
+            #执行
+            result=ping_scan(address,timeout,retry,sort)
+            if 'open' in flag:
+                print(result['open'] or 'there are no open ip')
+            if 'close' in flag:
+                print(result['close'] or 'there are no close ip')
 
     def get_ssh_shell(self,param):
         #获取参数
@@ -248,8 +295,6 @@ class Protocol_Excute:
             for future in futures:
                 result=future.result()
                 self.ssh_shells.append(result)
-        #打印历史记录
-        # print(self.var.ssh_open)
         #状态切换
         self.state_change('send')
 

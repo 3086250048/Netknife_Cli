@@ -116,7 +116,10 @@ class Global_Var:
 
     @temp_ip_about_param.setter
     def temp_ip_about_param(self,value):
-        self._temp_ip_about_param[value['ip']]=value['param']
+        if value==None:
+            self._temp_ip_about_param={}
+        else:
+            self._temp_ip_about_param[value['ip']]=value['param']
     
     
     @temp_ip_list.setter
