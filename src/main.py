@@ -1,8 +1,8 @@
 ver='1.0'
 from ply.lex import lex
 from ply.yacc import yacc
-import lexyacc.init as init
-import lexyacc.send as send 
+import _ply.init_state as init
+import _ply.ssh_send_state as send 
 from global_var import Global_Var
 
 class Netknife:
@@ -35,17 +35,18 @@ class Netknife:
             else:
                 if input_raw:
                     _in=input_raw.rstrip()   
+                    print('start===============>')
                     self.parser.parse(_in)
-                            
+                    print('end=================>')
                     # try:
                     #     self.parser.parse(_in) 
                     # except Exception as e:
                     #     print(e)
-            
+                #send模式下回车
                 if self.var.current_state=='send' and not input_raw:
-                    self.parser.parse('enter')
-          
-         
+                    self.parser.parse('enter')    
+                
+                
         
     
 

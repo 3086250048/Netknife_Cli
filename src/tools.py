@@ -74,7 +74,24 @@ def extend_param_print(p):
 p :{'ip':['1.1.1.1',...],'key':['user'....]}
 '''
 def extend_param_get(p):
+    #get如果取的ip没有赋值过属性，或指定获取的属性没有被赋值过则置为None
     EXTEND_P=var.extend_param
+    for ip in p['ip']:
+        if ip not in list(EXTEND_P.keys()):
+            param={}
+            for k in p['key']:
+                param[k]=None
+            var.temp_ip_about_param={'ip':ip,'param':param}
+        else:
+            param=EXTEND_P[ip]
+            for k in p['key']:
+                if k not in list(param.keys()):
+                    param[k]=None
+            var.temp_ip_about_param={'ip':ip,'param':param}
+
+    #重新取赋值过None的extend_param
+    EXTEND_P=var.extend_param
+
     if 'key' not in p :
         for key,value in EXTEND_P.items():
             if key in p['ip']:
@@ -96,6 +113,36 @@ def extend_param_get(p):
 '''
 以下是protocol.py文件依赖函数
 '''
+
+def get_temp_ip_about_param(address,p_list):
+    # 重置临时ip相关参数字典
+    var.temp_ip_about_param=None
+    #给temp_ip_about_param赋值
+    extend_param_get({
+        'ip':address,
+        'key':p_list
+    })
+
+def classify_ip_param(protocol_var):
+    has_param_ip=[]
+    type_list=[[]]
+    #对@protocol中所选中的ip按照参数进行分类
+    if protocol_var:   
+        for key,value in protocol_var.items():
+            if not type_list[0]:
+                type_list[0].append({'ip':key,'param':value})
+                has_param_ip.append(key)
+                continue
+            append=True
+            for type_p in type_list:
+                if value == type_p[0]['param']:
+                    append=False
+                    type_p.append({'ip':key,'param':value})
+                    has_param_ip.append(key)
+            if append:
+                type_list.append([{'ip':key,'param':value}])
+                has_param_ip.append(key)
+    return type_list,has_param_ip
 
 def tcp_port_check(target,timeout):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -205,8 +252,10 @@ def init_exp__at(at_protocol):
         if _at_protocol=='ssh' or _at_protocol=='!ssh':
             result['ip_port_user_pwd']+=[p for p in inner_param_get(at_protocol)[_at_protocol] ]
     return result
-  
-        
+
+
+     
+
 if __name__ =='__main__':
     tcp_port_scan([['192.168.2.254','443']])
 

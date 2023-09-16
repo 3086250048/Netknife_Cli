@@ -29,12 +29,12 @@ def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
-def p_cmd_exp(p):
+def p_ssh_send_exp(p):
     '''
-        cmd_exp : CMD
+   ssh_send_exp : CMD
                 | CMD NULL
-                | cmd_exp CMD
-                | cmd_exp CMD NULL
+                | ssh_send_exp CMD
+                | ssh_send_exp CMD NULL
                 | AT INNER
     '''
 

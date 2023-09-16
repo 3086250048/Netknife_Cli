@@ -26,6 +26,9 @@ class Global_Var:
             self._temp_ip_about_param={}
             self._temp_ip_list=[]
             
+            #input函数状态下输入的字符
+            self._other_in=''
+
     @property
     def current_state(self):
         return self._current_state 
@@ -61,7 +64,9 @@ class Global_Var:
     @property
     def temp_ip_list(self):
         return self._temp_ip_list
-    
+    @property
+    def other_in(self):
+        return self._other_in
     
     @current_state.setter
     def current_state(self,value):
@@ -126,3 +131,6 @@ class Global_Var:
     def temp_ip_list(self,value):
         self._temp_ip_list=value
     
+    @other_in.setter
+    def other_in(self,value):
+        self._other_in=value
