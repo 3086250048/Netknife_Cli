@@ -1,4 +1,31 @@
+
+class Var_Error(ValueError):
+    def __init__(self,error) -> None:
+        super().__init__(self)
+        self.error=error
+    def __str__(self) -> str:
+        return self.error
+
+
 class Global_Var:
+    class_var_map={
+        'number_var':[
+            'timeout',
+            'retry',  
+        ],
+        'list_var':[
+            'port'
+        ],
+        'sn_var':[
+            'user',
+            'pwd'
+        ],
+        'str_var':[
+            'flag',
+            'sort',
+        ]
+    }
+  
     _exist=False
     def __new__(cls,*args, **kwds):
         if not hasattr(cls,'_instance'):
@@ -116,7 +143,23 @@ class Global_Var:
     def extend_param(self,value):
         if value['ip'] not in self._extend_param:
             self.extend_param[value['ip']]={}
-        self.extend_param[value['ip']][value['key']]=value['value']
+        param_key=value['key']
+        param_value=value['value']
+        class_var_map=Global_Var.class_var_map
+        if param_key in class_var_map['number_var']:
+            if isinstance(param_value,list):
+                param_value=param_value[0]
+            if isinstance(param_value,str):
+                param_value=Var_Error("number_ver Can't be str")
+        if param_key in class_var_map['str_var'] or param_value in class_var_map['sn_var']:
+            if isinstance(param_value,list):
+                param_value=str(param_value[0])
+            else:
+                param_value=str(param_value)
+        if param_key in class_var_map['list_var']:
+            if isinstance(param_value,str):
+                param_value=Var_Error("list_ver Can't be str")
+        self.extend_param[value['ip']][param_key]=param_value
     
 
     @temp_ip_about_param.setter

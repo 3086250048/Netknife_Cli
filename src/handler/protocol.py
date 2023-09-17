@@ -37,37 +37,23 @@ class Protocol_Excute:
             self._exist=True
             self.ssh_shells=[]
             self.var=Global_Var()
-            self.tcping_P=None
-            self.ping_P=None
-            self.excute_ssh_cmd_P=None
-            self.get_ssh_shell_P=None
+            self.tcping_param=None
+            self.ping_param=None
+            self.excute_ssh_cmd_param=None
+            self.get_ssh_shell_param=None
 
     def state_change(self,next_state):
         self.var.next_state=next_state
 
-    def tcping(self,param):
-        #获取参数
-        self.tcping_P=TCPING_Param_Product(param).tcping_P() 
-        for tcping_p in self.tcping_P:
-            connect=tcping_p['connect']
-            timeout=tcping_p['timeout']
-            flag=tcping_p['flag']
-            #执行
-            result=tcp_port_scan(connect,timeout)
-            if 'open' in flag:
-                print(result['open'] or 'there are no open ports')
-            if 'close' in flag:
-                print(result['close'] or 'there are no close ports')
-  
     def ping(self,param):
         #重置ping的历史记录
         var.ping_open=None
         var.ping_close=None  
         
         #获取参数
-        self.ping_P=PING_Param_Product(param).ping_P() 
+        self.ping_param=PING_Param_Product(param).result() 
         
-        for p in self.ping_P:
+        for p in self.ping_param:
             address=p['address']
             timeout=p['timeout']
             retry=p['retry']
@@ -81,6 +67,20 @@ class Protocol_Excute:
             if 'close' in flag:
                 print(result['close'] or 'there are no close ip')
 
+    def tcping(self,param):
+        #获取参数
+        self.tcping_param=TCPING_Param_Product(param).result() 
+        for tcping_p in self.tcping_param:
+            connect=tcping_p['connect']
+            timeout=tcping_p['timeout']
+            flag=tcping_p['flag']
+            #执行
+            result=tcp_port_scan(connect,timeout)
+            if 'open' in flag:
+                print(result['open'] or 'there are no open ports')
+            if 'close' in flag:
+                print(result['close'] or 'there are no close ports')
+    
     def get_ssh_shell(self,param):
         #获取参数
         self.get_ssh_shell_P=SSH_Param_Product(param).get_ssh_shell_P() 

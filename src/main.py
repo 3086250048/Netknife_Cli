@@ -34,10 +34,8 @@ class Netknife:
                 continue
             else:
                 if input_raw:
-                    _in=input_raw.rstrip()   
-                    print('start===============>')
+                    _in=input_raw.rstrip()      
                     self.parser.parse(_in)
-                    print('end=================>')
                     # try:
                     #     self.parser.parse(_in) 
                     # except Exception as e:

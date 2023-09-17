@@ -12,6 +12,14 @@ import time
 var=Global_Var()
 
 
+def sprint(str,line):
+    s=f'''
+{line}>>>>>>>>>>>{line}>>>>>>>>>>>>>{line}>>>>>>>>>>>{line}>>>>>>>>>>>>>{line}>>>>>>>>>>>>>{line}
+{str}
+{line}>>>>>>>>>>>{line}>>>>>>>>>>>>>{line}>>>>>>>>>>>{line}>>>>>>>>>>>>>{line}>>>>>>>>>>>>>{line}
+'''
+    print(s)
+
 class Tools_Error(ValueError):
     def __init__(self,error) -> None:
         super().__init__(self)

@@ -40,9 +40,19 @@ tokens=(
 'COMMA',
 'NULL',
 'AT',
-'SEMICOLON'
+'SEMICOLON',
+'QUOTATION',
+'NOTUSE'
 )
 
+
+
+def t_NOTUSE(t):
+    r'(\#|\$|\^|\&|\*|\(|\)|\-|\+|\-|\:|\[|\]|\{|\}|\?|\||\<|\>|\/|\`|\\)'
+    return t
+def t_QUOTATION(t):
+    r'(\'|")'
+    return t
 def t_SEMICOLON(t):
     r';'
     return t
@@ -118,6 +128,7 @@ def p_init_exp(p):
                 extend_param_print(set_dic)
         if p[1]['param_set']:
             for value in p[1]['param_set']:
+                print(value)
                 var.extend_param=value
         #这里return 防止只进行about set 操作时进行执行
         return
@@ -232,7 +243,8 @@ def p_at_param_exp(p):
     at_param_exp : INNER AT address_exp 
                  | AT address_exp 
                  | INNER AT address_exp EQ sn_exp 
-                 | INNER AT address_exp EQ NUMBER 
+                 | INNER AT address_exp EQ port_number_block_exp
+                 | INNER AT address_exp EQ special_info_exp
     '''  
     if len(p)==3:
         p[0]={
@@ -248,12 +260,51 @@ def p_at_param_exp(p):
             p[0]=p[3]['key'].append(p[1])
     if len(p)==6:
             p[0]=[]
+            print(p[5])
             for ip in p[3]:
                 p[0].append({
                     'ip':ip,
                     'key':p[1],
                     'value':p[5],
                 })
+
+def p_special_info_exp(p):
+    '''
+        special_info_exp : QUOTATION NOT
+                         | QUOTATION RANGE
+                         | QUOTATION NUMBER
+                         | QUOTATION WORD
+                         | QUOTATION AT
+                         | QUOTATION MOD
+                         | QUOTATION EQ
+                         | QUOTATION DOT
+                         | QUOTATION COMMA
+                         | QUOTATION SEMICOLON
+                         | QUOTATION NOTUSE
+                         | special_info_exp NOT
+                         | special_info_exp RANGE
+                         | special_info_exp NUMBER
+                         | special_info_exp WORD
+                         | special_info_exp AT
+                         | special_info_exp MOD
+                         | special_info_exp EQ
+                         | special_info_exp DOT
+                         | special_info_exp COMMA
+                         | special_info_exp SEMICOLON
+                         | special_info_exp NOTUSE
+                         | special_info_exp QUOTATION
+                         
+    '''
+    if len(p)==2:
+        p[0]=None
+    if len(p)==3:
+        if p[1]=="\'" or p[1]=='\"':
+            p[0]=f'{p[2]}'
+        else:
+            if p[2]=="\'" or p[2]=='\"':
+                p[0]=p[1]
+            else:
+                p[0]=f'{p[1]}{p[2]}'
 
 
 def p_address_exp(p):
@@ -299,7 +350,7 @@ def p_port_number_block_exp(p):
     leg_number=[i for i in range(1,65536)]
 
     if len(p)==2:
-        p[0]=[i for i in p[1] if i >=1 and i<=65535]
+            p[0]=[i for i in p[1] if i >=1 and i<=65535]
     if len(p)==3:
         gen_number=[i for i in p[2] if i >=1 and i<=65535]
         p[0]=[i for i in leg_number if i not in gen_number]
@@ -332,9 +383,9 @@ def p_ipv4_number_block_exp(p):
 def p_sn_exp(p):
     '''
         sn_exp : WORD
-            | NUMBER WORD
-            | sn_exp WORD
-            | sn_exp NUMBER
+               | NUMBER WORD
+               | sn_exp WORD
+               | sn_exp NUMBER
     '''
     if len(p)==2:
         p[0]=f'{p[1]}'
@@ -365,15 +416,8 @@ def p_number_block_exp(p):
     p[0]=[]
     if len(p)==2:
         p[0]=p[1]
-    if len(p)==4:
+    else:
         p[0]=list(set(p[1]+p[3]))
-    if len(p)>4:
-        i=0 
-
-        while i<len(p):
-            if i%2!=0:
-                p[0]=list(set(p[1]+p[3]))
-            i+=1 
 
 def p_number_exp(p):
     '''
@@ -397,9 +441,11 @@ def p_param_exp(p):
                 | INNER EQ address_exp
                 | INNER EQ NULL
                 | INNER EQ port_number_block_exp
+                | INNER EQ special_info_exp
                 | INNER EQ sn_exp NULL param_exp
                 | INNER EQ address_exp  NULL param_exp
                 | INNER EQ port_number_block_exp  NULL param_exp
+                | INNER EQ special_info_exp NULL param_exp
                 
     '''
     p[0]={}
