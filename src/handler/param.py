@@ -65,7 +65,9 @@ class PING_Param_Product(Param_Produce):
     '''
     def __init__(self, param) -> None:
         super().__init__(param)
-        self.address=[]
+        self.at_exp_address=[]
+        self.address_exp_address=[]
+
         self.has_address_exp=False
         self.has_at_exp=False
         #
@@ -75,7 +77,7 @@ class PING_Param_Product(Param_Produce):
         self.retry=5
         self.flag='openclose'
         self.sort='forward'
-    
+        self.p_list=['timeout','retry','flag','sort']
     def completion_is_none_param(self):
         for ip,param in self.ping_var.items():
             for k,v in param.items():
@@ -97,10 +99,10 @@ class PING_Param_Product(Param_Produce):
                 or self.param['ip_port_user_pwd']:
             #存在 protocol [adress_exp] @protocol ....句子
                 self.has_at_exp=True
-                self.address=[ip for ip in self.param['ip']]+\
+                self.at_exp_address=[ip for ip in self.param['ip']]+\
                 [connect[0] for connect in self.param['ip_port']]+\
                 [shell[0] for shell in self.param['ip_port_user_pwd']]
-                if len(self.address)>65535:
+                if len(self.at_exp_address)>65535:
                     raise Param_Error(
                             'cannot send icmp echo request to more \
                     than 65535 addresses at the same time.')
@@ -108,8 +110,8 @@ class PING_Param_Product(Param_Produce):
         if 'address' in self.param : 
             #存在protocol address_exp [@protocol]....句子
             self.has_address_exp=True
-            self.address=self.param['address']
-            if len(self.address)>65535:
+            self.address_exp_address=self.param['address']
+            if len(self.address_exp_address)>65535:
                 raise Param_Error(
             'cannot send icmp echo request to more \
 than 65535 addresses at the same time.')
@@ -117,8 +119,7 @@ than 65535 addresses at the same time.')
     def at_exp(self):
         if self.has_at_exp:
             self.has_at_exp=False
-            p_list=['timeout','retry','flag','sort']
-            get_temp_ip_about_param(self.address,p_list)
+            get_temp_ip_about_param(self.at_exp_address,self.p_list)
             '''extend_param_get函数只是给temp_ip_about_param全局变量赋值，
                 所以要从temp_ip_about_param中取值
             '''
@@ -128,7 +129,7 @@ than 65535 addresses at the same time.')
             #将相同ping参数的IP归类到一个列表中,并提取有参数的IP   
             type_list,has_param_ip=classify_ip_param(self.ping_var)
             #筛选出没有参数的ip(只针对@protocl所得到的ip),使用默认参数执行
-            no_has_param_ip=[ ip for ip in self.address if ip not in has_param_ip]
+            no_has_param_ip=[ ip for ip in self.at_exp_address if ip not in has_param_ip]
             #没有参数的ip使用默认参数执行
             if no_has_param_ip:
                 yield{
@@ -156,13 +157,21 @@ than 65535 addresses at the same time.')
     def address_exp(self):
         if self.has_address_exp:
             self.has_address_exp=False
+            #next start this
+            get_temp_ip_about_param(self.at_exp_address,self.p_list)
+            '''extend_param_get函数只是给temp_ip_about_param全局变量赋值，
+                所以要从temp_ip_about_param中取值
+            '''
+            self.ping_var=var.temp_ip_about_param
+            #将ping参数为none的设置为默认值
+            self.completion_is_none_param()
+            # next start this
             param=self.param.get('param',{
                 'timeout':self.timeout,
                 'retry':self.retry,
                 'flag':self.flag,
                 'sort':self.sort
             })
-            sprint(self.address,'149行')
             return {
                 'address':self.param.get('address'),
                 'timeout':param.get('timeout',self.timeout),
@@ -175,12 +184,10 @@ than 65535 addresses at the same time.')
         self.check()
         ping_p=[]
         result=self.address_exp()
-        sprint(result,'第162行')
         if result:
             ping_p.append(result)
         for p in self.at_exp():
             ping_p.append(p)
-        print(ping_p)
         return ping_p
         
 class TCPING_Param_Product(Param_Produce): 
@@ -205,25 +212,16 @@ class TCPING_Param_Product(Param_Produce):
         self.tcping_var=None
         self.address=[]
         self.ip_port_dict={}
-        self.get_param=[]
+        self.get_param=['port','timeout','flag']
         #默认参数
         self.timeout=1
         self.flag='openclose'
     
     def completion_lack_port_ip(self):
         #缺少port的ip列表
-        lack_port_ip=[]    
-        while True:
-            for k,v in self.tcping_var.items():
-                if 'port' not in v or not v['port']:
-                    lack_port_ip.append({k:v})
-            print(f'lack_port_ip=>{lack_port_ip}')
-           
-            #当没有缺少port参数的ip时则获取最新的tcping_var后退出
-            if not lack_port_ip :
-                get_temp_ip_about_param(self.address,self.get_param)
-                self.tcping_var=var.temp_ip_about_param
-                break
+        lack_port_ip=[{k:v} for k,v in self.tcping_var.items() if not v['port']]
+        print(f'lack_port_ip=>{lack_port_ip}')
+        while lack_port_ip:
             #给other_in赋值然后进行解析，从而间接给缺少port的ip赋值
             var.other_in=input('Enter an expression to assign:')
             if var.other_in:
@@ -234,9 +232,7 @@ class TCPING_Param_Product(Param_Produce):
             #重新获取赋值后的ip_param
             get_temp_ip_about_param(self.address,self.get_param)
             self.tcping_var=var.temp_ip_about_param
-            print(f'203{self.tcping_var}')
-            #重置lack
-            lack_port_ip=[] 
+            lack_port_ip=[k for k,v in self.tcping_var.items() if not v['port']]
 
     def completion_is_none_param(self):
         for ip,param in self.tcping_var.items():
@@ -248,48 +244,28 @@ class TCPING_Param_Product(Param_Produce):
                         self.tcping_var[ip][k]=self.timeout
                     if k=='flag':
                         self.tcping_var[ip][k]=self.flag
-
-    
+        
     def ready(self):
-        print(f'219:{self.param}')
         if 'address' in self.param:
             self.has_address_exp=True
-            if 'port' not in self.param:      
+            if 'port' not in self.param:    
                 #将包含address_exp的flag置为true
                 self.has_lack_port_address_exp=True
-                self.address=self.param['address']
-                self.get_param=['port','timeout','flag']
         #判断是否有@语法
         if 'ip' in self.param:
             #判断是否@ping
             if  self.param['ip']:
                 self.has_at_ping_exp=True
-                self.address=self.param['ip']
-                self.get_param=['port','timeout','flag']
             #判断是否@tcping
-            if self.param['ip_port']:        
-                self.has_at_tcping_exp=True
-                self.get_param=['timeout','flag']        
-                for connect in self.param['ip_port']:
-                    self.address.append(connect[0])
-                    self.ip_port_dict[connect[0]]=connect[1]
+            if self.param['ip_port']:   
+                self.has_at_tcping_exp=True      
             #判断是否@ssh
             if self.param['ip_port_user_pwd']:
                 self.has_at_ssh_exp=True
-                self.get_param=['timeout','flag']
-                for shell in self.param['ip_port_user_pwd']:
-                    self.address.append(shell[0])
-                    self.ip_port_dict[shell[0]]=shell[1]
-        
-        get_temp_ip_about_param(self.address,self.get_param)
-        self.tcping_var=var.temp_ip_about_param
-        
-            
+                  
     def get(self):
-        address=[]
         for ip_param_type in self.type_list:
-            for ip_param in ip_param_type:
-                address+=[ip_param['ip']]
+            address=[ip_param['ip'] for ip_param in ip_param_type]
             yield {
                 'connect':list(product(address,ip_param_type[0]['param']['port'])),
                 'timeout':ip_param_type[0]['param']['timeout'],
@@ -298,25 +274,27 @@ class TCPING_Param_Product(Param_Produce):
             address=[]
 
     def address_exp(self):
-       
         if self.has_address_exp:
+            self.has_address_exp=False
             if self.has_lack_port_address_exp:
                 self.has_lack_port_address_exp=False
-                self.has_address_exp=False
+                self.address=[]  
+                self.address=self.param['address']
+                #获取关于缺少port信息的address_exp的ip地址对应的参数
+                get_temp_ip_about_param(self.address,self.get_param)
+                self.tcping_var=var.temp_ip_about_param
                 #使ip参数中必定有port信息
                 self.completion_lack_port_ip()
-                sprint(self.tcping_var,'276行')
+              
                 #使ip参数中为None的参数设置为默认值
                 self.completion_is_none_param()
-                sprint(self.tcping_var,'279行')
+         
                 #对相同参数的ip分类到各个类型列表
                 self.type_list,has_param_ip=classify_ip_param(self.tcping_var)
-                sprint(self.type_list,'282行')
                 #丢出结果
                 for tcping_param in self.get():
                     yield tcping_param
             else:
-                self.has_address_exp=False
                 #有port参数
                 param=self.param.get('param',{
                     'timeout':self.timeout,
@@ -327,14 +305,16 @@ class TCPING_Param_Product(Param_Produce):
                     'timeout':param.get('timeout',self.timeout),
                     'flag':param.get('flag',self.flag)
                 }
-        
-
-          
+                  
     def at_ping_exp(self):
      
         if self.has_at_ping_exp:
-            print('at_ping了')
             self.has_at_ping_exp=False
+            self.address=[]
+            self.address=self.param['ip']
+            #获取关于ping历史记录的ip地址对应的参数
+            get_temp_ip_about_param(self.address,self.get_param)
+            self.tcping_var=var.temp_ip_about_param
             #使ip参数中必定有port信息
             self.completion_lack_port_ip()
             #使ip参数中为None的参数设置为默认值
@@ -349,17 +329,44 @@ class TCPING_Param_Product(Param_Produce):
         
         if self.has_at_tcping_exp:
             self.has_at_tcping_exp=False
+            self.address=[]
+            #获取ssh历史记录中的地址
+            self.address=[connect[0] for connect in self.param['ip_port']]
+            #获取ssh历史记录中的ip地址和port对应的字典
+            for connect in self.param['ip_port']:
+                if connect[0] not in self.ip_port_dict:
+                    self.ip_port_dict[connect[0]]=[]
+                self.ip_port_dict[connect[0]].append(connect[1])
+       
+            #获取关于tcping历史记录的ip地址对应的参数
+            get_temp_ip_about_param(self.address,self.get_param)
+            self.tcping_var=var.temp_ip_about_param
+        
             #使ip参数中为None的参数设置为默认值
             self.completion_is_none_param()
+       
             #对相同参数的ip分类到各个类型列表
             self.type_list,has_param_ip=classify_ip_param(self.tcping_var)
+         
             #丢出结果
             for tcping_param in self.get():
                 yield tcping_param
+    
     def at_ssh_exp(self):
-        
         if self.has_at_ssh_exp:
             self.has_at_ssh_exp=False
+            self.address=[]
+            #获取ssh历史记录中的地址
+            self.address=[shell[0] for shell in self.param['ip_port_user_pwd']]
+            #获取ssh历史记录中的ip地址和port对应的字典
+              #获取ssh历史记录中的ip地址和port对应的字典
+            for shell in self.param['ip_port_user_port']:
+                if shell[0] not in self.ip_port_dict:
+                    self.ip_port_dict[shell[0]]=[]
+                self.ip_port_dict[shell[0]].append(shell[1])
+            #获取关于ssh历史记录的ip地址对应的参数
+            get_temp_ip_about_param(self.address,self.get_param)
+            self.tcping_var=var.temp_ip_about_param
             #使ip参数中为None的参数设置为默认值
             self.completion_is_none_param()
             #对相同参数的ip分类到各个类型列表

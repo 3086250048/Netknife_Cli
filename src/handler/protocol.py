@@ -3,6 +3,7 @@ from tools import (
     ping_scan,
     connect_ssh_shell,
     send_ssh_command,
+    sprint
 
 )
 from handler.param import(
@@ -52,7 +53,6 @@ class Protocol_Excute:
         
         #获取参数
         self.ping_param=PING_Param_Product(param).result() 
-        
         for p in self.ping_param:
             address=p['address']
             timeout=p['timeout']
@@ -68,6 +68,9 @@ class Protocol_Excute:
                 print(result['close'] or 'there are no close ip')
 
     def tcping(self,param):
+        #重置tcping的历史记录
+        var.tcping_open=None
+        var.tcping_close=None
         #获取参数
         self.tcping_param=TCPING_Param_Product(param).result() 
         for tcping_p in self.tcping_param:

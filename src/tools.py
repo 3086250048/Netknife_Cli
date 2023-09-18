@@ -164,10 +164,7 @@ def tcp_port_scan(targets,timeout=1):
     close_str=''
     with ThreadPoolExecutor(max_workers=len(targets)) as executor:
         futures = [executor.submit(tcp_port_check,target,timeout) for target in targets]
-        #重置tcping的历史记录
-        var.tcping_open=None
-        var.tcping_close=None
-
+        
         for future in futures:
             result= future.result()
             if result[0] == 0:
@@ -183,7 +180,6 @@ def tcp_port_scan(targets,timeout=1):
 
 #['ip'...]
 def ping_scan(address,timeout,retry,sort):
-        
         result={
         'open':'',
         'close':''
