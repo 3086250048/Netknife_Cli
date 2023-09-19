@@ -7,46 +7,44 @@ from tools import (
 
 )
 from handler.param import(
-    PING_Param_Product,
-    SSH_Param_Product,
-    TCPING_Param_Product
+    Ping_Param_Product,
+    Ssh_Param_Product,
+    Tcping_Param_Product
 )
 from concurrent.futures import ThreadPoolExecutor
-from global_var import Global_Var
+from handler.var import Global_Var
+import netmiko
 
-var=Global_Var()
 
 
-class Protocol_Excute:
-    '''
-    Protocol_Excute:
-        ping:探测存活IP
-        tcping:探测开放端口
-        get_ssh_shell:建立一个ssh隧道
-        excute_ssh_cmd:向ssh隧道发送命令
+class Protocol_Operate:
+    def __init__(self,param):
+        """
+            Protocol Operate 用于构建一个和协议相关的操作，比如参数的准备、
+            执行,输出控制,结果返回。
+        """
+        self.var=Global_Var()
+        self.param=param
+        self.output=''
+        self.result=None
+        """
+            :param var:全局变量对象,单例对象。
+            :param param:从ply模块传入的变量。
+            :param output:输出到cli界面上的字符。
+            :param result:协议操作后返回的结果。
+        """
+    def ready(self):
+        """准备执行前的操作"""
     
-    此类主要负责命令执行和命令行上下文管理
-    '''
-    _exist=False
-    def __new__(cls,*args, **kwds):
-        if not hasattr(cls,'_instance'):
-            cls._instance=super().__new__(cls,*args,**kwds)
-        return cls._instance   
-   
-    def __init__(self):  
-        if self._exist==False:
-            self._exist=True
-            self.ssh_shells=[]
-            self.var=Global_Var()
-            self.tcping_param=None
-            self.ping_param=None
-            self.excute_ssh_cmd_param=None
-            self.get_ssh_shell_param=None
+    def excute(self):
+        """执行"""
+    
+    def print_result(self):
+        """打印执行结果"""
 
-    def state_change(self,next_state):
-        self.var.next_state=next_state
-
-    def ping(self,param):
+    def get_result(self,param):
+        """获取输出结果"""
+    
         #重置ping的历史记录
         var.ping_open=None
         var.ping_close=None  

@@ -1,6 +1,7 @@
-def test():
-    for i in range(1,10):
-        yield i
+from sys import _getframe as fun_name
 
-for i in test():
-    print(i)
+def test():
+    fun_n=fun_name().f_code.co_name
+    return fun_n
+
+print(test())

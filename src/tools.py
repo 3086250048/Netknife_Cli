@@ -2,7 +2,7 @@ import socket
 from concurrent.futures import ThreadPoolExecutor
 from multiping import multi_ping
 import socket
-from global_var import Global_Var 
+from handler.var import Global_Var 
 import paramiko
 import time
 

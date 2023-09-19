@@ -3,7 +3,7 @@ from ply.yacc import yacc
 from itertools import product
 from socket import gethostbyname
 from handler.protocol import Protocol_Excute
-from global_var import Global_Var 
+from handler.var import Global_Var 
 from tools import (
 inner_param_print,
 inner_param_get,

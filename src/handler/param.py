@@ -4,11 +4,11 @@ from tools import (
     sprint
 )
 from itertools import product
-from global_var import Global_Var
+from handler.var import Global_Var
 from ply.lex import lex
 from ply.yacc import yacc
 import _ply.init_state as init
-var=Global_Var()
+
 
 
 class Param_Error(ValueError):
@@ -18,15 +18,15 @@ class Param_Error(ValueError):
     def __str__(self) -> str:
         return self.error
 
-
 class Param_Produce:
     def __init__(self,param) -> None:
         self.param=param
         #这里需要ply是因为缺少参数时input输入解析需要。
         self.lexer=lex(module=init)
         self.parser=yacc(module=init,debug=True)
+        self.var=Global_Var()
 
-class SSH_Param_Product(Param_Produce):
+class Ssh_Param_Product(Param_Produce):
     
     def get_ssh_shell_P(self):
         '''
@@ -53,9 +53,9 @@ class SSH_Param_Product(Param_Produce):
     def excute_ssh_cmd_P(self):
         return self.param
    
-class PING_Param_Product(Param_Produce):
+class Ping_Param_Product(Param_Produce):
     '''
-        return:{
+     return:{
             address:[address:str],
             timeout:float,
             retry:int,
@@ -123,7 +123,7 @@ than 65535 addresses at the same time.')
             '''extend_param_get函数只是给temp_ip_about_param全局变量赋值，
                 所以要从temp_ip_about_param中取值
             '''
-            self.ping_var=var.temp_ip_about_param
+            self.ping_var=self.var.temp_ip_about_param
             #将ping参数为none的设置为默认值
             self.completion_is_none_param()
             #将相同ping参数的IP归类到一个列表中,并提取有参数的IP   
@@ -162,7 +162,7 @@ than 65535 addresses at the same time.')
             '''extend_param_get函数只是给temp_ip_about_param全局变量赋值，
                 所以要从temp_ip_about_param中取值
             '''
-            self.ping_var=var.temp_ip_about_param
+            self.ping_var=self.var.temp_ip_about_param
             #将ping参数为none的设置为默认值
             self.completion_is_none_param()
             # next start this
@@ -190,7 +190,7 @@ than 65535 addresses at the same time.')
             ping_p.append(p)
         return ping_p
         
-class TCPING_Param_Product(Param_Produce): 
+class Tcping_Param_Product(Param_Produce): 
     '''
         return : {
             'connect':[('address':str,'port':int),...],
@@ -223,15 +223,15 @@ class TCPING_Param_Product(Param_Produce):
         print(f'lack_port_ip=>{lack_port_ip}')
         while lack_port_ip:
             #给other_in赋值然后进行解析，从而间接给缺少port的ip赋值
-            var.other_in=input('Enter an expression to assign:')
-            if var.other_in:
-                if not var.other_in:continue
-                _in=var.other_in.rstrip()   
+            self.var.other_in=input('Enter an expression to assign:')
+            if self.var.other_in:
+                if not self.var.other_in:continue
+                _in=self.var.other_in.rstrip()   
                 self.parser.parse(_in)
             
             #重新获取赋值后的ip_param
             get_temp_ip_about_param(self.address,self.get_param)
-            self.tcping_var=var.temp_ip_about_param
+            self.tcping_var=self.var.temp_ip_about_param
             lack_port_ip=[k for k,v in self.tcping_var.items() if not v['port']]
 
     def completion_is_none_param(self):
@@ -282,7 +282,7 @@ class TCPING_Param_Product(Param_Produce):
                 self.address=self.param['address']
                 #获取关于缺少port信息的address_exp的ip地址对应的参数
                 get_temp_ip_about_param(self.address,self.get_param)
-                self.tcping_var=var.temp_ip_about_param
+                self.tcping_var=self.var.temp_ip_about_param
                 #使ip参数中必定有port信息
                 self.completion_lack_port_ip()
               
@@ -314,7 +314,7 @@ class TCPING_Param_Product(Param_Produce):
             self.address=self.param['ip']
             #获取关于ping历史记录的ip地址对应的参数
             get_temp_ip_about_param(self.address,self.get_param)
-            self.tcping_var=var.temp_ip_about_param
+            self.tcping_var=self.var.temp_ip_about_param
             #使ip参数中必定有port信息
             self.completion_lack_port_ip()
             #使ip参数中为None的参数设置为默认值
@@ -340,7 +340,7 @@ class TCPING_Param_Product(Param_Produce):
        
             #获取关于tcping历史记录的ip地址对应的参数
             get_temp_ip_about_param(self.address,self.get_param)
-            self.tcping_var=var.temp_ip_about_param
+            self.tcping_var=self.var.temp_ip_about_param
         
             #使ip参数中为None的参数设置为默认值
             self.completion_is_none_param()
@@ -366,7 +366,7 @@ class TCPING_Param_Product(Param_Produce):
                 self.ip_port_dict[shell[0]].append(shell[1])
             #获取关于ssh历史记录的ip地址对应的参数
             get_temp_ip_about_param(self.address,self.get_param)
-            self.tcping_var=var.temp_ip_about_param
+            self.tcping_var=self.var.temp_ip_about_param
             #使ip参数中为None的参数设置为默认值
             self.completion_is_none_param()
             #对相同参数的ip分类到各个类型列表
@@ -389,7 +389,6 @@ class TCPING_Param_Product(Param_Produce):
             for result in itr():
                 print(result)
                 result_list.append(result)
-        print(f'{result_list}<<<<<<<<<<<<<<<<<<')
         return result_list
         
 

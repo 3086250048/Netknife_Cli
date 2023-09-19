@@ -3,7 +3,7 @@ from ply.lex import lex
 from ply.yacc import yacc
 import _ply.init_state as init
 import _ply.ssh_send_state as send 
-from global_var import Global_Var
+from handler.var import Global_Var
 
 class Netknife:
     def __init__(self) -> None:
