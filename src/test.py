@@ -1,7 +1,16 @@
-from sys import _getframe as fun_name
+class test:
+    def __init__(self) -> None:
+        self._a=None
+        self._b=None
 
-def test():
-    fun_n=fun_name().f_code.co_name
-    return fun_n
+    @property
+    def a(self):
+        return self._a
 
-print(test())
+    @a.setter
+    def a(self,value):
+        if not value :print('error')
+        self._a=value
+
+t=test()
+print(setattr(t,'a',''))
