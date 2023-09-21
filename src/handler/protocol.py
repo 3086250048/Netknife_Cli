@@ -13,26 +13,26 @@ from handler.param import(
 )
 from concurrent.futures import ThreadPoolExecutor
 from handler.var import Global_Var
+
 import netmiko
 
 
-
 class Protocol_Operate:
+    """
+        Protocol Operate 用于构建一个和协议相关的操作，比如参数的准备、
+        执行,输出控制,结果返回。
+
+        :param var:全局变量对象,单例对象。
+        :param param:从ply模块传入的变量。
+        :param output:输出到cli界面上的字符。
+        :param result:协议操作后返回的结果。
+    """
     def __init__(self,param):
-        """
-            Protocol Operate 用于构建一个和协议相关的操作，比如参数的准备、
-            执行,输出控制,结果返回。
-        """
-        self.var=Global_Var()
         self.param=param
         self.output=''
         self.result=None
-        """
-            :param var:全局变量对象,单例对象。
-            :param param:从ply模块传入的变量。
-            :param output:输出到cli界面上的字符。
-            :param result:协议操作后返回的结果。
-        """
+    
+    
     def ready(self):
         """准备执行前的操作"""
     
@@ -115,6 +115,7 @@ class Protocol_Operate:
         pass
     def serial(self):
         pass
+    
     
  
 if __name__ =='__main__':

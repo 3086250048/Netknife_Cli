@@ -1,16 +1,9 @@
-class test:
-    def __init__(self) -> None:
-        self._a=None
-        self._b=None
+from handler.var import State_Var,String_Var,Number_Var
+from netknife_ply import init_state as init
+from netknife_ply import ssh_send_state as ssh_send
 
-    @property
-    def a(self):
-        return self._a
 
-    @a.setter
-    def a(self,value):
-        if not value :print('error')
-        self._a=value
+number_var=Number_Var()
+str_var=String_Var()
 
-t=test()
-print(setattr(t,'a',''))
+str_var.address=1

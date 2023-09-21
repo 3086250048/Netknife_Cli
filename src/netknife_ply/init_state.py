@@ -2,8 +2,16 @@ from ply.lex import lex
 from ply.yacc import yacc
 from itertools import product
 from socket import gethostbyname
-from handler.protocol import Protocol_Excute
-from handler.var import Global_Var 
+from handler.protocol import(
+    Protocol_Operate
+)
+from handler.var import (
+    String_Var,
+    Number_Var,
+    List_Var,
+    Inner_Var,
+    Extend_Var
+)
 from tools import (
 inner_param_print,
 inner_param_get,
@@ -15,13 +23,13 @@ from tools import  (
 )
 
 
-var=Global_Var()
-handler=Protocol_Excute()
-MAP={
-    'ssh':handler.get_ssh_shell,
-    'ping':handler.ping,
-    'tcping':handler.tcping,
-}
+# var=Global_Var()
+# handler=Protocol_Excute()
+# MAP={
+#     'ssh':handler.get_ssh_shell,
+#     'ping':handler.ping,
+#     'tcping':handler.tcping,
+# }
 
 PARAM_TABLE={
     'raw_number_to_domain_block_exp':None

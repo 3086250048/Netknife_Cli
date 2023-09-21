@@ -1,93 +1,153 @@
-import _ply.init_state as init
-import _ply.ssh_send_state as ssh_send
-from error import Var_Error as err
+from handler.error import Var_Error as err
 from sys import _getframe as fun_name
-from typing import Any,List,Dict,Tuple,NewType
+from typing import Any,List,Dict,Tuple,NewType,Type
+import operator
+
 
 class Common_Var:
-    """一般变量"""
-
-    """
-        参数错误检查函数
-    """
-    def set_err_none(self,param):
-        raise err(param,'set','none')
+    #手动报错
+   
+    """get的值为none的错误"""
     def get_err_none(self,param):
         raise err(param,'get','none')
-    def set_err_class(self,param):
-        raise err(param,'set','class')
-    def set_err_notin(self,param):
-        raise err(param,'set','notin')
-    def set_err_eq(self,param):
-        raise err(param,'set','eq')
-    def set_err_range(self,param):
-        raise err(param,'set','range')
-    def append_err_none(self,param):
-        raise err(param,'append','none')
-    def append_err_class(self,param):
-        raise err(param,'append','class')
-    def append_err_notin(self,param):
-        raise err(param,'append','notin')
+    """get的值不在给定的可能值内的错误"""
     def get_err_notin(self,param):
         raise err(param,'get','notin')
-  
-    """
-        参数错误检查装饰器
-    """
-    def check_get_none_err(func):
-        """
-            检查get的值为none的错误
-        """
-        def wapper(self):
-            if  not getattr(self,f'_{func.__name__}') :raise err(func.__name__,'get','none')
-            func(self)
-        return wapper
     
-    def check_set_none_err(func):
-        """
-            检查set的值为none的错误
-        """
-        def wapper(self):
-            if not getattr(self,f'_{func.__name__}'):raise err(func.__name__,'set','none')
-            func(self)
-        return wapper
+    """set的值为none错误"""
+    def set_err_none(self,param):
+        raise err(param,'set','none')
+    """set的值类型错误"""
+    def set_err_class(self,param):
+        raise err(param,'set','class')
+    """set的值不在给定的可能值内的错误"""
+    def set_err_notin(self,param):
+        raise err(param,'set','notin')
+    """设定的值与某个值相等的错误"""
+    def set_err_eq(self,param):
+        raise err(param,'set','eq')
+    """设定的值不在某个范围内的错误"""
+    def set_err_range(self,param):
+        raise err(param,'set','range')
     
-    def check_set_class_err(*param):
+    """append的值为none的错误"""
+    def append_err_none(self,param):
+        raise err(param,'append','none')
+    """append的值类型错误"""
+    def append_err_class(self,param):
+        raise err(param,'append','class')
+    """append的值不在给定的可能值内的错误"""
+    def append_err_notin(self,param):
+        raise err(param,'append','notin')
+   
+    #装饰器自动报错
+    """ 检查get时的错误"""
+    def check_get_err(
+            check_none:bool=True,
+            check_notin_attr:str=''
+            ):
         """
-            检查set的值类型上的错误
+        check_get_err  通过键入参数自动的检查被装饰的实例属性进行get时是否合规   
+        
+        :param check_none:get的参数为none时是否报错
+        :param check_notin_attr:判断set的值是否在实例的属性中出现(if a not in obj.attr 
+        这种形式的判断),没有出现报错
         """
-        def wapper_outer(func):
+        def outer_wapper(func):
             def wapper(self):
-                if len(param)==1:
-                    if not isinstance(getattr(self,f'_{func.__name__}'),param):raise err(func.__name__,'set','class')
-                else:
+                v=getattr(self,f'_{func.__name__}')
+                """判断get的值是否为none"""
+                if check_none:
+                    if  not v :
+                        raise err(func.__name__,'get','none')
+                """判断set的值是否在可能的值内(可能的值指可迭代元素)"""
+                if check_notin_attr:
+                    correct_values=getattr(self,check_notin_attr)
+                    if v not in correct_values:
+                        raise err(func.__name__,'get','notin')
+                func()
+            return wapper
+        return outer_wapper
+    
+    """检查set时的错误"""
+    def check_set_error(
+            check_none:bool=True,
+            check_class:List[Type]=[],
+            check_notin_attr:str='',
+            check_eq_attr:str='',
+            check_ge:Any=None,
+            check_gt:Any=None,
+            check_le:Any=None,
+            check_lt:Any=None
+            ):
+        """
+        check_set_error 通过键入参数自动的检查被装饰的实例属性进行set时是否合规    
+        
+        :param check_none:set的参数为none时是否报错
+        :param check_class:判断set的参数是否在check_class列表内,不在时报错
+        :param check_notin_attr:判断set的值是否在实例的属性中出现,(if a not in obj.attr 
+        ),没有出现报错。
+        :param check_eq_attr:判断set的值是否与实例的属性相等(if a == obj.attr),相等时报错
+        :param check_ge | check_gt | check_le | check_lt:判断set的值是否在
+        规定的范围内,check_ge和check_le的优先级高于check_gt和check_lt,如果只
+        给check_ge赋值,那么只要大于check_ge就不会报错,以此类推。
+        """
+        def outer_wapper(func):
+            def wapper(self,*args,**kwargs):
+                init_v=getattr(self,f'_{func.__name__}')
+                func(self,*args,**kwargs)
+                excute_after_v=getattr(self,f'_{func.__name__}')
+                """判断set的值是否为none"""
+                if check_none:
+                    setattr(self,f'_{func.__name__}',init_v)
+                    if not excute_after_v:raise err(func.__name__,'set','none')
+                """判断set的值class是否正确"""
+                if check_class:
                     flag=False
-                    for cls in param:
-                        if  isinstance(getattr(self,f'_{func.__name__}'),cls):flag=True
-                    if not flag:raise err(func.__name__,'set','class')
+                    for cls in check_class:
+                        if  isinstance(excute_after_v,cls):flag=True
+                    if not flag:
+                        setattr(self,f'_{func.__name__}',init_v)
+                        raise err(func.__name__,'set','class')
+                """判断set的值是否在可能的值内(可能的值指可迭代元素)"""
+                if check_notin_attr:
+                        if excute_after_v not in getattr(self,check_notin_attr):
+                            setattr(self,f'_{func.__name__}',init_v)
+                            raise err(func.__name__,'set','notin')
+                """判断set的值是否和实例上的属性冲突"""
+                if check_eq_attr:
+                    if excute_after_v == getattr(self,check_eq_attr):
+                        setattr(self,f'_{func.__name__}',init_v)
+                        raise err(func.__name__,'set','eq')
+                """判断set的值是否在规定的范围内"""
+                if  check_ge or check_gt or check_le or check_lt :
+                    left,right=None,None
+                    if check_ge:
+                        left=operator.__ge__
+                        left_value=check_ge
+                    elif check_gt:
+                        left=operator.__gt__
+                        left_value=check_gt
+                    if check_le:
+                        right=operator.__le__
+                        right_value=check_le
+                    elif check_lt:
+                        right=operator.__lt__
+                        right_value=check_lt
+                    result_list=[]
+                    attr_value=getattr(self,f'_{func.__name__}')
+                    if left:
+                        result_list.append(left(attr_value,left_value))
+                    if right:
+                        result_list.append(right(attr_value,right_value))
+                    
+                    for result in result_list:
+                        if not result :
+                            setattr(self,f'_{func.__name__}',init_v)
+                            raise err(func.__name__,'set','range')
             return wapper
-        return wapper_outer
+        return outer_wapper
     
-    def check_set_notin_err(param):
-        """
-            检查set的值是否超出预期的范围
-        """
-        def wapper_outer(func):
-            def wapper(self):
-                if getattr(self,f'_{func.__name__}') not in getattr(self,param):raise err(func.__name__,'set','notin')
-            return wapper
-        return wapper_outer
-    
-    def check_set_eq_err(param):
-        """
-            检查set的值是否与某个值相等的错误
-        """
-        def wapper_outer(func):
-            def wapper(self):
-                    if getattr(self,f'_{func.__name__}') == getattr(self,param):raise err(func.__name__,'set','eq')
-            return wapper
-        return wapper_outer
-     
 class Global_Var(Common_Var):
     """
         Global_var 全局变量
@@ -116,35 +176,21 @@ class State_Var(Global_Var):
             :param plys:状态对应的lexyacc文件
             :param ply:当前所使用的ply
     """
-    def __init__(self) -> None:
-        
-        super().__init__()
-       
+    def __init__(self,
+                 plys:Dict[str,object],
+                 current_state:str,
+                 prompts:Dict[str,str],
+                 ) -> None:
         if not self.exist:
             self.exist=True
-            self._current_state='init'
+            self._current_state=current_state
             self._next_state=''
-            self._states=(
-                'init',
-                'break',
-                'ssh_send',
-                'telnet_send',
-                'ftp_send',
-            )
-            self._prompts={
-                'init':'[@init]#',
-                'break':'<退出current_state状态>',
-                'ssh_send':'[ssh@send]#',
-                'telnet_send':'[telnet@send]#',
-                'ftp_send':'[ftp@send]#'
-            }
-            self._plys={
-                'init':init,
-                'ssh_send':ssh_send
-            }
-            self._ply=init
+            self._states=tuple(self._plys)
+            self._prompts=prompts
+            self._plys=plys
+            self._ply=self._plys[self._current_state]
             self._prompt=self._prompts[self.current_state]
-        
+            super().__init__(self)
         
 
     @property
@@ -184,6 +230,7 @@ class State_Var(Global_Var):
         不相等则切换current_state和prompt
         """
         fun_n=fun_name().f_code.co_name
+        if use_ply not in self._states:self.set_err_notin(fun_n) 
         self.next_state=use_ply
         if self.current_state == self.next_state:self.set_err_eq(fun_n)
         self.current_state=self.next_state
@@ -202,10 +249,9 @@ class Number_Var(Common_Var):
         self._timeout=0
         self._retry=0
         self._port=0
-  
-    
+
     @property
-    @Common_Var.get_err_none
+    @Common_Var.check_get_none_err
     def timeout(self)-> int | float:
         return self._timeout
     
@@ -232,11 +278,10 @@ class Number_Var(Common_Var):
         return self._port
     
     @port.setter
+    @Common_Var.check_set_none_err
+    @Common_Var.check_set_class_err(int)
+    @Common_Var.check_set_range_err(ge=1,le=65535)
     def port(self,port:int)->None:
-        fun_n=fun_name().f_code.co_name
-        if not port:self.set_err_none(fun_n)
-        if not isinstance(port,int) :self.set_err_class(fun_n)
-        if not 1 <= port <= 65535:self.set_err_range(fun_n)
         self._port=port
 
 class String_Var(Common_Var):
@@ -289,7 +334,7 @@ class String_Var(Common_Var):
     def sort(self)->str:
         return self._sort
 
-    @flag.setter
+    @sort.setter
     @Common_Var.check_set_none_err
     @Common_Var.check_set_class_err(str)
     @Common_Var.check_set_notin_err('_correct_sort')
@@ -371,7 +416,7 @@ class List_Var(Common_Var):
         if not self._ports: return None
         return self._ports.pop()
     
-    def ports_clear(self)->None:
+    def ports_reset(self)->None:
         self._ports=[]
     """
         Addresses
@@ -467,7 +512,7 @@ class List_Var(Common_Var):
         if not self._shells:return None
         return self._shells.pop()
     
-    def shells_clear(self)->None:
+    def shells_reset(self)->None:
         self._shells=[]
 
 class Inner_Var(Global_Var):
@@ -520,7 +565,7 @@ class Inner_Var(Global_Var):
         if not self._ping_open:return None
         return self._ping_open.pop()
         
-    def ping_open_clear(self)->None:
+    def ping_open_reset(self)->None:
         self._ping_open=[]
     
     
@@ -546,7 +591,7 @@ class Inner_Var(Global_Var):
         if not self._ping_close:return None
         return self._ping_close.pop()
 
-    def ping_close_clear(self)->None:
+    def ping_close_reset(self)->None:
         self._ping_close=[]
     """
         Tcping_Open
@@ -571,7 +616,7 @@ class Inner_Var(Global_Var):
         if not self._tcping_open:return None
         return self._tcping_open.pop()
 
-    def tcping_open_clear(self)->None:
+    def tcping_open_reset(self)->None:
         self._tcping_open=[]
     """
         Tcping_Close
@@ -596,7 +641,7 @@ class Inner_Var(Global_Var):
         if not self._tcping_close:return None
         return self._tcping_close.pop()
 
-    def tcping_close_clear(self)->None:
+    def tcping_close_reset(self)->None:
         self._tcping_close=[]
     """
     Ssh_Open
@@ -621,7 +666,7 @@ class Inner_Var(Global_Var):
         if not self._ssh_open:return None
         return self._ssh_open.pop()
 
-    def ssh_open_clear(self)->None:
+    def ssh_open_reset(self)->None:
         self._ssh_open=[]
     """
     Ssh_Close
@@ -646,7 +691,7 @@ class Inner_Var(Global_Var):
         if not self._ssh_close:return None
         return self._ssh_close.pop()
 
-    def ssh_open_clear(self)->None:
+    def ssh_open_reset(self)->None:
         self._ssh_close=[]
       
 class Extend_Var(Global_Var):
@@ -707,30 +752,12 @@ class Extend_Var(Global_Var):
     def address_param_map_clear(self)->None:
         self._address_param_map={}
 
-class Temp_Var(Global_Var,List_Var):
-    def __init__(self) -> None:
-        super().__init__()
-        if not self.exist:
-            self.exist=True
-            self.temp_string_var=None
-            
+class Temp_Var(Extend_Var):
+    """
+        临时变量
+    """
 
-   
-
-
-
-
-    # @property
-    # def temp_ip_about_param(self):
-    #     return self._temp_ip_about_param
-
-    # @temp_ip_about_param.setter
-    # def temp_ip_about_param(self,value):
-    #     if value==None:
-    #         self._temp_ip_about_param={}
-    #     else:
-    #         self._temp_ip_about_param[value['ip']]=value['param']
-    
     
 if __name__ =='__main__':
-    state_var=State_Var()
+  str_var=String_Var()
+  str_var.address=['1.1.1.1']

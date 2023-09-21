@@ -1,9 +1,9 @@
 from ply.lex import lex
 from ply.yacc import yacc
-from handler.protocol import Protocol_Excute
+# from handler.protocol import Protocol_Excute
 
 
-handler=Protocol_Excute()
+# handler=Protocol_Excute()
 
 tokens=(
 'CMD',
