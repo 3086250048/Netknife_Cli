@@ -4,7 +4,7 @@ from tools import (
     sprint
 )
 from itertools import product
-from handler.var import Global_Var
+# from handler.var import Global_Var
 from ply.lex import lex
 from ply.yacc import yacc
 

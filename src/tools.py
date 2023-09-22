@@ -2,14 +2,14 @@ import socket
 from concurrent.futures import ThreadPoolExecutor
 from multiping import multi_ping
 import socket
-from handler.var import Global_Var 
+
 import paramiko
 import time
 
 '''
 公共变量
 '''
-var=Global_Var()
+var=1
 
 
 def sprint(str,line):

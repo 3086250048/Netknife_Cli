@@ -12,7 +12,7 @@ from handler.param import(
     Tcping_Param_Product
 )
 from concurrent.futures import ThreadPoolExecutor
-from handler.var import Global_Var
+# from handler.var import Global_Var
 
 import netmiko
 
